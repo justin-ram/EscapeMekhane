@@ -357,7 +357,27 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
     public void spawnPlayer()
     {
-        controller.transform.position = gameManager.instance.playerSpawnPos.transform.position;
+        if (controller == null)
+        {
+            Debug.LogError("Spawn failed: controller is not assigned.");
+            return;
+        }
+
+        if (gameManager.instance == null)
+        {
+            Debug.LogError("Spawn failed: Game Manager instance is missing.");
+            return;
+        }
+
+        if (gameManager.instance.playerSpawnPos == null)
+        {
+            Debug.LogError("Spawn failed: Player Spawn Position is not assigned.");
+            return;
+        }
+
+        controller.transform.position =
+            gameManager.instance.playerSpawnPos.transform.position;
+
         Physics.SyncTransforms();
         HP = HPOriginal;
         updatePlayerUI();
