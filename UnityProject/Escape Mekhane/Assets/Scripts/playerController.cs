@@ -65,7 +65,9 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     Vector3 dashDirection;
 
     Vector3 cameraDirection;
-
+    Vector3 damageDir;
+    int pushBackSpeed;
+    float pushBackDuration;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -86,6 +88,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         HealHp();
         weaponPushBack();
         interactUpdateUi();
+        damagePushBack();
     }
 
     void movement()
@@ -236,20 +239,23 @@ public class playerController : MonoBehaviour, IDamage, IPickup
                 IDamage dmg = hit.collider.GetComponent<IDamage>();
                 if (dmg != null)
                 {
-                    dmg.takeDamage(gunInv[gunInvPos].shootDamage);
+                    dmg.takeDamage(gunInv[gunInvPos].shootDamage, gunInv[gunInvPos].damageDir, gunInv[gunInvPos].pushBackSpeed, gunInv[gunInvPos].pushBackDuration);
                 }
             }
         }
         else
         {
-            Instantiate(gunInv[gunInvPos].projectile, gunEndpoint.position, transform.rotation);
+            Instantiate(gunInv[gunInvPos].projectile, gunEndpoint.position, Camera.main.transform.rotation);
             gunInv[gunInvPos].weaponPushLasts = gunInv[gunInvPos].weaponPushLastsTimer;
         }
     }
 
-    public void takeDamage(int amount)
+    public void takeDamage(int amount, Vector3 damageDirection, int damageSpeed, float pushDurationTimer)
     {
         HP -= amount;
+        pushBackDuration = pushDurationTimer;
+        damageDir = damageDirection;
+        pushBackSpeed = damageSpeed;
         audioManager.instance.audPlayer.PlayOneShot(audHurtSound[Random.Range(0, audHurtSound.Length)], audHurtVol);
         healCoolDown = healCoolDownTimer;
         updatePlayerUI();
@@ -413,6 +419,15 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     {
         controller.transform.position = teleportPoint;
         Physics.SyncTransforms();
+    }
+
+    void damagePushBack()
+    {
+        if (pushBackDuration > 0)
+        {
+            pushBackDuration -= Time.deltaTime;
+            controller.Move(damageDir * pushBackSpeed * Time.deltaTime);
+        }
     }
 
 

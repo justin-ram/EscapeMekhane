@@ -69,7 +69,7 @@ MonoBehaviour:
   type: 5
   rb: {fileID: 0}
   explosion: {fileID: 5050615966937215224}
-  damageAmount: 50
+  damageAmount: 1
   damageRate: 0
   bulletSpeed: 0
   bulletDestroyTime: 0
@@ -79,3 +79,5 @@ MonoBehaviour:
     m_Bits: 1160
   explosionRadius: 3
   explosionDestroyTime: 0.5
+  damagePushBackSpeed: 10
+  pushDuration: 1

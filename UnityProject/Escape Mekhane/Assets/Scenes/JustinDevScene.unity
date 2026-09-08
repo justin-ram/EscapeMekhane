@@ -176,11 +176,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20363e2c59793c542a591c679855fa7d, type: 3}
---- !u!1 &232643999 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6890801763857287625, guid: a5fe10936a07be94396711bd4506465b, type: 3}
-  m_PrefabInstance: {fileID: 1144817049620914429}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &399363621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1040,10 +1035,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3842593918150332152, guid: a5fe10936a07be94396711bd4506465b, type: 3}
-      propertyPath: gunEndpoint
-      value: 
-      objectReference: {fileID: 232643999}
     - target: {fileID: 6687765142510852671, guid: a5fe10936a07be94396711bd4506465b, type: 3}
       propertyPath: m_Name
       value: Player

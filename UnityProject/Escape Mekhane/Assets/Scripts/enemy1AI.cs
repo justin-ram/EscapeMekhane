@@ -137,7 +137,7 @@ public class enemy1AI : MonoBehaviour, IDamage
         Quaternion rot = Quaternion.LookRotation(playerDir);
         gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot, gunRotateSpeed * Time.deltaTime);
     }
-    public void takeDamage(int amount)
+    public void takeDamage(int amount, Vector3 damageDirection, int damageSpeed, float pushDurationTimer)
     {
         HP -= amount;
         agent.SetDestination(gameManager.instance.player.transform.position);

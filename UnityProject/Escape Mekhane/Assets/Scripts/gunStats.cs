@@ -9,6 +9,9 @@ public class gunStats : ScriptableObject
     [Range(1, 100)][SerializeField] public int shootDistance;
     [Range(0.1f, 2)][SerializeField] public float shootFireRate;
 
+    public Vector3 damageDir;
+    [SerializeField] public int pushBackSpeed;
+    [SerializeField] public float pushBackDuration;
     public int ammoCur;
 
     [Range(5, 50)] public int ammoMax;

@@ -19,7 +19,7 @@ public class brokenTerrain : MonoBehaviour, IDamage
         
     }
 
-    public void takeDamage(int amount)
+    public void takeDamage(int amount, Vector3 damageDirection, int damageSpeed, float pushDurationTimer)
     {
         HP -= amount;
         if (HP <= 0)

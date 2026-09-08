@@ -16,6 +16,11 @@ public class damage : MonoBehaviour
     [SerializeField] LayerMask targetLayers;
     [SerializeField] float explosionRadius;
     [SerializeField] float explosionDestroyTime;
+
+    Vector3 damageDir;
+    [SerializeField] int damagePushBackSpeed;
+
+    [SerializeField] float pushDuration;
     bool isDamaging;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,7 +51,7 @@ public class damage : MonoBehaviour
         IDamage dmg = other.GetComponent<IDamage>();
         if(dmg != null && type != damageType.DOT && type != damageType.explosion && type != damageType.rocket)
         {
-            dmg.takeDamage(damageAmount);
+            dmg.takeDamage(damageAmount, damageDir, damagePushBackSpeed, pushDuration);
         }
         if(type == damageType.bullet)
         {
@@ -88,7 +93,7 @@ public class damage : MonoBehaviour
     IEnumerator damageOther(IDamage d)
     {
         isDamaging = true;
-        d.takeDamage(damageAmount);
+        d.takeDamage(damageAmount, damageDir, damagePushBackSpeed, pushDuration);
         yield return new WaitForSeconds(damageRate);
         isDamaging = false;
     }
@@ -102,12 +107,14 @@ public class damage : MonoBehaviour
     void ExplosionRadius()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, targetLayers);
-
-        foreach (var collider in colliders)
+        
+        foreach (var hit in colliders)
         {
-            if(collider.GetComponent<IDamage>() != null)
+            if(hit.GetComponent<IDamage>() != null)
             {
-                collider.GetComponent<IDamage>().takeDamage(damageAmount);
+                Vector3 hitCurrPosition = hit.transform.position;
+                Vector3 explosionPushBackDir = (hitCurrPosition - transform.position).normalized;
+                hit.GetComponent<IDamage>().takeDamage(damageAmount, explosionPushBackDir, damagePushBackSpeed, pushDuration);  
             }
         }
     }

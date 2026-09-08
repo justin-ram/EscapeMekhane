@@ -68,7 +68,7 @@ public class enemy2AI : MonoBehaviour, IDamage
         return false;
 
     }
-    public void takeDamage(int amount)
+    public void takeDamage(int amount, Vector3 damageDirection, int damageSpeed, float pushDurationTimer)
     {
         HP -= amount;
         if (HP <= 0)
