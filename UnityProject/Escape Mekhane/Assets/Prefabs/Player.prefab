@@ -34,7 +34,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6526922289627313583}
-  - {fileID: 5815570590608936600}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3842593918150332152
@@ -96,7 +95,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2365386389509ad44b059b0e8e7cb73b, type: 3}
   audHurtVol: 0.5
   grappleDistance: 100
-  grappleMoveDist: 0
   grappleSpeed: 20
 --- !u!143 &2627892245434617466
 CharacterController:
@@ -202,12 +200,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8317883302180322344}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.06183999, z: -0, w: -0.9980861}
-  m_LocalPosition: {x: 0.30227482, y: 0.6109998, z: 1.8486679}
+  m_LocalRotation: {x: -0, y: -0.06183999, z: -0, w: -0.99808615}
+  m_LocalPosition: {x: 0.30226633, y: -0.38900012, z: 1.8486686}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3045668937515327166}
+  m_Father: {fileID: 6526922289627313583}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &6369808870124896627
 MeshFilter:
@@ -294,7 +292,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5815570590608936600}
   m_Father: {fileID: 3045668937515327166}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &5822911713307390242

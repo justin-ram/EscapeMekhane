@@ -208,16 +208,23 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
         RaycastHit hit;
 
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDistance, ~ignoreLayer))
+        if (gunInv[gunInvPos].isProjectile == false)
         {
-            // Debug.Log(hit.collider.name);
-
-            Instantiate(gunInv[gunInvPos].hitEffect, hit.point, Quaternion.identity);
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null)
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDistance, ~ignoreLayer))
             {
-                dmg.takeDamage(gunInv[gunInvPos].shootDamage);
+                // Debug.Log(hit.collider.name);
+
+                Instantiate(gunInv[gunInvPos].hitEffect, hit.point, Quaternion.identity);
+                IDamage dmg = hit.collider.GetComponent<IDamage>();
+                if (dmg != null)
+                {
+                    dmg.takeDamage(gunInv[gunInvPos].shootDamage);
+                }
             }
+        }
+        else
+        {
+            //Instantiate(gunInv[gunInvPos].projectile, )
         }
     }
 
@@ -365,7 +372,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
     public void teleportPlayer(Vector3 teleportPoint)
     {
-        
+
         controller.transform.position = teleportPoint;
         Physics.SyncTransforms();
     }
