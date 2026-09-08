@@ -7,14 +7,12 @@ public class enemy1AI : MonoBehaviour, IDamage
 {
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Renderer model;
-
     [Header("Stats")]
     [Range(1, 100)][SerializeField] int HP;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
     [SerializeField] int roamDist;
     [SerializeField] int roamPauseTime;
-
     [Header("Weapons")]
     [SerializeField] GameObject bullet;
     [SerializeField] Transform gunPivot;
@@ -75,8 +73,7 @@ public class enemy1AI : MonoBehaviour, IDamage
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, faceTargetSpeed * Time.deltaTime);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
 
