@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityEngine.AI;
+
 using System.Collections;
-using System.Xml.Schema;
+
 public class boss2 : MonoBehaviour, IDamage
 {
     

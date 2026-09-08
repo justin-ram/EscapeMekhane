@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.AI;
+
 public class spawner : MonoBehaviour
 {
     [SerializeField] GameObject objectToSpawn;
     [SerializeField] int amountToSpawn;
     [SerializeField] int spawnRate;
     [SerializeField] int spawnDist;
-
     int spawnCount;
     float spawnTimer;
 
@@ -23,10 +23,11 @@ public class spawner : MonoBehaviour
     {
         if (startSpawning)
         {
+
             spawnTimer += Time.deltaTime;
             if (spawnCount < amountToSpawn && spawnTimer >= spawnRate)
             {
-                //spawn Something
+                
                 spawn();
             }
         }
@@ -44,15 +45,10 @@ public class spawner : MonoBehaviour
     {
         spawnTimer = 0;
         spawnCount++;
-
         Vector3 ranPos = Random.insideUnitSphere * spawnDist;
-
         ranPos += transform.position;
-
         NavMeshHit hit;
-
         NavMesh.SamplePosition(ranPos, out hit, spawnDist, 1);
-
         Instantiate(objectToSpawn, hit.position, Quaternion.Euler(0, Random.Range(0, 360), 0));
     }
 }
