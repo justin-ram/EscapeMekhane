@@ -37,6 +37,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [Header("Gun Stuff")]
     [SerializeField] List<gunStats> gunInv = new List<gunStats>();
     [SerializeField] GameObject gunModel;
+    [SerializeField] Transform gunEndpoint;
 
     [Header("Audio")]
     public AudioClip[] audJumpSound;
@@ -241,6 +242,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
         else
         {
+            Instantiate(gunInv[gunInvPos].projectile, gunEndpoint.position, transform.rotation);
             gunInv[gunInvPos].weaponPushLasts = gunInv[gunInvPos].weaponPushLastsTimer;
         }
     }

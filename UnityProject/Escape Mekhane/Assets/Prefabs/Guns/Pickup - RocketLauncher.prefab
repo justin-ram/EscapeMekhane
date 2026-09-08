@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6456841499508388148}
   - component: {fileID: 6665750746925971973}
   m_Layer: 0
-  m_Name: Pickup - RocketLauncher 1
+  m_Name: Pickup - RocketLauncher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -176,6 +176,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20363e2c59793c542a591c679855fa7d, type: 3}
+--- !u!1 &232643999 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6890801763857287625, guid: a5fe10936a07be94396711bd4506465b, type: 3}
+  m_PrefabInstance: {fileID: 1144817049620914429}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &399363621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -508,6 +513,8 @@ GameObject:
   - component: {fileID: 1087402377}
   - component: {fileID: 1087402376}
   - component: {fileID: 1087402375}
+  - component: {fileID: 1087402380}
+  - component: {fileID: 1087402379}
   m_Layer: 0
   m_Name: Landscape
   m_TagString: Untagged
@@ -605,6 +612,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 876390067}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1087402379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1087402374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86c8d2bf9c18dd4499c979fa5fd9123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  model: {fileID: 0}
+  HP: 0
+  faceTargetSpeed: 0
+  FOV: 0
+  roamDist: 0
+  roamPauseTime: 0
+  bullet: {fileID: 0}
+  gunPivot: {fileID: 0}
+  shootPos: {fileID: 0}
+  shootRate: 0
+  gunRotateSpeed: 0
+--- !u!114 &1087402380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1087402374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86c8d2bf9c18dd4499c979fa5fd9123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  model: {fileID: 0}
+  HP: 0
+  faceTargetSpeed: 0
+  FOV: 0
+  roamDist: 0
+  roamPauseTime: 0
+  bullet: {fileID: 0}
+  gunPivot: {fileID: 0}
+  shootPos: {fileID: 0}
+  shootRate: 0
+  gunRotateSpeed: 0
 --- !u!1001 &1438679239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -985,6 +1040,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3842593918150332152, guid: a5fe10936a07be94396711bd4506465b, type: 3}
+      propertyPath: gunEndpoint
+      value: 
+      objectReference: {fileID: 232643999}
     - target: {fileID: 6687765142510852671, guid: a5fe10936a07be94396711bd4506465b, type: 3}
       propertyPath: m_Name
       value: Player
