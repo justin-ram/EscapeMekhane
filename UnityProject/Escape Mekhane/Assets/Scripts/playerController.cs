@@ -63,6 +63,10 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     Vector3 playerVelocity;
     Vector3 dashDirection;
 
+    Vector3 cameraDirection;
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -79,6 +83,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         dash();
         grapple();
         HealHp();
+        weaponPushBack();
         interactUpdateUi();
     }
 
@@ -194,7 +199,19 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             audioManager.instance.audPlayer.PlayOneShot(audDashSound[Random.Range(0, audDashSound.Length)], audDashVol);
         }
     }
+    void weaponPushBack()
+    {
+        cameraDirection = Camera.main.transform.forward;
 
+        if (gunInv.Count > 0)
+        {
+            if (gunInv[gunInvPos].weaponPushLasts > 0)
+            {
+                gunInv[gunInvPos].weaponPushLasts -= Time.deltaTime;
+                controller.Move(-cameraDirection.normalized * gunInv[gunInvPos].weaponPushSpeed * Time.deltaTime);
+            }
+        }
+    }
     IEnumerator invincibilityWindow()
     {
         gameObject.layer = LayerMask.NameToLayer("Invincible");
@@ -224,7 +241,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
         else
         {
-            //Instantiate(gunInv[gunInvPos].projectile, )
+            gunInv[gunInvPos].weaponPushLasts = gunInv[gunInvPos].weaponPushLastsTimer;
         }
     }
 
@@ -392,8 +409,9 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
     public void teleportPlayer(Vector3 teleportPoint)
     {
-
         controller.transform.position = teleportPoint;
         Physics.SyncTransforms();
     }
+
+
 }

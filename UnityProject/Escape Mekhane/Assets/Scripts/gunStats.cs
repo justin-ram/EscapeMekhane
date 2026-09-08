@@ -17,7 +17,11 @@ public class gunStats : ScriptableObject
     public AudioClip[] shootSound;
     [Range(0, 1)] public float shootSoundVol;
 
+    [Header("Projectile Guns")]
     [SerializeField] public bool isProjectile;
-
     public GameObject projectile;
+
+    [SerializeField] public int weaponPushSpeed;
+    [SerializeField] public float weaponPushLastsTimer;
+     public float weaponPushLasts;
 }

@@ -985,10 +985,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3842593918150332152, guid: a5fe10936a07be94396711bd4506465b, type: 3}
-      propertyPath: sprintMult
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6687765142510852671, guid: a5fe10936a07be94396711bd4506465b, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1169,7 +1165,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cb133fc755b4694caa50ee32b385845, type: 3}
---- !u!1001 &3482088775573249696
+--- !u!1001 &3179797341752352952
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1177,67 +1173,55 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 1584531080101228180, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
+      propertyPath: m_Name
+      value: Pickup - RocketLauncher
+      objectReference: {fileID: 0}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.66
+      value: 20.35
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.02
+      value: 3.25
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.35
+      value: -20.36
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1757956550580560470, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+    - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2090599675320111166, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
-      propertyPath: bulletSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2090599675320111166, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
-      propertyPath: bulletDestroyTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2090599675320111166, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
-      propertyPath: explosionDestroyTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2298444432907026333, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
-      propertyPath: m_Name
-      value: Rocket
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
 --- !u!1001 &6280852212044013273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1434,4 +1418,4 @@ SceneRoots:
   - {fileID: 7883129016342790937}
   - {fileID: 61683667}
   - {fileID: 6280852212044013273}
-  - {fileID: 3482088775573249696}
+  - {fileID: 3179797341752352952}

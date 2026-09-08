@@ -16,10 +16,14 @@ MonoBehaviour:
   shootDamage: 1
   shootDistance: 1
   shootFireRate: 0.1
-  ammoCur: 0
+  ammoCur: 5
   ammoMax: 5
   hitEffect: {fileID: 0}
-  shootSound: []
-  shootSoundVol: 0
+  shootSound:
+  - {fileID: 8300000, guid: 73eef571f435ab64889071a9099c6300, type: 3}
+  shootSoundVol: 0.5
   isProjectile: 1
-  projectile: {fileID: 0}
+  projectile: {fileID: 2298444432907026333, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
+  weaponPushSpeed: 10
+  weaponPushLastsTimer: 0.3
+  weaponPushLasts: 0

@@ -96,6 +96,8 @@ MonoBehaviour:
   audHurtVol: 0.5
   grappleDistance: 100
   grappleSpeed: 20
+  weaponPushSpeed: 50
+  weaponPushLastsTimer: 0.5
 --- !u!143 &2627892245434617466
 CharacterController:
   m_ObjectHideFlags: 0
