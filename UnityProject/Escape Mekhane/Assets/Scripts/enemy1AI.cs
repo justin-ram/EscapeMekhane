@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 
 
 public class enemy1AI : MonoBehaviour, IDamage
 {
     [SerializeField] NavMeshAgent agent;
+
     [SerializeField] Renderer model;
     [Header("Stats")]
     [Range(1, 100)][SerializeField] int HP;
@@ -21,7 +23,7 @@ public class enemy1AI : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     [SerializeField] int gunRotateSpeed;
 
-    [SerializeField] int gravity;
+    [SerializeField] float gravity;
 
     Vector3 damageDir;
     int pushBackSpeed;
@@ -37,12 +39,15 @@ public class enemy1AI : MonoBehaviour, IDamage
     float roamTimer;
     float stoppingDistOrig;
     bool playerInTrigger;
+    bool isPushing;
+    Vector3 upRight;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         colorOrig = model.material.color;
-        
+
         startingPos = transform.position;
         stoppingDistOrig = agent.stoppingDistance;
     }
@@ -79,7 +84,7 @@ public class enemy1AI : MonoBehaviour, IDamage
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 0, playerDir.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, faceTargetSpeed * Time.deltaTime);
     }
-    
+
     void Update()
     {
 
@@ -93,7 +98,7 @@ public class enemy1AI : MonoBehaviour, IDamage
             checkRoam();
         }
         damagePushBack();
-        
+
     }
 
     bool canSeePlayer()
@@ -179,22 +184,17 @@ public class enemy1AI : MonoBehaviour, IDamage
 
     void damagePushBack()
     {
-        if(pushBackDuration <= 0)
-        {
-            agent.nextPosition = transform.position;
-            agent.updatePosition = true;
-            agent.updateRotation = true;
-        }
+        Vector3 position = transform.position;
         if (pushBackDuration > 0)
         {
-            agent.updatePosition = false;
-            agent.updateRotation = false;
             pushBackDuration -= Time.deltaTime;
-            Vector3 position = transform.position;
-            //controller.Move(damageDir * pushBackSpeed * Time.deltaTime);
             position += damageDir * pushBackSpeed * Time.deltaTime;
             transform.position = position;
         }
+        
+
     }
+
 }
+
 

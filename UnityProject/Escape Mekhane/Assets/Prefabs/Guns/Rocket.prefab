@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5523728463434010153}
   - component: {fileID: 2444654702960859676}
   - component: {fileID: 8693979421490311196}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.7
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &8982475097246451529
 TrailRenderer:

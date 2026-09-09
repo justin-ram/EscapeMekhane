@@ -311,6 +311,7 @@ MonoBehaviour:
   shootPos: {fileID: 6904699509640752029}
   shootRate: 0.2
   gunRotateSpeed: 5
+  gravity: 0.5
 --- !u!33 &1649957458456453412
 MeshFilter:
   m_ObjectHideFlags: 0
