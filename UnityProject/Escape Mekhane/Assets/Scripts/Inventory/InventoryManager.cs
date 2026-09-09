@@ -54,13 +54,39 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("Item added " +
             displayName + " x" + amount);
     }
-
-    public bool HasItem(string itemID)
+    public bool HasItem(string itemID, int requiredAmount = 1)
     {
         foreach (InventoryItem item in items)
         {
-            if (item.ItemID == itemID && item.amount > 0)
+            if (item.ItemID == itemID && item.amount >= requiredAmount)
             {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool RemoveItem(string itemID, int amount = 1)
+    {
+        for(int i = 0; i < items.Count; i++)
+        {
+            if (items[i].ItemID == itemID)
+            {
+                if (items[i].amount < amount)
+                {
+                    return false;
+                }
+
+                items[i].amount -= amount;
+
+                Debug.Log("Item used: " + items[i].DisplayName + " x" + amount);
+
+                if (items[i].amount <= 0)
+                {
+                    items.RemoveAt(i);
+                }
+
                 return true;
             }
         }
