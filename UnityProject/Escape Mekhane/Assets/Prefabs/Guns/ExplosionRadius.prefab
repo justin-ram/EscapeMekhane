@@ -52,7 +52,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.94
+  m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2437824596701146380
 MonoBehaviour:
@@ -69,7 +69,7 @@ MonoBehaviour:
   type: 5
   rb: {fileID: 0}
   explosion: {fileID: 5050615966937215224}
-  damageAmount: 1
+  damageAmount: 10
   damageRate: 0
   bulletSpeed: 0
   bulletDestroyTime: 0

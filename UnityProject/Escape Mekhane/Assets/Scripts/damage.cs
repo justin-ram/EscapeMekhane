@@ -34,6 +34,7 @@ public class damage : MonoBehaviour
         }
         if(type == damageType.explosion)
         {
+            ExplosionRadius();
             Destroy(gameObject, explosionDestroyTime);
         }
         if(type == damageType.bullet)
@@ -64,11 +65,6 @@ public class damage : MonoBehaviour
         if(type == damageType.proximity)
         {
             Destroy(transform.parent.gameObject);
-        }
-        if(type == damageType.explosion)
-        {
-            ExplosionRadius();
-           // Destroy(gameObject);
         }
         if(type == damageType.rocket)
         {
@@ -107,7 +103,7 @@ public class damage : MonoBehaviour
     void ExplosionRadius()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, targetLayers);
-        
+       
         foreach (var hit in colliders)
         {
             if(hit.GetComponent<IDamage>() != null)

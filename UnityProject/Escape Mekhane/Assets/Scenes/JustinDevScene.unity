@@ -631,6 +631,7 @@ MonoBehaviour:
   shootPos: {fileID: 0}
   shootRate: 0
   gunRotateSpeed: 0
+  gravity: 0
 --- !u!114 &1087402380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655,6 +656,7 @@ MonoBehaviour:
   shootPos: {fileID: 0}
   shootRate: 0
   gunRotateSpeed: 0
+  gravity: 0
 --- !u!1001 &1438679239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -752,6 +754,67 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 825cb54eb1442504ebbd404e656f1f6e, type: 3}
+--- !u!1001 &1786712163
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 213655098650490270, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: gravity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 24.45978
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -19.656246
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287086935711028010, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896066170890960464, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
+      propertyPath: m_Name
+      value: enemy1.1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1762fb534cea6fa4f99adb2956469013, type: 3}
 --- !u!1 &1858401136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,17 +1290,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pickup - RocketLauncher
       objectReference: {fileID: 0}
+    - target: {fileID: 1584531080101228180, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20.35
+      value: 17.67
       objectReference: {fileID: 0}
     - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.25
+      value: 3.22
       objectReference: {fileID: 0}
     - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20.36
+      value: -14
       objectReference: {fileID: 0}
     - target: {fileID: 8048707271596280176, guid: 9b353a4dce72e5446a8ffe16fd24b9b1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1469,3 +1536,4 @@ SceneRoots:
   - {fileID: 61683667}
   - {fileID: 6280852212044013273}
   - {fileID: 3179797341752352952}
+  - {fileID: 1786712163}

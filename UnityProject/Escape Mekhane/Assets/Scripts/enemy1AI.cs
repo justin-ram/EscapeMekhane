@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
+
 
 
 public class enemy1AI : MonoBehaviour, IDamage
@@ -20,6 +21,11 @@ public class enemy1AI : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     [SerializeField] int gunRotateSpeed;
 
+    [SerializeField] int gravity;
+
+    Vector3 damageDir;
+    int pushBackSpeed;
+    float pushBackDuration;
 
     Color colorOrig;
 
@@ -86,6 +92,8 @@ public class enemy1AI : MonoBehaviour, IDamage
         {
             checkRoam();
         }
+        damagePushBack();
+        
     }
 
     bool canSeePlayer()
@@ -140,6 +148,9 @@ public class enemy1AI : MonoBehaviour, IDamage
     public void takeDamage(int amount, Vector3 damageDirection, int damageSpeed, float pushDurationTimer)
     {
         HP -= amount;
+        pushBackDuration = pushDurationTimer;
+        damageDir = damageDirection;
+        pushBackSpeed = damageSpeed;
         agent.SetDestination(gameManager.instance.player.transform.position);
 
         if (HP <= 0)
@@ -164,6 +175,26 @@ public class enemy1AI : MonoBehaviour, IDamage
     {
         shootTimer = 0;
         Instantiate(bullet, shootPos.position, transform.rotation);
+    }
+
+    void damagePushBack()
+    {
+        if(pushBackDuration <= 0)
+        {
+            agent.nextPosition = transform.position;
+            agent.updatePosition = true;
+            agent.updateRotation = true;
+        }
+        if (pushBackDuration > 0)
+        {
+            agent.updatePosition = false;
+            agent.updateRotation = false;
+            pushBackDuration -= Time.deltaTime;
+            Vector3 position = transform.position;
+            //controller.Move(damageDir * pushBackSpeed * Time.deltaTime);
+            position += damageDir * pushBackSpeed * Time.deltaTime;
+            transform.position = position;
+        }
     }
 }
 
