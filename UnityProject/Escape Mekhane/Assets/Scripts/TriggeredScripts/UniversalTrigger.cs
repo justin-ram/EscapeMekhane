@@ -1,16 +1,27 @@
+using UnityEngine.Events;
 using UnityEngine;
 
+//Untested
 public class UniversalTrigger : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private string targetTag = "Player";
+    [SerializeField] private bool triggerOnce = true;
+    [SerializeField] private UnityEvent onTriggerEntered;
 
-    // Update is called once per frame
-    void Update()
+    private bool hasTriggered = false;
+    void OnTriggerEnter(Collider other)
     {
-        
+        if (!other.CompareTag(targetTag))
+        {
+            return;
+        }
+
+        if (triggerOnce && hasTriggered)
+        {
+            return;
+        }
+
+        hasTriggered = true;
+        onTriggerEntered?.Invoke();
     }
 }
