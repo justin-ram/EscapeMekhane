@@ -1,5 +1,4 @@
 using UnityEngine;
-//Untested
 public class DoorUnlock : MonoBehaviour
 {
     [SerializeField] private string requiredItemID = "emergency_power_cell";

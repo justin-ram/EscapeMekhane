@@ -181,7 +181,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
         else
         {
-            Debug.Log("Gravity Returning to normal");
+            //Debug.Log("Gravity Returning to normal");
             isWallRunning = false;
             gravity = gravityOrig;
         }
