@@ -69,6 +69,16 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     int pushBackSpeed;
     float pushBackDuration;
 
+    /*Make a bool of iswallrunning
+      use movedirection because it wount be being used currently for the vector to go along
+      make a int wallRundist
+    */
+
+    bool isWallRunning;
+    bool isOnRightWall;
+    bool isOnLeftWall;
+    [SerializeField] int wallRunDist;
+    [SerializeField] Transform wallRunTransform;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -107,14 +117,17 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             }
         }
 
-        if (!isGrappling)
+        wallRun();
+        //change this portion to check if wall running or grappling dont do if either
+        if (!isGrappling && isWallRunning != true)
         {
             moveDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
             controller.Move(moveDirection.normalized * speed * Time.deltaTime);
         }
-
-
-        if (!isGrappling)
+        /* if is walling = true then engage wall running
+           
+        */
+        if (!isGrappling && isWallRunning != true)
         {
             jump();
             controller.Move(playerVelocity * Time.deltaTime);
@@ -132,6 +145,47 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
 
         selectGun();
+    }
+
+    /*
+        void wallRun()
+        {
+            
+            either set gravity to 0 or close to zero.
+            after that calculate direction of wall and player so that it aligns across the wall
+            use vector3.projectonplane
+        }
+    */
+    void wallRun()
+    {
+        // create a raycast to see if you can wall run. if true then set isWallrun to true;
+        //Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDistance, ~ignoreLayer)
+        RaycastHit hit;
+        Debug.DrawLine(wallRunTransform.position, wallRunTransform.position + wallRunTransform.right * wallRunDist, Color.blue);
+        if (Physics.Raycast(wallRunTransform.position, wallRunTransform.right, out hit, wallRunDist, ~ignoreLayer))
+        {
+            Debug.Log(hit.collider.name);
+            IWallRun wallRun = hit.collider.GetComponent<IWallRun>();
+
+            if (wallRun != null)
+            {
+                Debug.Log("WallRunning");
+                isWallRunning = true;
+                gravity = 0;
+                moveDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
+                //gets the direction of the plane
+                Vector3 wallDir = Vector3.ProjectOnPlane(moveDirection.normalized, hit.normal).normalized;
+                controller.Move(wallDir * speed * Time.deltaTime);
+            }
+           
+        }
+        else
+        {
+            Debug.Log("Gravity Returning to normal");
+            isWallRunning = false;
+            gravity = gravityOrig;
+        }
+
     }
 
     void sprint()
@@ -334,7 +388,11 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         {
             // Debug.Log(hit.collider.name);
             IInteract interact = hit.collider.GetComponent<IInteract>();
-            gameManager.instance.showInteract(interact);
+            if(interact != null)
+            {
+                gameManager.instance.showInteract(interact);
+            }
+            
         }
         else
         {

@@ -27,6 +27,6 @@ MonoBehaviour:
   shootSoundVol: 0.5
   isProjectile: 1
   projectile: {fileID: 2298444432907026333, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
-  weaponPushSpeed: 0
-  weaponPushLastsTimer: 0
-  weaponPushLasts: 0
+  weaponPushSpeed: 10
+  weaponPushLastsTimer: 0.5
+  weaponPushLasts: 0.5
