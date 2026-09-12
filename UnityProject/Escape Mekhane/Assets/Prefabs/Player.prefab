@@ -86,7 +86,7 @@ MonoBehaviour:
     m_Bits: 8
   HP: 100
   speed: 6
-  jumpSpeed: 10
+  jumpSpeed: 7
   maxJumps: 1
   sprintMult: 2
   gravity: 15
@@ -129,8 +129,13 @@ MonoBehaviour:
   audHurtVol: 0.5
   grappleDistance: 100
   grappleSpeed: 20
-  wallRunDist: 1
+  isWallRunLeft: 0
+  isWallRunRight: 0
+  wallRunDist: 0.85
   wallRunTransform: {fileID: 8047651399855660126}
+  wallRunGrav: 0.5
+  wallJumpSpeed: 7
+  wallJumpDurationTime: 0
 --- !u!143 &2627892245434617466
 CharacterController:
   m_ObjectHideFlags: 0
@@ -410,7 +415,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8353294174341659829}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -484,6 +489,8 @@ MonoBehaviour:
   camSens: 10
   lockVertMin: -90
   lockVertMax: 90
+  leanAngle: 30
+  leanSpeed: 10
 --- !u!81 &6773564999299048152
 AudioListener:
   m_ObjectHideFlags: 0
