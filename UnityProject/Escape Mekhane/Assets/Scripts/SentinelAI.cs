@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]					// Guarantees that the Sentinel has the movement component used by this script.
-public class SentinelAI : MonoBehaviour, IDamage					// Lets the player's existing weapons damage the Sentinel through IDamage.
+public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the player's existing weapons damage the Sentinel through IDamage.
 {
     [Header("Required References")]
     [SerializeField] Renderer _model;					// Renderer used for the temporary red damage flash.
@@ -294,6 +294,22 @@ public class SentinelAI : MonoBehaviour, IDamage					// Lets the player's existi
         }
     }
 
+    public bool CanReceiveHealing =>
+    !_isDead &&
+    _currentHealth > 0 &&
+    _currentHealth < _maxHealth;                    // Allows the Fabricator to select this enemy only when it is alive and missing health.
+
+    public void Heal(int amount)
+    {
+        if (!CanReceiveHealing || amount <= 0)
+        {
+            return;                 // Prevents healing dead, full-health, or incorrectly configured enemies.
+        }
+
+        _currentHealth = Mathf.Min(
+            _currentHealth + amount,
+            _maxHealth);                    // Restores health without allowing it to exceed the enemy's maximum health.
+    }
     IEnumerator FlashDamage()
     {
         if (_material == null)
