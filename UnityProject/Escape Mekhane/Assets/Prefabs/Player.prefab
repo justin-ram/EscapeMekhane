@@ -130,7 +130,7 @@ MonoBehaviour:
   grappleDistance: 100
   grappleSpeed: 20
   wallRunDist: 1
-  wallRunPosition: {fileID: 0}
+  wallRunTransform: {fileID: 8047651399855660126}
 --- !u!143 &2627892245434617466
 CharacterController:
   m_ObjectHideFlags: 0

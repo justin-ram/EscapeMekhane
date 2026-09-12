@@ -14,8 +14,8 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [Range(5, 10)][SerializeField] int jumpSpeed;
     [SerializeField] int maxJumps;
     [SerializeField] int sprintMult;
-    [SerializeField] int gravity;
-    int gravityOrig;
+    [SerializeField] float gravity;
+    float gravityOrig;
     //how long before you can press dash again
     [SerializeField] float dashCoolDownTime;
     [SerializeField] int dashSpeed;
@@ -66,8 +66,11 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
     Vector3 cameraDirection;
     Vector3 damageDir;
+
+    Vector3 wallJumpDirection;
     int pushBackSpeed;
     float pushBackDuration;
+
 
     /*Make a bool of iswallrunning
       use movedirection because it wount be being used currently for the vector to go along
@@ -75,10 +78,15 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     */
 
     bool isWallRunning;
-    bool isOnRightWall;
-    bool isOnLeftWall;
-    [SerializeField] int wallRunDist;
+    public bool isWallRunLeft;
+    public bool isWallRunRight;
+    [SerializeField] float wallRunDist;
     [SerializeField] Transform wallRunTransform;
+    [SerializeField] float wallRunGrav;
+    [SerializeField] float wallJumpSpeed;
+
+    [SerializeField] float wallJumpDurationTime;
+    float wallJumpDuration;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -127,12 +135,17 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         /* if is walling = true then engage wall running
            
         */
-        if (!isGrappling && isWallRunning != true)
+        if (!isGrappling && !isWallRunning)
         {
             jump();
             controller.Move(playerVelocity * Time.deltaTime);
             playerVelocity.y -= gravity * Time.deltaTime;
         }
+
+
+      //  wallJump();
+
+
 
         if (Input.GetButton("Fire1") && gunInv.Count > 0 && shootTimer > gunInv[gunInvPos].shootFireRate)
         {
@@ -161,29 +174,69 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         // create a raycast to see if you can wall run. if true then set isWallrun to true;
         //Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDistance, ~ignoreLayer)
         RaycastHit hit;
+        RaycastHit hit2;
         Debug.DrawLine(wallRunTransform.position, wallRunTransform.position + wallRunTransform.right * wallRunDist, Color.blue);
+        Debug.DrawLine(wallRunTransform.position, wallRunTransform.position + -wallRunTransform.right * wallRunDist, Color.red);
         if (Physics.Raycast(wallRunTransform.position, wallRunTransform.right, out hit, wallRunDist, ~ignoreLayer))
         {
-            Debug.Log(hit.collider.name);
+            // Debug.Log(hit.collider.name);
             IWallRun wallRun = hit.collider.GetComponent<IWallRun>();
 
             if (wallRun != null)
             {
-                Debug.Log("WallRunning");
-                isWallRunning = true;
-                gravity = 0;
+                // Debug.Log("WallRunningRight");
+                isWallRunRight = true;
+                gravity = wallRunGrav;
+                wallJumpDirection = hit.normal;
+                jumpCount = 0;
+                //Camera.main.transform.rotation = Quaternion.Euler(4.28847361f, 0.699134409f, 18.5101738f);
                 moveDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
                 //gets the direction of the plane
                 Vector3 wallDir = Vector3.ProjectOnPlane(moveDirection.normalized, hit.normal).normalized;
                 controller.Move(wallDir * speed * Time.deltaTime);
             }
-           
+
+        }
+        else if (Physics.Raycast(wallRunTransform.position, -wallRunTransform.right, out hit2, wallRunDist, ~ignoreLayer))
+        {
+            // Debug.Log(hit2.collider.name);
+            IWallRun wallRun = hit2.collider.GetComponent<IWallRun>();
+
+            if (wallRun != null)
+            {
+                // Debug.Log("WallRunningleft");
+                isWallRunLeft = true;
+                gravity = wallRunGrav;
+                jumpCount = 0;
+              //  Camera.main.transform.rotation = Quaternion.Euler(-4.28847361f, -0.699134409f, -18.5101738f);
+                wallJumpDirection = hit.normal;
+                moveDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
+                //gets the direction of the plane
+                Vector3 wallDir = Vector3.ProjectOnPlane(moveDirection.normalized, hit.normal).normalized;
+                controller.Move(wallDir * speed * Time.deltaTime);
+            }
+
         }
         else
         {
-            Debug.Log("Gravity Returning to normal");
-            isWallRunning = false;
+            //Debug.Log("Gravity Returning to normal");
+            //remove is wall running here and use iswallrunningleft. make a check after both the if statements to see
+            //if either one of them is true and then set this one to true if one of them is true.
+            isWallRunLeft = false;
+            isWallRunRight = false;
             gravity = gravityOrig;
+        }
+        if (isWallRunLeft)
+        {
+            isWallRunning = true;
+        }
+        else if (isWallRunRight)
+        {
+            isWallRunning = true;
+        }
+        else
+        {
+            isWallRunning = false;
         }
 
     }
@@ -224,6 +277,17 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             playerVelocity.y = jumpSpeed;
             audioManager.instance.audPlayer.PlayOneShot(audJumpSound[Random.Range(0, audJumpSound.Length)], audJumpVol);
         }
+    }
+
+    void wallJump()
+    {
+        if (wallJumpDuration > 0)
+        {
+            wallJumpDuration -= Time.deltaTime;
+            controller.Move(wallJumpDirection * wallJumpSpeed * Time.deltaTime);
+        }
+        
+        wallJumpDuration = wallJumpDurationTime;
     }
 
     public void jumpPowerUp(int amount)
@@ -388,11 +452,11 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         {
             // Debug.Log(hit.collider.name);
             IInteract interact = hit.collider.GetComponent<IInteract>();
-            if(interact != null)
+            if (interact != null)
             {
                 gameManager.instance.showInteract(interact);
             }
-            
+
         }
         else
         {

@@ -5,6 +5,11 @@ public class camerController : MonoBehaviour
     [SerializeField] int camSens;
     [SerializeField] int lockVertMin, lockVertMax;
 
+    [Header("WallRun Lean")]
+    [SerializeField] float leanAngle;
+    float leanAngleStart;
+    [SerializeField] float leanSpeed;
+    float currentLeanAngle;
     float camRotX;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,6 +26,9 @@ public class camerController : MonoBehaviour
             if (gameManager.instance.isPaused == false)
             {
                 rotateCamera();
+                LeanCamera();
+
+                transform.localRotation = Quaternion.Euler(camRotX, 0, currentLeanAngle);
             }
         }
     }
@@ -32,8 +40,27 @@ public class camerController : MonoBehaviour
 
         camRotX -= mouseY;
         camRotX = Mathf.Clamp(camRotX, lockVertMin, lockVertMax);
-
-        transform.localRotation = Quaternion.Euler(camRotX, 0, 0);
         transform.parent.Rotate(Vector3.up * mouseX);
+    }
+
+    void LeanCamera()
+    {
+        if(gameManager.instance.playerScript.isWallRunRight)
+        {
+            leanAngleStart = leanAngle;
+           
+        }
+        else if(gameManager.instance.playerScript.isWallRunLeft)
+        {
+            leanAngleStart = -leanAngle;
+          
+        }
+        else
+        {
+            leanAngleStart = 0;
+        }
+
+        currentLeanAngle = Mathf.LerpAngle(transform.localEulerAngles.z, leanAngleStart, leanSpeed * Time.deltaTime);
+
     }
 }

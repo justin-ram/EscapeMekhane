@@ -3,20 +3,8 @@
   "WorkspaceRootPath": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\enemy1AI.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:UnityProject\\Escape Mekhane\\Assets\\Scripts\\enemy1AI.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\playerController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:UnityProject\\Escape Mekhane\\Assets\\Scripts\\playerController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\gameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:UnityProject\\Escape Mekhane\\Assets\\Scripts\\gameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\camerController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:UnityProject\\Escape Mekhane\\Assets\\Scripts\\camerController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -47,50 +35,12 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "enemy1AI.cs",
-              "DocumentMoniker": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\enemy1AI.cs",
-              "RelativeDocumentMoniker": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\enemy1AI.cs",
-              "ToolTip": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\enemy1AI.cs",
-              "RelativeToolTip": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\enemy1AI.cs",
-              "ViewState": "AgIAAK8AAAAAAAAAAAAAAMAAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-09T15:11:56.821Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "gameManager.cs",
-              "DocumentMoniker": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\gameManager.cs",
-              "RelativeDocumentMoniker": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\gameManager.cs",
-              "ToolTip": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\gameManager.cs",
-              "RelativeToolTip": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\gameManager.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-09T18:49:47.149Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "camerController.cs",
-              "DocumentMoniker": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\camerController.cs",
-              "RelativeDocumentMoniker": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\camerController.cs",
-              "ToolTip": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\camerController.cs",
-              "RelativeToolTip": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\camerController.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-09T18:48:59.52Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "playerController.cs",
               "DocumentMoniker": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\playerController.cs",
               "RelativeDocumentMoniker": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\playerController.cs",
               "ToolTip": "C:\\ProjectnPortfolio2\\ProjectandPortfolio2\\UnityProject\\Escape Mekhane\\Assets\\Scripts\\playerController.cs",
               "RelativeToolTip": "UnityProject\\Escape Mekhane\\Assets\\Scripts\\playerController.cs",
-              "ViewState": "AgIAAMkAAAAAAAAAAAAAAMIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAlwD8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-06T19:25:38.325Z",
               "EditorCaption": ""
