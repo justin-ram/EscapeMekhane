@@ -284,14 +284,16 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     {
         if (wallJumpDuration > 0)
         {
-            Debug.Log("JumpingOff");
+           // Debug.Log("JumpingOff");
             wallJumpDuration -= Time.deltaTime;
             controller.Move(wallJumpDirection * wallJumpSpeed * Time.deltaTime);
         }
         if(Input.GetButtonDown("Jump") && isWallRunning)
         {
-            Debug.Log("WallJump");
+           // Debug.Log("WallJump");
             wallJumpDuration = wallJumpDurationTime;
+            playerVelocity.y = jumpSpeed;
+            audioManager.instance.audPlayer.PlayOneShot(audJumpSound[Random.Range(0, audJumpSound.Length)], audJumpVol);
         }
            
     }

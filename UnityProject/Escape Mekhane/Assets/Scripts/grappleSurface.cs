@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GrappableWall : MonoBehaviour, IGrapple, IWallRun
+public class GrappableWall : MonoBehaviour, IGrapple
 {
     
 }
