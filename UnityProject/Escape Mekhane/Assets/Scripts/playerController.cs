@@ -143,7 +143,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
 
 
-      //  wallJump();
+        wallJump();
 
 
 
@@ -197,6 +197,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             }
 
         }
+        //left wall run
         else if (Physics.Raycast(wallRunTransform.position, -wallRunTransform.right, out hit2, wallRunDist, ~ignoreLayer))
         {
             // Debug.Log(hit2.collider.name);
@@ -209,7 +210,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
                 gravity = wallRunGrav;
                 jumpCount = 0;
               //  Camera.main.transform.rotation = Quaternion.Euler(-4.28847361f, -0.699134409f, -18.5101738f);
-                wallJumpDirection = hit.normal;
+                wallJumpDirection = hit2.normal;
                 moveDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
                 //gets the direction of the plane
                 Vector3 wallDir = Vector3.ProjectOnPlane(moveDirection.normalized, hit.normal).normalized;
@@ -283,11 +284,16 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     {
         if (wallJumpDuration > 0)
         {
+            Debug.Log("JumpingOff");
             wallJumpDuration -= Time.deltaTime;
             controller.Move(wallJumpDirection * wallJumpSpeed * Time.deltaTime);
         }
-        
-        wallJumpDuration = wallJumpDurationTime;
+        if(Input.GetButtonDown("Jump") && isWallRunning)
+        {
+            Debug.Log("WallJump");
+            wallJumpDuration = wallJumpDurationTime;
+        }
+           
     }
 
     public void jumpPowerUp(int amount)
@@ -306,10 +312,6 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         {
             timeDashLasts -= Time.deltaTime;
             controller.Move(dashDirection.normalized * dashSpeed * Time.deltaTime);
-        }
-        if (timeDashLasts <= 0)
-        {
-            playerVelocity.x = 0;
         }
         if (Input.GetButtonDown("Dash") && dashTimer <= 0 && isGrappling == false)
         {
