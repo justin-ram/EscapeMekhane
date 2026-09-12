@@ -197,7 +197,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 25.436, y: 6.985, z: -11.922}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3500006, y: 2.4477644, z: 1.2189959}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8799396369627743819}
@@ -215,7 +215,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b9dacce0e0fc14c8ec5a8d3f066a29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleValue: 0.001
+  scaleValue: 0.0001
   scalePivot: {fileID: 8799396369627743819}
   delayTimer: 5
-  shouldShrink: 1
+  shouldShrink: 0
+  rotationPivot: {fileID: 8738128991431981}
+  shouldRotate: 1
+  rotationX: 0.1
