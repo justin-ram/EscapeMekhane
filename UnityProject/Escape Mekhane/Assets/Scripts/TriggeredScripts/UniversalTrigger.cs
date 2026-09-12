@@ -1,7 +1,6 @@
 using UnityEngine.Events;
 using UnityEngine;
 
-//Untested
 public class UniversalTrigger : MonoBehaviour
 {
     [SerializeField] private string targetTag = "Player";

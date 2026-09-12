@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-//UnTested
 public class CutSceneSequence : MonoBehaviour
 {
     [SerializeField] private bool playOne = true;
