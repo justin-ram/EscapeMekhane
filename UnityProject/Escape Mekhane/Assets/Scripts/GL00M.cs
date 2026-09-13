@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using JetBrains.Annotations;
 
-public class GL00M : MonoBehaviour
+
+public class GL00M : MonoBehaviour, IDamage
 {
     [SerializeField] NavMeshAgent agent;
 
@@ -21,17 +23,24 @@ public class GL00M : MonoBehaviour
     [SerializeField] float shootRate;
     [SerializeField] int gunRotateSpeed;
     [SerializeField] float jumpRate;
+    [SerializeField] int ballNumber;
+    [SerializeField] float ballDistance;
+    [SerializeField] float fireRate;
+    [SerializeField] int shockWaveDist;
+    float fireTimer;
+    int count;
+    int patern; 
 
     Color colorOrig;
 
     Vector3 playerDir;
     float shootTimer;
     bool playerInTrigger;
-    float randomX;
-    float randomZ;
-    int doesTelleport;
+   
+   
     float jumpTime;
     bool isJumping;
+    int rand;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,8 +48,9 @@ public class GL00M : MonoBehaviour
     {
 
         colorOrig = model.material.color;
-
-        doesTelleport = 0;
+        count = 0;
+        isJumping = false;
+        patern = 1;
 
 
 
@@ -52,11 +62,11 @@ public class GL00M : MonoBehaviour
     {
         if (playerInTrigger)
         {
-
+            shootTimer += Time.deltaTime;
             agent.SetDestination(gameManager.instance.player.transform.position);
 
             shootTimer = shootTimer + Time.deltaTime;
-           
+            
             playerDir = gameManager.instance.player.transform.position - transform.position;
             faceTarget();
             rotateGun();
@@ -65,17 +75,36 @@ public class GL00M : MonoBehaviour
 
 
 
-            if (shootTimer >= shootRate)
+            if (shootTimer >= shootRate && isJumping == false)
             {
-                shoot();
-            }
-            if (jumpTime >= jumpRate && isJumping ==false)
-            {
+               
+                if(patern == 1)
+                {
+                    StartCoroutine(jump());
+                    
+                }
+                else if(patern ==2)
+                {
 
-                StartCoroutine(jump());
 
+                    fireTimer += Time.deltaTime;
+                    if (fireTimer >= fireRate)
+                    {
+                        shoot3();
+                        if (count == 3)
+                        {
+                            shootTimer = 0;
+                            count = 0;
+                            patern = 1;
+                        }
+                    }
+
+
+                }
+                
                 
             }
+            
 
         }
 
@@ -104,7 +133,7 @@ public class GL00M : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(playerDir);
         gunPivot.rotation = Quaternion.Lerp(gunPivot.rotation, rot, gunRotateSpeed * Time.deltaTime);
     }
-    public void takeDamage(int amount)
+    public void takeDamage(int amount, Vector3 gameDirection, int damageSpeed, float pushDurationTimer)
     {
         HP -= amount;
         if (HP <= 0)
@@ -126,16 +155,58 @@ public class GL00M : MonoBehaviour
     }
     void shoot()
     {
-        shootTimer = 0;
+        
 
-        Instantiate(bullet, shootPos.position, transform.rotation);
+        float totalDis = 0f;
+        Quaternion rotate;
 
 
+        for (int j = 0; j < ballNumber; j++)
+        {
+            rotate = shootPos.rotation * Quaternion.Euler(0, -totalDis, 0);
+            Instantiate(bullet, shootPos.position, rotate);
+            totalDis += ballDistance;
+        }
+        totalDis = 0;
+        for (int k = 0; k < ballNumber; k++)
+        {
+            rotate = shootPos.rotation * Quaternion.Euler(0, totalDis, 0);
+            Instantiate(bullet, shootPos.position, rotate);
+            totalDis += ballDistance;
+        }
+        
+
+
+    }
+    void shoot3()
+    {
+        fireTimer = 0;
+
+        float totalDis = 0f;
+        Quaternion rotate;
+
+
+        for (int j = 0; j < ballNumber; j++)
+        {
+            rotate = shootPos.rotation * Quaternion.Euler(0, -totalDis, 0);
+            Instantiate(bullet, shootPos.position, rotate);
+            totalDis += ballDistance;
+        }
+        totalDis = 0;
+        for (int k = 0; k < ballNumber; k++)
+        {
+            rotate = shootPos.rotation * Quaternion.Euler(0, totalDis, 0);
+            Instantiate(bullet, shootPos.position, rotate);
+            totalDis += ballDistance;
+        }
+        count++;
+        
 
     }
 
    IEnumerator jump()
     {
+        
         isJumping = true;
         Vector3 startPos = transform.position;
         Vector3 target = gameManager.instance.player.transform.position;
@@ -150,7 +221,23 @@ public class GL00M : MonoBehaviour
             currentPos.y += arc;
             transform.position = currentPos;
             yield return null;
+            
         }
         transform.position = target;
+        shoot();
+        isJumping = false;
+        RaycastHit hit;
+        if(Physics.Raycast(shootPos.position, shootPos.forward, out hit, shockWaveDist))
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                
+            }
+        }
+        
+       
+        shootTimer = 0;
+        patern++;
+        
     }
 }
