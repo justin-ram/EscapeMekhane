@@ -49,11 +49,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   rb: {fileID: 5523728463434010153}
+  explosion: {fileID: 0}
   damageAmount: 20
   damageRate: 0
   bulletSpeed: 25
   bulletDestroyTime: 3
   hitEffect: {fileID: 0}
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  explosionRadius: 0
+  explosionDestroyTime: 0
+  damagePushBackSpeed: 0
+  pushDuration: 0
 --- !u!135 &3742500266747277907
 SphereCollider:
   m_ObjectHideFlags: 0
