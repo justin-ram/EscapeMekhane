@@ -99,14 +99,17 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     // Update is called once per frame
     void Update()
     {
-        movement();
-        sprint();
-        dash();
-        grapple();
-        HealHp();
-        weaponPushBack();
-        interactUpdateUi();
-        damagePushBack();
+        if (gameManager.instance.isPaused == false)
+        {
+            movement();
+            sprint();
+            dash();
+            grapple();
+            HealHp();
+            weaponPushBack();
+            interactUpdateUi();
+            damagePushBack();
+        }
     }
 
     void movement()
@@ -135,11 +138,14 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         /* if is walling = true then engage wall running
            
         */
-        if (!isGrappling && !isWallRunning)
+        if (!isWallRunning)
         {
             jump();
-            controller.Move(playerVelocity * Time.deltaTime);
-            playerVelocity.y -= gravity * Time.deltaTime;
+            if (!isGrappling)
+            {
+                controller.Move(playerVelocity * Time.deltaTime);
+                playerVelocity.y -= gravity * Time.deltaTime;
+            }
         }
 
 
@@ -209,7 +215,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
                 isWallRunLeft = true;
                 gravity = wallRunGrav;
                 jumpCount = 0;
-              //  Camera.main.transform.rotation = Quaternion.Euler(-4.28847361f, -0.699134409f, -18.5101738f);
+                //  Camera.main.transform.rotation = Quaternion.Euler(-4.28847361f, -0.699134409f, -18.5101738f);
                 wallJumpDirection = hit2.normal;
                 moveDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
                 //gets the direction of the plane
@@ -274,6 +280,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     {
         if (Input.GetButtonDown("Jump") && jumpCount < maxJumps)
         {
+            isGrappling = false;
             jumpCount++;
             playerVelocity.y = jumpSpeed;
             audioManager.instance.audPlayer.PlayOneShot(audJumpSound[Random.Range(0, audJumpSound.Length)], audJumpVol);
@@ -284,18 +291,18 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     {
         if (wallJumpDuration > 0)
         {
-           // Debug.Log("JumpingOff");
+            // Debug.Log("JumpingOff");
             wallJumpDuration -= Time.deltaTime;
             controller.Move(wallJumpDirection * wallJumpSpeed * Time.deltaTime);
         }
-        if(Input.GetButtonDown("Jump") && isWallRunning)
+        if (Input.GetButtonDown("Jump") && isWallRunning)
         {
-           // Debug.Log("WallJump");
+            // Debug.Log("WallJump");
             wallJumpDuration = wallJumpDurationTime;
             playerVelocity.y = jumpSpeed;
             audioManager.instance.audPlayer.PlayOneShot(audJumpSound[Random.Range(0, audJumpSound.Length)], audJumpVol);
         }
-           
+
     }
 
     public void jumpPowerUp(int amount)
@@ -348,7 +355,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     {
         shootTimer = 0;
         audioManager.instance.audPlayer.PlayOneShot(gunInv[gunInvPos].shootSound[Random.Range(0, gunInv[gunInvPos].shootSound.Length)], gunInv[gunInvPos].shootSoundVol);
-
+        isGrappling = false;
         RaycastHit hit;
 
         if (gunInv[gunInvPos].isProjectile == false)
@@ -496,7 +503,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
                 if (grapple != null)
                 {
                     hitPosition = hit.point;
-                    grappleDirection = hit.point - transform.position;
+                    //grappleDirection = hit.point - transform.position;
                     isGrappling = true;
                     gravity = 0;
                 }
@@ -504,8 +511,10 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
         if (isGrappling)
         {
-            controller.Move(grappleDirection.normalized * grappleSpeed * Time.deltaTime);
-            if (Vector3.Distance(hitPosition, transform.position) < 0.9f)
+            grappleDirection = hitPosition - transform.position;
+            CollisionFlags flagged = controller.Move(grappleDirection.normalized * grappleSpeed * Time.deltaTime);
+            Debug.Log(Vector3.Distance(hitPosition, transform.position));
+            if (Vector3.Distance(hitPosition, transform.position) < 0.9f || flagged != CollisionFlags.None)
             {
                 isGrappling = false;
                 gravity = gravityOrig;
