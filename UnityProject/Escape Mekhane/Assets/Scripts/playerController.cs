@@ -317,6 +317,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         maxJumps += amount;
     }
 
+
     void dash()
     {
         if (dashTimer > 0)

@@ -69,7 +69,7 @@ MonoBehaviour:
   type: 5
   rb: {fileID: 0}
   explosion: {fileID: 5050615966937215224}
-  damageAmount: 1
+  damageAmount: 10
   damageRate: 0
   bulletSpeed: 0
   bulletDestroyTime: 0
