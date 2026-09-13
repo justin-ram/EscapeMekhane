@@ -27,6 +27,8 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float timeDashLastsTimer;
     //time before velocity is set to 0.
     float timeDashLasts;
+
+    [SerializeField] float invincibilitySeconds;
     [SerializeField] int interactDist;
     float healCoolDown;
     [SerializeField] int healAmount;
@@ -326,7 +328,11 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
         if (Input.GetButtonDown("Dash") && dashTimer <= 0 && isGrappling == false)
         {
-            dashDirection = transform.forward;
+            dashDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
+            if(dashDirection == Vector3.zero)
+            {
+                dashDirection = transform.forward;
+            }
             dashTimer = dashCoolDownTime;
             timeDashLasts = timeDashLastsTimer;
             updatePlayerUI();
@@ -350,7 +356,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     IEnumerator invincibilityWindow()
     {
         gameObject.layer = LayerMask.NameToLayer("Invincible");
-        yield return new WaitForSeconds(timeDashLastsTimer);
+        yield return new WaitForSeconds(invincibilitySeconds);
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
     void shoot()
@@ -572,6 +578,4 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             controller.Move(damageDir * pushBackSpeed * Time.deltaTime);
         }
     }
-
-
 }
