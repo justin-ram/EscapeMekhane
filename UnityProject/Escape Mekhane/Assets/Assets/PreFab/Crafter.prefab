@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8486655023614182847
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -746079447478585731, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_Name
+      value: DroneStation_base_basic_pbr (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.2358012
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000047683716
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 16.571747
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 172901596975893659, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -746079447478585731, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7466919992639024204}
+    - targetCorrespondingSourceObject: {fileID: -746079447478585731, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9204307615157393660}
+  m_SourcePrefab: {fileID: -4161369568681901532, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+--- !u!1 &28080932575474626 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -746079447478585731, guid: 01fb2e1f67d284f4a84489510f07d1d0, type: 3}
+  m_PrefabInstance: {fileID: 8486655023614182847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7466919992639024204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28080932575474626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34dc0ef091dd404449b45db2e3eab95d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingredientOneID: damaged_power_relay
+  ingredientOneAmount: 1
+  ingredientTwoID: ammo_pack
+  ingredientTwoAmount: 1
+  craftedItemID: emergency_power_cell
+  craftedItemName: Emergency Power Cell
+  craftedItemAmount: 1
+  craftKey: 99
+--- !u!65 &9204307615157393660
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28080932575474626}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.541765, y: 1.818877, z: 1.885}
+  m_Center: {x: 0.0004504919, y: 0.9094385, z: -0.0038779378}
