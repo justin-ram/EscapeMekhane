@@ -34,6 +34,7 @@ public class SHR0UD : MonoBehaviour, IDamage
     [SerializeField] float x4;
     [SerializeField] float y4;
     [SerializeField] float z4;
+    [SerializeField] GameObject shipItem;
 
     [SerializeField] float gravity;
     [SerializeField] float loadRate;
@@ -215,7 +216,7 @@ public class SHR0UD : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
-
+            Instantiate(shipItem, transform.position, transform.rotation);
             Destroy(gameObject);
         }
         else

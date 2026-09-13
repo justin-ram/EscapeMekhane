@@ -219,6 +219,7 @@ MonoBehaviour:
   x4: 50
   y4: 1
   z4: 50
+  shipItem: {fileID: 5042017000464638916, guid: 61f029c6fdd95e94f8a87dce0cd1d075, type: 3}
   gravity: 0
   loadRate: 1
   render: {fileID: 7569551696585084297}
