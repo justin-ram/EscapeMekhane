@@ -328,7 +328,7 @@ MonoBehaviour:
   HP: 100
   faceTargetSpeed: 3
   bullet: {fileID: 1389214214515800697, guid: 8643b4dcbace99f449650872b7583ec3, type: 3}
-  shipItem: {fileID: 0}
+  shipItem: {fileID: 5042017000464638916, guid: 61f029c6fdd95e94f8a87dce0cd1d075, type: 3}
   gunPivot: {fileID: 2503063411006902279}
   shootPos: {fileID: 6192409582279713193}
   shootRate: 5
