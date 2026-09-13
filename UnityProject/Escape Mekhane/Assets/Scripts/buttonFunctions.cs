@@ -40,7 +40,7 @@ public class buttonFunctions : MonoBehaviour
     }
     public void StartGame()
     {
-        SceneManager.LoadScene("Level2");
+        SceneManager.LoadScene("Level1_Blockout");
     }
 
     public void respawnPlayer()

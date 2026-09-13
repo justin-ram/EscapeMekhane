@@ -87,14 +87,17 @@ public class gameManager : MonoBehaviour
                 stateUnpause();
             }
         }
-        if (gameManager.instance.playerScript.gunInv.Count > 0)
+        if (player != null)
         {
-            ammoCurrTxt.text = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoCur.ToString("F0");
-            ammoMaxTxt.text = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoMax.ToString("F0");
+            if (gameManager.instance.playerScript.gunInv.Count > 0)
+            {
+                ammoCurrTxt.text = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoCur.ToString("F0");
+                ammoMaxTxt.text = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoMax.ToString("F0");
+            }
         }
     }
 
-    
+
     public void statePause(GameObject menu)
     {
         isPaused = true;
@@ -128,7 +131,7 @@ public class gameManager : MonoBehaviour
 
     public void shipWin()
     {
-        if(shipItemGoalCount == winGameGoalCount)
+        if (shipItemGoalCount == winGameGoalCount)
         {
             statePause(menuWin);
         }
@@ -160,7 +163,7 @@ public class gameManager : MonoBehaviour
             interactUI.SetActive(true);
         }
     }
-    
+
     public void disableInteract()
     {
         interactUI.SetActive(false);
