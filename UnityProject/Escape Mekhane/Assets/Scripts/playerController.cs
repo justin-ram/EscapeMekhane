@@ -37,7 +37,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float healDurationTimer;
 
     [Header("Gun Stuff")]
-    [SerializeField] List<gunStats> gunInv = new List<gunStats>();
+    [SerializeField] public List<gunStats> gunInv = new List<gunStats>();
     [SerializeField] GameObject gunModel;
     [SerializeField] Transform gunEndpoint;
 
@@ -50,7 +50,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [Range(0, 1)][SerializeField] float audDashVol;
     public AudioClip[] audHurtSound;
     [Range(0, 1)][SerializeField] float audHurtVol;
-    int gunInvPos;
+    public int gunInvPos;
     bool isSprinting;
     bool isPlayingSteps;
 
@@ -163,6 +163,8 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         {
             shoot();
         }
+
+        
 
         if (Input.GetButtonDown("Fire2"))
         {

@@ -29,6 +29,9 @@ public class gameManager : MonoBehaviour
     public TMP_Text shipPartsNeededTXT;
     public TMP_Text shipShipPartsCollectedTXT;
 
+    public TMP_Text ammoCurrTxt;
+    public TMP_Text ammoMaxTxt;
+
     public GameObject playerSpawnPos;
     public GameObject checkPointPopup;
 
@@ -84,8 +87,14 @@ public class gameManager : MonoBehaviour
                 stateUnpause();
             }
         }
+        if (gameManager.instance.playerScript.gunInv.Count > 0)
+        {
+            ammoCurrTxt.text = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoCur.ToString("F0");
+            ammoMaxTxt.text = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoMax.ToString("F0");
+        }
     }
 
+    
     public void statePause(GameObject menu)
     {
         isPaused = true;

@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Gun - Shotgun
   m_EditorClassIdentifier: 
   gunModel: {fileID: 5494625650325380441, guid: 944f765b84e4c4012876d61f4dfc7b5a, type: 3}
+  ammoType: 0
   shootDamage: 10
   shootDistance: 9
   shootFireRate: 1
   damageDir: {x: 0, y: 0, z: 0}
   pushBackSpeed: 0
   pushBackDuration: 0
-  ammoCur: 0
+  ammoCur: 18
   ammoMax: 20
   hitEffect: {fileID: 5584602140419805224, guid: 6d2ab2bfa7deb87469243d7b8de20229, type: 3}
   shootSound:
