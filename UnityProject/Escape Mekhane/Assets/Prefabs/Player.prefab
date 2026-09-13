@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bcc16c880bc48540ba99fe3f1b71f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
+  playerCamera: {fileID: 5822911713307390242}
   dialogUI: {fileID: 0}
   scanRange: 8
   scanKey: 101
