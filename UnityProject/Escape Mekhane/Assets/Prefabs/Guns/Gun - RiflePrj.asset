@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77c9dee7c0646884392a8526efbff6cf, type: 3}
-  m_Name: Gun - Shotgun
+  m_Name: Gun - RiflePrj
   m_EditorClassIdentifier: 
-  gunModel: {fileID: 5494625650325380441, guid: 944f765b84e4c4012876d61f4dfc7b5a, type: 3}
+  gunModel: {fileID: 4698201593948852689, guid: 185ce04d44da342739f0bef843698e6c, type: 3}
   ammoType: 0
-  shootDamage: 10
-  shootDistance: 9
-  shootFireRate: 1
+  shootDamage: 1
+  shootDistance: 1
+  shootFireRate: 0.3
   damageDir: {x: 0, y: 0, z: 0}
   pushBackSpeed: 0
   pushBackDuration: 0
-  ammoCur: 18
-  ammoMax: 25
-  hitEffect: {fileID: 5584602140419805224, guid: 6d2ab2bfa7deb87469243d7b8de20229, type: 3}
+  ammoCur: 0
+  ammoMax: 30
+  hitEffect: {fileID: 0}
   shootSound:
-  - {fileID: 8300000, guid: 46e1c7ce22809c74490a8b97e755cec3, type: 3}
+  - {fileID: 8300000, guid: 73eef571f435ab64889071a9099c6300, type: 3}
   shootSoundVol: 0.5
-  isProjectile: 0
-  projectile: {fileID: 0}
+  isProjectile: 1
+  projectile: {fileID: 1389214214515800697, guid: f8d842a65c4d2894e80f04467b3fd6a4, type: 3}
   weaponPushSpeed: 0
   weaponPushLastsTimer: 0
   weaponPushLasts: 0
