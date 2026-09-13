@@ -14,6 +14,17 @@ public class InventoryUI : MonoBehaviour
 
     void Start()
     {
+        if (inventoryManager == null)
+        {
+            inventoryManager = InventoryManager.instance;
+        }
+
+        if (inventoryManager == null)
+        {
+            Debug.LogError("InventoryUI could not find InventoryManager.");
+            return;
+        }
+
         inventoryPanel.SetActive(false);
     }
     void Update()
@@ -37,6 +48,11 @@ public class InventoryUI : MonoBehaviour
 
     public void RefreshInventory()
     {
+        if (inventoryManager == null)
+        {
+            inventoryManager = InventoryManager.instance;
+        }
+
         if (inventoryManager == null)
         {
             inventoryText.text = "Inventory Manager is not assigned.";
