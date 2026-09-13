@@ -56,6 +56,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] int grappleDistance;
     [SerializeField] int grappleSpeed;
 
+    [SerializeField] LineRenderer grappleLine;
     Vector3 hitPosition;
     bool isGrappling;
     Vector3 grappleDirection;
@@ -281,6 +282,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         if (Input.GetButtonDown("Jump") && jumpCount < maxJumps)
         {
             isGrappling = false;
+            grappleLine.enabled = false;
             jumpCount++;
             playerVelocity.y = jumpSpeed;
             audioManager.instance.audPlayer.PlayOneShot(audJumpSound[Random.Range(0, audJumpSound.Length)], audJumpVol);
@@ -356,6 +358,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         shootTimer = 0;
         audioManager.instance.audPlayer.PlayOneShot(gunInv[gunInvPos].shootSound[Random.Range(0, gunInv[gunInvPos].shootSound.Length)], gunInv[gunInvPos].shootSoundVol);
         isGrappling = false;
+        grappleLine.enabled = false;
         RaycastHit hit;
 
         if (gunInv[gunInvPos].isProjectile == false)
@@ -498,7 +501,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, grappleDistance, ~ignoreLayer))
             {
-                Debug.Log(hit.collider.name);
+              //  Debug.Log(hit.collider.name);
                 IGrapple grapple = hit.collider.GetComponent<IGrapple>();
                 if (grapple != null)
                 {
@@ -512,11 +515,15 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         if (isGrappling)
         {
             grappleDirection = hitPosition - transform.position;
+            grappleLine.SetPosition(0, hitPosition);
+            grappleLine.SetPosition(1, transform.position);
+            grappleLine.enabled = true;
             CollisionFlags flagged = controller.Move(grappleDirection.normalized * grappleSpeed * Time.deltaTime);
-            Debug.Log(Vector3.Distance(hitPosition, transform.position));
+           // Debug.Log(Vector3.Distance(hitPosition, transform.position));
             if (Vector3.Distance(hitPosition, transform.position) < 0.9f || flagged != CollisionFlags.None)
             {
                 isGrappling = false;
+                grappleLine.enabled = false;
                 gravity = gravityOrig;
             }
         }
