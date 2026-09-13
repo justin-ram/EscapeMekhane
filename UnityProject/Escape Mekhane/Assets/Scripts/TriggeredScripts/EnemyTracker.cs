@@ -25,7 +25,7 @@ public class EnemyTracker : MonoBehaviour
         {
             gate.SetActive(false);
             gateUnlocked = true;
-            Debug.Log("All Enemies defeated.Gate unlocked");
+            Debug.Log("All Enemies defeated Gate unlocked");
         }
     }
 }
