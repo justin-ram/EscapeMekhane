@@ -91,12 +91,15 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] float wallJumpDurationTime;
     float wallJumpDuration;
 
+    public bool canBeDamagedByRadiation;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         HPOriginal = HP;
         gravityOrig = gravity;
         spawnPlayer();
+        canBeDamagedByRadiation = true;
     }
 
     // Update is called once per frame

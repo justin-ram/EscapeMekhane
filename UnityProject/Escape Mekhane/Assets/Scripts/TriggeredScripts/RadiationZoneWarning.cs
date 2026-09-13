@@ -10,22 +10,28 @@ public class RadiationZoneWarning : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (gameManager.instance.playerScript.canBeDamagedByRadiation)
         {
-            return;
-        }
+            if (!other.CompareTag("Player"))
+            {
+                return;
+            }
 
-        warningPanel.SetActive(true);
-        Debug.Log(warningMessage);
+            warningPanel.SetActive(true);
+            Debug.Log(warningMessage);
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (gameManager.instance.playerScript.canBeDamagedByRadiation)
         {
-            return;
+            if (!other.CompareTag("Player"))
+            {
+                return;
+            }
+            warningPanel.SetActive(false);
+            Debug.Log("Exited Radiation Field");
         }
-        warningPanel.SetActive(false);
-        Debug.Log("Exited Radiation Field");
     }
 }

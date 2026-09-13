@@ -3,7 +3,7 @@ using System.Collections;
 
 public class damage : MonoBehaviour
 {
-    enum damageType {bullet, stationary, DOT, proximity, rocket , explosion}
+    enum damageType {bullet, stationary, DOT, proximity, rocket , explosion, radiation}
     [SerializeField] damageType type;
     [SerializeField] Rigidbody rb;
     [SerializeField] GameObject explosion;
@@ -22,6 +22,7 @@ public class damage : MonoBehaviour
 
     [SerializeField] float pushDuration;
     bool isDamaging;
+  
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -50,7 +51,7 @@ public class damage : MonoBehaviour
             return;
         }
         IDamage dmg = other.GetComponent<IDamage>();
-        if(dmg != null && type != damageType.DOT && type != damageType.explosion && type != damageType.rocket)
+        if(dmg != null && type != damageType.DOT && type != damageType.explosion && type != damageType.rocket && type != damageType.radiation)
         {
             dmg.takeDamage(damageAmount, damageDir, damagePushBackSpeed, pushDuration);
         }
@@ -79,7 +80,11 @@ public class damage : MonoBehaviour
             return;
         }
         IDamage dmg = other.GetComponent<IDamage>();
-        if(dmg != null&& type == damageType.DOT&& !isDamaging)
+        if(dmg != null&& type == damageType.DOT && !isDamaging)
+        {
+            StartCoroutine(damageOther(dmg));
+        }
+        if(dmg != null && type == damageType.radiation && !isDamaging && gameManager.instance.playerScript.canBeDamagedByRadiation)
         {
             StartCoroutine(damageOther(dmg));
         }
