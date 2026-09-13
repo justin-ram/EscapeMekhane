@@ -15,11 +15,11 @@ MonoBehaviour:
   gunModel: {fileID: 4698201593948852689, guid: 185ce04d44da342739f0bef843698e6c, type: 3}
   shootDamage: 1
   shootDistance: 1
-  shootFireRate: 0.1
+  shootFireRate: 2
   damageDir: {x: 0, y: 0, z: 0}
   pushBackSpeed: 0
   pushBackDuration: 0
-  ammoCur: 5
+  ammoCur: 0
   ammoMax: 5
   hitEffect: {fileID: 0}
   shootSound:
@@ -29,4 +29,4 @@ MonoBehaviour:
   projectile: {fileID: 2298444432907026333, guid: e90d84c10db14084085fab063ec6fa35, type: 3}
   weaponPushSpeed: 10
   weaponPushLastsTimer: 0.5
-  weaponPushLasts: 0.5
+  weaponPushLasts: -0.018902523

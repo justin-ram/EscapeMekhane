@@ -147,7 +147,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
 
 
-        if (Input.GetButton("Fire1") && gunInv.Count > 0 && shootTimer > gunInv[gunInvPos].shootFireRate)
+        if (Input.GetButton("Fire1") && gunInv.Count > 0 && shootTimer > gunInv[gunInvPos].shootFireRate && gunInv[gunInvPos].ammoCur > 0)
         {
             shoot();
         }
@@ -356,7 +356,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDistance, ~ignoreLayer))
             {
                 // Debug.Log(hit.collider.name);
-
+                gunInv[gunInvPos].ammoCur--;
                 Instantiate(gunInv[gunInvPos].hitEffect, hit.point, Quaternion.identity);
                 IDamage dmg = hit.collider.GetComponent<IDamage>();
                 if (dmg != null)
@@ -365,8 +365,9 @@ public class playerController : MonoBehaviour, IDamage, IPickup
                 }
             }
         }
-        else
+        else if (gunInv[gunInvPos].ammoCur > 0)
         {
+            gunInv[gunInvPos].ammoCur--;
             Instantiate(gunInv[gunInvPos].projectile, gunEndpoint.position, Camera.main.transform.rotation);
             gunInv[gunInvPos].weaponPushLasts = gunInv[gunInvPos].weaponPushLastsTimer;
         }

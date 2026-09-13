@@ -16,9 +16,17 @@ MonoBehaviour:
   shootDamage: 10
   shootDistance: 9
   shootFireRate: 1
-  ammoCur: 10
+  damageDir: {x: 0, y: 0, z: 0}
+  pushBackSpeed: 0
+  pushBackDuration: 0
+  ammoCur: 0
   ammoMax: 20
   hitEffect: {fileID: 5584602140419805224, guid: 6d2ab2bfa7deb87469243d7b8de20229, type: 3}
   shootSound:
   - {fileID: 8300000, guid: 46e1c7ce22809c74490a8b97e755cec3, type: 3}
   shootSoundVol: 0.5
+  isProjectile: 0
+  projectile: {fileID: 0}
+  weaponPushSpeed: 0
+  weaponPushLastsTimer: 0
+  weaponPushLasts: 0
