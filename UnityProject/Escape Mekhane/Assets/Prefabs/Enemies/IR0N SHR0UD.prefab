@@ -156,6 +156,7 @@ GameObject:
   - component: {fileID: 381209296303765004}
   - component: {fileID: 1925659564153440717}
   - component: {fileID: 7569551696585084297}
+  - component: {fileID: 7860423482704156276}
   m_Layer: 7
   m_Name: IR0N SHR0UD
   m_TagString: Untagged
@@ -191,9 +192,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a82141c4c09a15438e30fa6c6a5548a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
+  agent: {fileID: 7860423482704156276}
   model: {fileID: 8613071073194439853}
-  HP: 100
+  HP: 10
   faceTargetSpeed: 100
   FOV: 0
   roamDist: 0
@@ -207,18 +208,18 @@ MonoBehaviour:
   ingnoreLayer:
     serializedVersion: 2
     m_Bits: 128
-  x1: 20
+  x1: 480
   y1: 1
-  z1: 20
-  x2: 30
+  z1: 500
+  x2: 490
   y2: 1
-  z2: 30
-  x3: 40
+  z2: 510
+  x3: 495
   y3: 1
-  z3: 40
-  x4: 50
+  z3: 505
+  x4: 480
   y4: 1
-  z4: 50
+  z4: 500
   shipItem: {fileID: 5042017000464638916, guid: 61f029c6fdd95e94f8a87dce0cd1d075, type: 3}
   gravity: 0
   loadRate: 1
@@ -429,6 +430,28 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!195 &7860423482704156276
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5211301489594403617}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.50000006
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 8
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6228798156436213892
 GameObject:
   m_ObjectHideFlags: 0
