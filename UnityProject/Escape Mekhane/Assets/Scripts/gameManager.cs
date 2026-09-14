@@ -131,7 +131,7 @@ public class gameManager : MonoBehaviour
 
     public void shipWin()
     {
-        if (shipItemGoalCount == winGameGoalCount)
+        if (shipItemGoalCount >= winGameGoalCount)
         {
             statePause(menuWin);
         }
