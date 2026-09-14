@@ -9,8 +9,11 @@ public class gunInventoryAmmoPickUp : MonoBehaviour
         IPickup pickup = other.GetComponent<IPickup>();
         if (pickup != null)
         {
-            gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoCur = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoMax;
-            Destroy(gameObject);
+            if(gameManager.instance.playerScript.gunInv.Count > 0)
+           { 
+                gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoCur = gameManager.instance.playerScript.gunInv[gameManager.instance.playerScript.gunInvPos].ammoMax;
+                Destroy(gameObject);
+            }
         }
 
     }
