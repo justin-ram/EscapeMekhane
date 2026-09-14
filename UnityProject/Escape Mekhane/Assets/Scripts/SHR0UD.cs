@@ -294,7 +294,7 @@ public class SHR0UD : MonoBehaviour, IDamage
     }
     void telleport()
     {
-        int rand = Random.Range(1, 3);
+        int rand = Random.Range(1, 4);
         
         if (transform.position == pos1)
         {
