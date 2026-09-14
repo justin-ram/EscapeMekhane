@@ -1728,6 +1728,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sentinel
       objectReference: {fileID: 0}
+    - target: {fileID: 1198097757554558008, guid: c108e061bfa075041a7efe66c8e8d4dd, type: 3}
+      propertyPath: _sightRange
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1198097757554558008, guid: c108e061bfa075041a7efe66c8e8d4dd, type: 3}
+      propertyPath: _attackRange
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1198097757554558008, guid: c108e061bfa075041a7efe66c8e8d4dd, type: 3}
+      propertyPath: _fieldOfView
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 1198097757554558008, guid: c108e061bfa075041a7efe66c8e8d4dd, type: 3}
+      propertyPath: _lineOfSightMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8503668883612157345, guid: c108e061bfa075041a7efe66c8e8d4dd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 311.1
@@ -2336,6 +2352,10 @@ PrefabInstance:
     - target: {fileID: 8226244124773005046, guid: 25dbbdf3ca0b8c249b02e464a2fa06f2, type: 3}
       propertyPath: m_Name
       value: enemy1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226244124773005046, guid: 25dbbdf3ca0b8c249b02e464a2fa06f2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3222,6 +3242,26 @@ PrefabInstance:
     - target: {fileID: 4198343771613175126, guid: 380af8db264ca474e80e2b896b190135, type: 3}
       propertyPath: m_Name
       value: Wasp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971225116671083025, guid: 380af8db264ca474e80e2b896b190135, type: 3}
+      propertyPath: _sightRange
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971225116671083025, guid: 380af8db264ca474e80e2b896b190135, type: 3}
+      propertyPath: _attackRange
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971225116671083025, guid: 380af8db264ca474e80e2b896b190135, type: 3}
+      propertyPath: _playerAimHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971225116671083025, guid: 380af8db264ca474e80e2b896b190135, type: 3}
+      propertyPath: _distanceTolerance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971225116671083025, guid: 380af8db264ca474e80e2b896b190135, type: 3}
+      propertyPath: _lineOfSightMask.m_Bits
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7020970696136665167, guid: 380af8db264ca474e80e2b896b190135, type: 3}
       propertyPath: m_LocalPosition.x

@@ -100,7 +100,7 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
             ? _shootOrigin.position
             : transform.position + Vector3.up;					// Fall back to the Sentinel's upper body if no shoot origin is assigned.
 
-        Vector3 target = _player.position + Vector3.up;
+        Vector3 target = _player.position + Vector3.up * 0.5f;
         Vector3 directionToPlayer = target - origin;
         distanceToPlayer = directionToPlayer.magnitude;					// Store the distance so Update can reuse it for movement and attacking.
 
@@ -177,7 +177,7 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
             return;					// Body tracking can continue even if the weapon references are missing.
         }
 
-        Vector3 gunDirection = (_player.position + Vector3.up) - _shootOrigin.position;					// Aim near the player's center instead of directly at their feet.
+        Vector3 gunDirection = (_player.position + Vector3.up * 0.5f) - _shootOrigin.position;					// Aim near the player's center instead of directly at their feet.
         Quaternion gunRotation = Quaternion.LookRotation(gunDirection);
         _gunPivot.rotation = Quaternion.Slerp(
             _gunPivot.rotation,
@@ -263,7 +263,7 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
             return;
         }
 
-        Vector3 direction = (_player.position + Vector3.up) - _shootOrigin.position;
+        Vector3 direction = (_player.position + Vector3.up * 0.5f) - _shootOrigin.position;
         Quaternion rotation = Quaternion.LookRotation(direction);
         Instantiate(_projectilePrefab, _shootOrigin.position, rotation);					// Spawn the projectile already aimed toward the player.
     }
