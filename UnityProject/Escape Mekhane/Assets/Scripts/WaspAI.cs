@@ -3,6 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(AudioSource))]
 public class WaspAI : MonoBehaviour, IDamage, IHealable
 {
     [Header("Required References")]
@@ -43,6 +44,21 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
     [SerializeField] float _playerAimHeight = 1f;
     [SerializeField] Color _warningColor = new Color(1f, 0.45f, 0f);
 
+    [Header("Audio")]
+    [SerializeField] AudioSource _hoverAudioSource;
+    [SerializeField] AudioSource _actionAudioSource;
+
+    [SerializeField] AudioClip _hoverClip;
+    [SerializeField] AudioClip _attackChargeClip;
+    [SerializeField] AudioClip _fireClip;
+    [SerializeField] AudioClip _damageClip;
+    [SerializeField] AudioClip _destroyClip;
+
+    [Range(0f, 1f)][SerializeField] float _hoverVolume = 0.4f;
+    [Range(0f, 1f)][SerializeField] float _actionVolume = 1f;
+    [SerializeField] float _audioMinDistance = 2f;
+    [SerializeField] float _audioMaxDistance = 20f;
+
     readonly RaycastHit[] _groundHits = new RaycastHit[12];
     readonly RaycastHit[] _obstacleHits = new RaycastHit[12];
     readonly RaycastHit[] _lineOfSightHits = new RaycastHit[12];
@@ -70,6 +86,8 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
         _rigidbody.isKinematic = true;
         _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+
+        PrepareAudio();
     }
 
     void Start()
@@ -81,6 +99,128 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
         FindPlayer();
         PrepareModel();
         PlaceAtHoverHeight();
+        StartHoverAudio();					// Begin the Wasp's continuous flying sound.
+    }
+
+    void OnEnable()
+    {
+        if (_currentHealth > 0)
+        {
+            StartHoverAudio();                  // Restart hovering audio if the Wasp is re-enabled while alive.
+        }
+    }
+
+    void OnDisable()
+    {
+        if (_hoverAudioSource != null)
+        {
+            _hoverAudioSource.Stop();                   // Prevent the hover loop from continuing while disabled.
+        }
+    }
+
+    void PrepareAudio()
+    {
+        AudioSource[] existingSources = GetComponents<AudioSource>();                   // Find any Audio Sources already attached to the Wasp.
+
+        if (_hoverAudioSource == null)
+        {
+            if (existingSources.Length > 0)
+            {
+                _hoverAudioSource = existingSources[0];                 // Reuse the first available source for the hover loop.
+            }
+            else
+            {
+                _hoverAudioSource = gameObject.AddComponent<AudioSource>();                 // Create a hover source when none exists.
+            }
+        }
+
+        if (_actionAudioSource == null)
+        {
+            foreach (AudioSource source in existingSources)
+            {
+                if (source != _hoverAudioSource)
+                {
+                    _actionAudioSource = source;                    // Use a separate source for attacks, damage, and destruction.
+                    break;
+                }
+            }
+
+            if (_actionAudioSource == null)
+            {
+                _actionAudioSource = gameObject.AddComponent<AudioSource>();                    // Create the separate action source when needed.
+            }
+        }
+
+        ConfigureAudioSource(_hoverAudioSource);                    // Apply the shared 3D audio settings.
+        ConfigureAudioSource(_actionAudioSource);
+
+        _hoverAudioSource.loop = true;                  // The flying sound should continue until the Wasp dies or is disabled.
+        _hoverAudioSource.volume = _hoverVolume;
+
+        _actionAudioSource.loop = false;                    // Action sounds should play only once per event.
+        _actionAudioSource.volume = _actionVolume;
+    }
+
+    void ConfigureAudioSource(AudioSource source)
+    {
+        source.playOnAwake = false;                 // Audio is started deliberately by the AI.
+        source.spatialBlend = 1f;                   // Make the sound fully positional in the 3D world.
+        source.dopplerLevel = 0f;                   // Prevent movement from unnaturally changing the pitch.
+        source.rolloffMode = AudioRolloffMode.Logarithmic;
+        source.minDistance = _audioMinDistance;
+        source.maxDistance = _audioMaxDistance;
+    }
+
+    void StartHoverAudio()
+    {
+        if (_hoverAudioSource == null ||
+            _hoverClip == null ||
+            _isDead ||
+            _hoverAudioSource.isPlaying)
+        {
+            return;                 // Avoid missing references, dead Wasps, and duplicate hover loops.
+        }
+
+        _hoverAudioSource.clip = _hoverClip;
+        _hoverAudioSource.loop = true;
+        _hoverAudioSource.volume = _hoverVolume;
+        _hoverAudioSource.Play();                   // Start the continuous flying sound.
+    }
+
+    void PlayActionClip(AudioClip clip)
+    {
+        if (_actionAudioSource == null || clip == null)
+        {
+            return;                 // Safely ignore audio events that do not have an assigned clip.
+        }
+
+        _actionAudioSource.PlayOneShot(clip, _actionVolume);                    // Play without interrupting another action sound.
+    }
+
+    void PlayDetachedClip(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            return;                 // Do nothing when no destruction clip has been assigned.
+        }
+
+        GameObject audioObject = new GameObject("Wasp Detached Audio");                 // Create audio that survives after the Wasp is destroyed.
+        audioObject.transform.position = transform.position;
+
+        AudioSource detachedSource = audioObject.AddComponent<AudioSource>();
+        ConfigureAudioSource(detachedSource);                   // Give the detached sound the same 3D distance settings.
+
+        detachedSource.clip = clip;
+        detachedSource.volume = _actionVolume;
+
+        if (_actionAudioSource != null)
+        {
+            detachedSource.outputAudioMixerGroup =
+                _actionAudioSource.outputAudioMixerGroup;                   // Preserve the Wasp's assigned mixer group.
+        }
+
+        detachedSource.Play();                  // Play the complete destruction sound after the Wasp disappears.
+        Destroy(audioObject, clip.length + 0.1f);                   // Remove the temporary audio object after playback finishes.
     }
 
     void Update()
@@ -410,6 +550,7 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
     IEnumerator AttackRoutine()
     {
         _isAttacking = true;
+        PlayActionClip(_attackChargeClip);					// Warn the player that the Wasp is preparing to fire.
 
         if (_material != null)
         {
@@ -455,6 +596,7 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
             _projectilePrefab,
             _shootOrigin.position,
             projectileRotation);
+        PlayActionClip(_fireClip);					// Play the shot at the moment the projectile is created.
 
         WaspProjectile projectile =
             projectileObject.GetComponent<WaspProjectile>();
@@ -481,11 +623,19 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
         if (_currentHealth <= 0)
         {
             _isDead = true;
-            StopAllCoroutines();
-            Destroy(gameObject);					// Destroying the root also removes every Wasp child.
+            StopAllCoroutines();                    // Cancel warnings and damage flashes when defeated.
+
+            if (_hoverAudioSource != null)
+            {
+                _hoverAudioSource.Stop();                   // Immediately stop the continuous flying sound.
+            }
+
+            PlayDetachedClip(_destroyClip);                 // Allow the destruction sound to finish after this object is removed.
+            Destroy(gameObject);                    // Remove the defeated Wasp and all of its child objects.
         }
         else
         {
+            PlayActionClip(_damageClip);                    // Play feedback for a nonlethal hit.
             StartCoroutine(FlashDamage());
         }
     }
@@ -506,6 +656,7 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
             _currentHealth + amount,
             _maxHealth);                    // Restores health without allowing it to exceed the enemy's maximum health.
     }
+
     IEnumerator FlashDamage()
     {
         if (_material == null)
