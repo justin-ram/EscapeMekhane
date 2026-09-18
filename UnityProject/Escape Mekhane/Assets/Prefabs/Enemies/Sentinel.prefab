@@ -113,6 +113,17 @@ MonoBehaviour:
   _burstSize: 3
   _timeBetweenShots: 0.15
   _burstCooldown: 1.5
+  _movementAudioSource: {fileID: 0}
+  _actionAudioSource: {fileID: 0}
+  _movementClip: {fileID: 8300000, guid: 3472f9542854c2646969e846b47f1fa5, type: 3}
+  _detectionClip: {fileID: 8300000, guid: 3ceb82ed29bd27e44af38f7e8e469782, type: 3}
+  _fireClip: {fileID: 8300000, guid: 3bcb7f870ef19d74a905be256b061c2d, type: 3}
+  _damageClip: {fileID: 8300000, guid: 572c5a4860c6c3d459aac5501d53fbf6, type: 3}
+  _destroyClip: {fileID: 8300000, guid: 96c0848adfc12a34db334870127f2b45, type: 3}
+  _movementVolume: 0.4
+  _actionVolume: 1
+  _audioMinDistance: 2
+  _audioMaxDistance: 20
 --- !u!1 &3642658280549112158
 GameObject:
   m_ObjectHideFlags: 0

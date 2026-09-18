@@ -33,6 +33,19 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
     [SerializeField] float _timeBetweenShots = 0.15f;
     [SerializeField] float _burstCooldown = 1.5f;
 
+    [Header("Audio")]
+    [SerializeField] AudioSource _movementAudioSource;					// Plays the Sentinel's looping mechanical movement sound.
+    [SerializeField] AudioSource _actionAudioSource;					// Plays detection, firing, and damage sounds without interrupting movement.
+    [SerializeField] AudioClip _movementClip;					// Loop used while the NavMeshAgent is actively moving.
+    [SerializeField] AudioClip _detectionClip;					// Plays once whenever the Sentinel first detects the player.
+    [SerializeField] AudioClip _fireClip;					// Plays once for every projectile spawned during a burst.
+    [SerializeField] AudioClip _damageClip;					// Plays when the Sentinel survives incoming damage.
+    [SerializeField] AudioClip _destroyClip;					// Plays from a detached object so destruction does not cut it off.
+    [Range(0f, 1f)][SerializeField] float _movementVolume = 0.4f;
+    [Range(0f, 1f)][SerializeField] float _actionVolume = 1f;
+    [Min(0f)][SerializeField] float _audioMinDistance = 2f;
+    [Min(0f)][SerializeField] float _audioMaxDistance = 20f;
+
     NavMeshAgent _agent;
     Transform _player;
     Material _material;
@@ -43,11 +56,13 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
     float _patrolTimer;
     bool _hasPatrolDestination;					// Prevents a new patrol point from being chosen every frame.
     bool _isFiring;					// Prevents multiple burst coroutines from running together.
-    bool _isDead;					// Stops all remaining behavior once health reaches zero.
+    bool _isDead;                   // Stops all remaining behavior once health reaches zero.
+    bool _hasDetectedPlayer;					// Prevents the detection sound from replaying every frame while the player remains visible.
 
     void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();					// Cache the component instead of repeatedly searching for it.
+        _agent = GetComponent<NavMeshAgent>();                  // Cache the component instead of repeatedly searching for it.
+        PrepareAudio();					// Create and configure any AudioSources that were not assigned in the Inspector.
         _spawnPosition = transform.position;					// Save the original location as the patrol center.
         _currentHealth = _maxHealth;					// Begin every spawned Sentinel at full health.
 
@@ -86,12 +101,21 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
 
         if (_player != null && CanSeePlayer(out float distanceToPlayer))					// Engage only when range, FOV, and line of sight all pass.
         {
+            if (!_hasDetectedPlayer)
+            {
+                PlayActionClip(_detectionClip);					// Announce the first frame on which the player becomes visible.
+                _hasDetectedPlayer = true;
+            }
+
             EngagePlayer(distanceToPlayer);
         }
         else
         {
+            _hasDetectedPlayer = false;					// Allow the detection sound to play again after the player is genuinely reacquired.
             Patrol();
         }
+
+        UpdateMovementAudio();					// Start or stop the movement loop based on the NavMeshAgent's current velocity.
     }
 
     bool CanSeePlayer(out float distanceToPlayer)
@@ -265,7 +289,8 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
 
         Vector3 direction = (_player.position + Vector3.up * 0.5f) - _shootOrigin.position;
         Quaternion rotation = Quaternion.LookRotation(direction);
-        Instantiate(_projectilePrefab, _shootOrigin.position, rotation);					// Spawn the projectile already aimed toward the player.
+        Instantiate(_projectilePrefab, _shootOrigin.position, rotation);                    // Spawn the projectile already aimed toward the player.
+        PlayActionClip(_fireClip);					// Match one firing sound to every projectile created during the burst.
     }
 
 
@@ -286,10 +311,18 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
         {
             _isDead = true;
             StopAllCoroutines();
-            Destroy(gameObject);                    // Removing the root also removes every visual and weapon child.
+
+            if (_movementAudioSource != null)
+            {
+                _movementAudioSource.Stop();					// Stop the loop before the Sentinel GameObject is removed.
+            }
+
+            PlayDetachedClip(_destroyClip);					// Allow the complete destruction sound to survive after this object is destroyed.
+            Destroy(gameObject);					// Removing the root also removes every visual and weapon child.
         }
         else
         {
+            PlayActionClip(_damageClip);					// Play the damage sound only when the Sentinel survives the hit.
             StartCoroutine(FlashDamage());
         }
     }
@@ -322,6 +355,110 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
         _material.color = _originalColor;
     }
 
+        void PrepareAudio()
+    {
+        AudioSource[] existingSources = GetComponents<AudioSource>();
+
+        if (_movementAudioSource == null)
+        {
+            _movementAudioSource = existingSources.Length > 0
+                ? existingSources[0]
+                : gameObject.AddComponent<AudioSource>();					// Reuse the first source when available.
+        }
+
+        if (_actionAudioSource == null || _actionAudioSource == _movementAudioSource)
+        {
+            _actionAudioSource = gameObject.AddComponent<AudioSource>();					// Use a separate source so one-shots cannot interrupt movement.
+        }
+
+        ConfigureAudioSource(_movementAudioSource);
+        ConfigureAudioSource(_actionAudioSource);
+
+        _movementAudioSource.clip = _movementClip;
+        _movementAudioSource.loop = true;
+        _movementAudioSource.playOnAwake = false;
+        _movementAudioSource.volume = _movementVolume;
+
+        _actionAudioSource.loop = false;
+        _actionAudioSource.playOnAwake = false;
+        _actionAudioSource.volume = _actionVolume;
+    }
+
+    void ConfigureAudioSource(AudioSource source)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        source.spatialBlend = 1f;					// Make the Sentinel's sounds originate from its world position.
+        source.rolloffMode = AudioRolloffMode.Logarithmic;
+        source.minDistance = _audioMinDistance;
+        source.maxDistance = Mathf.Max(_audioMinDistance, _audioMaxDistance);
+        source.dopplerLevel = 0f;					// Prevent unwanted pitch changes while the Sentinel moves.
+    }
+
+    void UpdateMovementAudio()
+    {
+        if (_movementAudioSource == null || _movementClip == null)
+        {
+            return;
+        }
+
+        bool isMoving =
+            _agent != null &&
+            _agent.enabled &&
+            _agent.isOnNavMesh &&
+            _agent.velocity.sqrMagnitude > 0.05f;					// Ignore extremely small NavMesh velocity fluctuations.
+
+        if (isMoving && !_movementAudioSource.isPlaying)
+        {
+            _movementAudioSource.Play();
+        }
+        else if (!isMoving && _movementAudioSource.isPlaying)
+        {
+            _movementAudioSource.Stop();
+        }
+    }
+
+    void PlayActionClip(AudioClip clip)
+    {
+        if (_actionAudioSource == null || clip == null)
+        {
+            return;
+        }
+
+        _actionAudioSource.PlayOneShot(clip, _actionVolume);					// PlayOneShot permits rapid burst sounds to overlap naturally.
+    }
+
+    void PlayDetachedClip(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        GameObject detachedAudio = new GameObject("Sentinel Destroy Audio");
+        detachedAudio.transform.position = transform.position;
+
+        AudioSource detachedSource = detachedAudio.AddComponent<AudioSource>();
+        ConfigureAudioSource(detachedSource);
+        detachedSource.clip = clip;
+        detachedSource.volume = _actionVolume;
+        detachedSource.Play();
+
+        Destroy(detachedAudio, clip.length + 0.1f);					// Clean up only after the complete destruction sound has played.
+    }
+
+    void OnDisable()
+    {
+        if (_movementAudioSource != null)
+        {
+            _movementAudioSource.Stop();					// Prevent the loop from continuing when the Sentinel is disabled or destroyed.
+        }
+    }
+
+    
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
