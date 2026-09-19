@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5d28da65ad55adc4899180bb885715b9
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/BiomeTemplates/FlowerPatches/FlowerPatches.prefab
+  uploadId: 997366

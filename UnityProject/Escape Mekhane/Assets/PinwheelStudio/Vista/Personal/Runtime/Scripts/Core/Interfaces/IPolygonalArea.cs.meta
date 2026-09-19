@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 905c628ec78945a8b5feb85fcdd541b4
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Runtime/Scripts/Core/Interfaces/IPolygonalArea.cs
+  uploadId: 997366

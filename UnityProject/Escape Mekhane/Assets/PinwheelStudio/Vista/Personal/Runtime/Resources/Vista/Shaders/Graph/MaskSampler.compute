@@ -1,0 +1,24 @@
+#pragma exclude_renderers gles3
+#pragma kernel Main
+
+#include "../Includes/CommonDataTypes.hlsl"
+#include "../Includes/Sampling.hlsl"
+
+StructuredBuffer<PositionSample> _Positions;
+
+Texture2D _MainTex;
+RWStructuredBuffer<float> _Data;
+int _BaseIndex;
+int _InstanceCount;
+
+[numthreads(8, 1, 1)]
+void Main(uint3 id: SV_DISPATCHTHREADID)
+{
+	int index = id.x + _BaseIndex;
+	if (index >= _InstanceCount)
+		return;
+
+	PositionSample p = _Positions[index];
+	float value = _MainTex.SampleLevel(_SamplerLinearClamp, p.position.xz, 0).r;
+	_Data[index] = value;
+}

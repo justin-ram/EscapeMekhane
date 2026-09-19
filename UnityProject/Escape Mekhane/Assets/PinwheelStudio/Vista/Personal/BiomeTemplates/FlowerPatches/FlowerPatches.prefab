@@ -1,0 +1,269 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2454901207045131480
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2244883816518131258}
+  m_Layer: 0
+  m_Name: FlowerPatches
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2244883816518131258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2454901207045131480}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 338, y: 0, z: 308}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1275349840721106990}
+  - {fileID: 8056276716605851650}
+  - {fileID: 3932261785467536071}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2971630168837588910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8056276716605851650}
+  - component: {fileID: 2502681628744709920}
+  m_Layer: 0
+  m_Name: Patch 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8056276716605851650
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2971630168837588910}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -98.1, y: 0, z: -23.5}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2244883816518131258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2502681628744709920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2971630168837588910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c05938ebcb84ab4ebf1959f34e51c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_order: 0
+  m_terrainGraph: {fileID: 11400000, guid: e1ca47ed0f536344f96cd04cbcf59e49, type: 2}
+  m_space: 0
+  m_dataMask: 384
+  m_baseResolution: 80
+  m_seed: 0
+  m_biomeMaskResolution: 512
+  m_biomeMaskGraph: {fileID: 0}
+  m_anchors:
+  - {x: 500, y: 0, z: 0}
+  - {x: 461.93976, y: 0, z: 191.34172}
+  - {x: 353.55338, y: 0, z: 353.55338}
+  - {x: 191.34172, y: 0, z: 461.93976}
+  - {x: -0.000021855694, y: 0, z: 500}
+  - {x: -191.3417, y: 0, z: 461.9398}
+  - {x: -353.55338, y: 0, z: 353.55338}
+  - {x: -461.93976, y: 0, z: 191.34174}
+  - {x: -500, y: 0, z: -0.00004371139}
+  - {x: -461.93976, y: 0, z: -191.34172}
+  - {x: -353.5534, y: 0, z: -353.55334}
+  - {x: -191.34178, y: 0, z: -461.93976}
+  - {x: 0.0000059624404, y: 0, z: -500}
+  - {x: 191.3418, y: 0, z: -461.93973}
+  - {x: 353.5533, y: 0, z: -353.55344}
+  - {x: 461.9398, y: 0, z: -191.34172}
+  m_falloffDirection: 0
+  m_falloffDistance: 300
+  m_falloffAnchors:
+  - {x: 800, y: 0, z: 0.00002278964}
+  - {x: 739.10364, y: 0, z: 306.14676}
+  - {x: 565.6854, y: 0, z: 565.6854}
+  - {x: 306.14676, y: 0, z: 739.10364}
+  - {x: -0.000008181911, y: 0, z: 800}
+  - {x: -306.14676, y: 0, z: 739.10364}
+  - {x: -565.6854, y: 0, z: 565.6854}
+  - {x: -739.10364, y: 0, z: 306.1468}
+  - {x: -800, y: 0, z: -0.000059664137}
+  - {x: -739.10364, y: 0, z: -306.14676}
+  - {x: -565.6855, y: 0, z: -565.6853}
+  - {x: -306.14685, y: 0, z: -739.10364}
+  - {x: 0.000026473115, y: 0, z: -800}
+  - {x: 306.14685, y: 0, z: -739.1036}
+  - {x: 565.6853, y: 0, z: -565.6855}
+  - {x: 739.10364, y: 0, z: -306.14676}
+  m_cleanUpMode: 0
+  m_biomeMaskAdjustments: []
+  m_blendOptions:
+    m_heightMapBlendMode: 0
+    m_textureBlendMode: 0
+    m_meshDensityBlendMode: 0
+    m_holeMapBlendMode: 0
+    m_populationBlendMode: 1
+    m_useTransformForHeightBlend: 1
+  m_textureInputs: []
+  m_positionInputs: []
+  m_guid: B4YM4F8O
+  m_propertyOverrides: []
+--- !u!1 &4887743165380864173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1275349840721106990}
+  m_Layer: 0
+  m_Name: DUPLICATE_BIOMES_TO_SCATTER_MORE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1275349840721106990
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4887743165380864173}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2244883816518131258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8778042298176684822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3932261785467536071}
+  - component: {fileID: 8175047671899214784}
+  m_Layer: 0
+  m_Name: Patch 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3932261785467536071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8778042298176684822}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 70.3, y: 0, z: -1.4}
+  m_LocalScale: {x: 0.08076, y: 0.08076, z: 0.08076}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2244883816518131258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8175047671899214784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8778042298176684822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c05938ebcb84ab4ebf1959f34e51c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_order: 0
+  m_terrainGraph: {fileID: 11400000, guid: e1ca47ed0f536344f96cd04cbcf59e49, type: 2}
+  m_space: 0
+  m_dataMask: 384
+  m_baseResolution: 80
+  m_seed: 0
+  m_biomeMaskResolution: 512
+  m_biomeMaskGraph: {fileID: 0}
+  m_anchors:
+  - {x: 500, y: 0, z: 0}
+  - {x: 461.93976, y: 0, z: 191.34172}
+  - {x: 353.55338, y: 0, z: 353.55338}
+  - {x: 191.34172, y: 0, z: 461.93976}
+  - {x: -0.000021855694, y: 0, z: 500}
+  - {x: -191.3417, y: 0, z: 461.9398}
+  - {x: -353.55338, y: 0, z: 353.55338}
+  - {x: -461.93976, y: 0, z: 191.34174}
+  - {x: -500, y: 0, z: -0.00004371139}
+  - {x: -461.93976, y: 0, z: -191.34172}
+  - {x: -353.5534, y: 0, z: -353.55334}
+  - {x: -191.34178, y: 0, z: -461.93976}
+  - {x: 0.0000059624404, y: 0, z: -500}
+  - {x: 191.3418, y: 0, z: -461.93973}
+  - {x: 353.5533, y: 0, z: -353.55344}
+  - {x: 461.9398, y: 0, z: -191.34172}
+  m_falloffDirection: 0
+  m_falloffDistance: 300
+  m_falloffAnchors:
+  - {x: 800, y: 0, z: 0.00002278964}
+  - {x: 739.10364, y: 0, z: 306.14676}
+  - {x: 565.6854, y: 0, z: 565.6854}
+  - {x: 306.14676, y: 0, z: 739.10364}
+  - {x: -0.000008181911, y: 0, z: 800}
+  - {x: -306.14676, y: 0, z: 739.10364}
+  - {x: -565.6854, y: 0, z: 565.6854}
+  - {x: -739.10364, y: 0, z: 306.1468}
+  - {x: -800, y: 0, z: -0.000059664137}
+  - {x: -739.10364, y: 0, z: -306.14676}
+  - {x: -565.6855, y: 0, z: -565.6853}
+  - {x: -306.14685, y: 0, z: -739.10364}
+  - {x: 0.000026473115, y: 0, z: -800}
+  - {x: 306.14685, y: 0, z: -739.1036}
+  - {x: 565.6853, y: 0, z: -565.6855}
+  - {x: 739.10364, y: 0, z: -306.14676}
+  m_cleanUpMode: 0
+  m_biomeMaskAdjustments: []
+  m_blendOptions:
+    m_heightMapBlendMode: 0
+    m_textureBlendMode: 0
+    m_meshDensityBlendMode: 0
+    m_holeMapBlendMode: 0
+    m_populationBlendMode: 1
+    m_useTransformForHeightBlend: 1
+  m_textureInputs: []
+  m_positionInputs: []
+  m_guid: B4YM4F8O
+  m_propertyOverrides: []

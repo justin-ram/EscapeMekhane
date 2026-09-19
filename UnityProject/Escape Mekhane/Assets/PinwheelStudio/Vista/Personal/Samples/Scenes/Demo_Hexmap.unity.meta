@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 89ea5945371342f4f9f942c15686179c
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Samples/Scenes/Demo_Hexmap.unity
+  uploadId: 997366

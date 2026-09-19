@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: dc5739ce0cc134648abea1274b6f9c4d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Runtime/Scripts/BiomeTemplate/Utilities/SnapBiomeToTiles.cs
+  uploadId: 997366

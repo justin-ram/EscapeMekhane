@@ -1,0 +1,28 @@
+#if VISTA
+using Pinwheel.Vista.Graph;
+using UnityEditor;
+using UnityEditor.Callbacks;
+using UnityEngine;
+using GraphEditorUIVersion = Pinwheel.VistaEditor.EditorSettings.GraphEditorSettings.UIVersion;
+using Pinwheel.Vista;
+
+namespace Pinwheel.VistaEditor.Graph
+{
+    public static class GraphOpenHandler
+    {
+        [OnOpenAsset(0)]
+        public static bool HandleOpenGraphAsset(int instanceId, int line)
+        {
+            Object asset = Utilities.EditorIdToObjectCompat(instanceId);
+            if (asset is GraphAsset)
+            {
+                return GraphEditorBase.OpenGraph(asset as GraphAsset);
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+#endif

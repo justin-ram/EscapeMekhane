@@ -1,0 +1,39 @@
+#pragma exclude_renderers gles3
+#pragma kernel Main
+
+#include "../Includes/CommonDataTypes.hlsl"
+#include "../Includes/Random.hlsl"
+#include "../Includes/Math.hlsl"
+
+RWStructuredBuffer<PositionSample> _Positions;
+
+float4 _GridBounds;
+float4 _BiomeBounds;
+int _Density;
+float4 _Seed;
+int _BaseIndex;
+int _InstanceCount;
+
+[numthreads(8, 1, 1)]
+void Main(uint3 id: SV_DISPATCHTHREADID)
+{
+	int index = _BaseIndex + id.x;
+	if (index >= _InstanceCount)
+		return;
+
+	float gridWidth = _GridBounds.z;
+	float biomeWidth = _BiomeBounds.z;
+	float widthRatio = gridWidth / biomeWidth;
+	float spacing = widthRatio / _Density;
+
+	uint x = (uint)index % (uint)_Density;
+	uint z = (uint)index / (uint)_Density;
+
+	float2 uv = float2((x + 0.5) * spacing, (z + 0.5) * spacing);
+	float3 pos = float3(uv.x, 0, uv.y);
+
+	PositionSample sample = (PositionSample)0;
+	sample.isValid =1;// (pos.x >= 0) * (pos.x <= 1) * (pos.z >= 0) * (pos.z <= 1);
+	sample.position = pos;
+	_Positions[index] = sample;
+}

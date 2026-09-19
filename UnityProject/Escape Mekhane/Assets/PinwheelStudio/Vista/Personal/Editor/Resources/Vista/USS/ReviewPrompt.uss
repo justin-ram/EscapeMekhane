@@ -1,0 +1,26 @@
+.review-prompt__card {
+    width: 380px;
+    min-height: 58px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 12px 12px 12px;
+    border-width: 1px;
+    border-color: rgb(90, 90, 180);
+    border-radius: 8px;
+    background-color: rgb(24, 24, 50);
+}
+
+.review-prompt__message {
+    margin: 0;
+}
+
+.review-prompt__actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+.review-prompt__actions > * {
+    margin-left: 6px;
+}

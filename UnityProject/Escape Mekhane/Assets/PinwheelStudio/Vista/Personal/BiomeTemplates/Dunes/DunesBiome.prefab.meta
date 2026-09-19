@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5d797b5b4b82ecc44850676dd4b84b48
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/BiomeTemplates/Dunes/DunesBiome.prefab
+  uploadId: 997366

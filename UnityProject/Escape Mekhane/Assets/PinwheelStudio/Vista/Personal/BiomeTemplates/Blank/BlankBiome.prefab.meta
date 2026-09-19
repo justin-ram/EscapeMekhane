@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ff9a34f4682c0b443b107b1aa742856b
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/BiomeTemplates/Blank/BlankBiome.prefab
+  uploadId: 997366

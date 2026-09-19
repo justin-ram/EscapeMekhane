@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1e846d66b2446bc48b2c197c114e49dd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Samples/TerrainLayers/RockFace/RockFace_VistaSample.terrainlayer
+  uploadId: 997366

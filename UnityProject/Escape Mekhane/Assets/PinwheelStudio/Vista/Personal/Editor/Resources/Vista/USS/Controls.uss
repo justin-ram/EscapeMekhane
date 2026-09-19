@@ -1,0 +1,358 @@
+/* General, reusable editor UI controls. Self contained, not bound to any window. ClickableElement
+   loads this sheet itself, so the controls look right wherever they are used. Optional theming via the
+   --vista-clickable-* and --vista-nav-card-* custom properties, each with a sensible fallback. */
+
+.clickable {
+    border-radius: var(--vista-clickable-radius, 4px);
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.clickable:enabled:hover {
+    background-color: var(--vista-clickable-hover-bg, rgba(255, 255, 255, 0.06));
+}
+
+.clickable:enabled:active {
+    background-color: var(--vista-clickable-press-bg, rgba(0, 0, 0, 0.18));
+}
+
+/* Navigation card: a body column (heading + optional description) on the left, a hover revealed arrow on
+   the right. The arrow signals the card opens another page (NavCard is navigation only). */
+.nav-card {
+    flex-direction: row;
+    align-items: center;
+    min-height: 50px;
+    margin: 0 0 6px 0;
+    padding: 8px 12px 8px 12px;
+    border-width: 1px;
+    border-color: var(--vista-nav-card-border, rgba(40, 40, 40, 255));
+    background-color: var(--vista-nav-card-bg, rgba(72, 72, 72, 255));
+}
+
+.nav-card:enabled:hover
+{
+    background-color: var(--vista-nav-card-hover-bg, rgba(80, 80, 80, 255));
+}
+
+.nav-card:enabled:active
+{
+    background-color: var(--vista-nav-card-press-bg, rgba(55, 55, 55, 255));
+}
+
+.nav-card__body {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.nav-card__heading {
+    font-size: 13px;
+    -unity-font-style: bold;
+}
+
+.nav-card__desc {
+    font-size: 11px;
+    opacity: 0.6;
+    white-space: normal;
+    margin-top: 2px;
+}
+
+.nav-card__arrow {
+    flex-shrink: 0;
+    margin-left: 8px;
+    font-size: 14px;
+    opacity: 0;
+    -unity-text-align: middle-center;
+}
+
+.nav-card:enabled:hover .nav-card__arrow {
+    opacity: 1;
+}
+
+/* Action tile: a medium rectangular launcher used in dashboards and action collections. It is more
+   substantial than a contextual chip, but shorter and simpler than a descriptive navigation card. */
+.clickable.action-tile {
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    padding: 4px 12px 4px 12px;
+    border-width: 1px;
+    border-color: var(--vista-action-tile-border, rgba(40, 40, 40, 255));
+    border-radius: var(--vista-clickable-radius, 4px);
+    background-color: var(--vista-action-tile-bg, rgba(72, 72, 72, 255));
+}
+
+/* Hover and press feedback only while enabled, so a disabled tile (e.g. a Pro-gated action) stays inert
+   instead of lighting up under the cursor, matching .nav-card above. */
+.clickable.action-tile:enabled:hover {
+    background-color: var(--vista-action-tile-hover-bg, rgba(82, 82, 82, 255));
+}
+
+.clickable.action-tile:enabled:active {
+    background-color: var(--vista-action-tile-press-bg, rgba(62, 62, 62, 255));
+}
+
+.action-tile__icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-right: 4px;
+}
+
+.action-tile__label {
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.action-tile__arrow {
+    flex-shrink: 0;
+    margin-left: 6px;
+    opacity: 0;
+}
+
+.action-tile--opens-page:enabled:hover .action-tile__arrow {
+    opacity: 1;
+}
+
+.outlined-box {
+    border-width: 1px;
+    border-color: var(--vista-outlined-box-border, rgba(255, 255, 255, 0.12));
+    border-radius: var(--vista-clickable-radius, 4px);
+    margin: 0 0 8px 0;
+    padding: 8px 10px 8px 10px;
+    background-color: var(--vista-outlined-box-bg, rgba(0, 0, 0, 0.10));
+}
+
+.outlined-box__title {
+    -unity-font-style: bold;
+    margin-bottom: 4px;
+}
+
+.outlined-box__line {
+    white-space: normal;
+    opacity: 0.85;
+    margin-bottom: 2px;
+}
+
+/* Text type scale, mirrors Polaris GStyles (title, h1..h3, p1, p2). Applied by the VistaUI factory.
+   Headers are bold and descend in size; p1 is body text; p2 is small and faded. */
+
+.title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    margin: 0 0 8px 0;
+}
+
+.h1 {
+    font-size: 16px;
+    -unity-font-style: bold;
+    margin: 10px 0 6px 0;
+}
+
+.h2 {
+    font-size: 14px;
+    -unity-font-style: bold;
+    margin: 10px 0 4px 0;
+}
+
+.h3 {
+    font-size: 12px;
+    -unity-font-style: bold;
+    margin: 8px 0 4px 0;
+}
+
+.p1 {
+    white-space: normal;
+    margin: 0 0 6px 0;
+}
+
+.p2 {
+    white-space: normal;
+    font-size: 10px;
+    margin: 0 0 4px 0;
+}
+
+/* Utility classes applied by the VistaUI element extensions (.Faded(), .ShowAsLink()). */
+
+.faded {
+    opacity: var(--vista-faded, 0.6);
+}
+
+.link {
+    color: var(--vista-link-color, rgb(120, 160, 245));
+}
+
+.rounded-outline {
+    border-width: 1px;
+    border-color: var(--vista-outline-border, rgba(255, 255, 255, 0.12));
+    border-radius: var(--vista-clickable-radius, 4px);
+}
+
+/* A clickable with an always on outline, shaped as a rounded rectangle. Border only, no background, so it
+   composes with .clickable (which reacts on background) for a chip that reads as an outlined tag and acts
+   like a button. Comes after .clickable here, so its radius and border width win over the .clickable base
+   by source order within this sheet. */
+.chip {
+    height: 18px;
+    border-width: 1px;
+    border-color: var(--vista-chip-border, rgba(255, 255, 255, 0.5));
+    border-radius: var(--vista-clickable-radius, 4px);
+    padding: 0 8px 0 8px;
+    font-size: 11px;
+    -unity-text-align: middle-center;
+}
+
+/* Primary action: a bolder, taller button for a page's main call to action, sized to sit comfortably in
+   the title strip. Applied to a Button via VistaUI.Primary(). Double class (the Button's own .unity-button
+   plus .primary) so these win over the default button theme at higher specificity. */
+.unity-button.primary {
+    -unity-font-style: bold;
+    height: 28px;
+    padding: 0 16px 0 16px;
+}
+
+.row {
+    flex-direction: row;
+}
+
+/* Selection card: a rounded, bordered box that reacts on hover/press (via the .clickable base) and can be
+   marked selected by its owner. The owner fills the inner content. Double class (clickable + selection-card)
+   so the border and background beat the transparent .clickable base (on the element, equal specificity). */
+.clickable.selection-card {
+    margin: 0;
+    border-width: 1px;
+    border-color: var(--vista-nav-card-border, rgba(255, 255, 255, 0.08));
+    background-color: var(--vista-nav-card-bg, rgba(255, 255, 255, 0.04));
+    border-radius: var(--vista-clickable-radius, 4px);
+}
+
+/* Selected card: brighter border + background. Extra class plus hover/active so it outranks the base card
+   rule and the .clickable hover/press states. The hover/active variants are :enabled gated to match the base
+   .clickable states, so a disabled card never reacts under the cursor (the at-rest selected look still holds). */
+.clickable.selection-card.selection-card--selected,
+.clickable.selection-card.selection-card--selected:enabled:hover,
+.clickable.selection-card.selection-card--selected:enabled:active {
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--vista-clickable-selected-bg, rgba(255, 255, 255, 0.13));
+}
+
+.column {
+    flex-direction: column;
+}
+
+.section-header {
+    flex-direction: row;
+    align-items: center;
+    margin: 12px 0 6px 0;
+}
+
+.section-header__title {
+    flex-grow: 1;
+    margin: 0;
+}
+
+.section-header__actions {
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Snackbar: a transient status bar anchored to the bottom of its host, colored by type. The outer element
+   is a transparent, full-width wrapper pinned to the bottom that centers the bar (absolute elements ignore
+   align-self, so the centering must come from this normal-flow wrapper's justify-content). The whole thing
+   fades via the opacity transition (the widget flips opacity 0 -> 1 on show, 1 -> 0 on dismiss). */
+.vista-snackbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 16px;
+    flex-direction: row;
+    justify-content: center;
+    transition-property: opacity;
+    transition-duration: 0.25s;
+}
+
+.vista-snackbar__bar {
+    max-width: 520px;
+    min-height: 32px;
+    padding: 8px 14px 8px 14px;
+    border-width: 1px;
+    border-radius: var(--vista-clickable-radius, 4px);
+    justify-content: center;
+    background-color: var(--vista-snackbar-info-bg, rgb(50, 56, 66));
+}
+
+.vista-snackbar__label {
+    white-space: normal;
+    color: var(--vista-snackbar-text, rgb(240, 240, 240));
+    -unity-text-align: middle-left;
+}
+
+.vista-snackbar--info {
+    background-color: var(--vista-snackbar-info-bg, rgb(50, 56, 66));
+    border-color: var(--vista-snackbar-info-border, rgb(100, 112, 132));
+}
+
+.vista-snackbar--success {
+    background-color: var(--vista-snackbar-success-bg, rgb(38, 96, 58));
+    border-color: var(--vista-snackbar-success-border, rgb(76, 192, 116));
+}
+
+.vista-snackbar--warning {
+    background-color: var(--vista-snackbar-warning-bg, rgb(122, 92, 24));
+    border-color: var(--vista-snackbar-warning-border, rgb(220, 166, 48));
+}
+
+.vista-snackbar--error {
+    background-color: var(--vista-snackbar-error-bg, rgb(122, 42, 42));
+    border-color: var(--vista-snackbar-error-border, rgb(220, 76, 76));
+}
+
+/* Modal: a full cover scrim that fades and blocks the UI beneath, with a centered card. The scrim fills the
+   host (inset 0) and centers its card; both fade via the opacity transition. */
+.vista-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--vista-modal-scrim, rgba(0, 0, 0, 0.6));
+    transition-property: opacity;
+    transition-duration: 0.25s;
+}
+
+.vista-modal__card {
+    min-width: 360px;
+    max-width: 520px;
+    padding: 20px 22px 18px 22px;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: var(--vista-modal-card-border, rgba(255, 255, 255, 0.10));
+    background-color: var(--vista-modal-card-bg, rgb(56, 56, 56));
+}
+
+.vista-modal__title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    margin: 0 0 8px 0;
+}
+
+.vista-modal__line {
+    white-space: normal;
+    margin: 0 0 6px 0;
+}
+
+.vista-modal__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 14px;
+}

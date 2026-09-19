@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4def07ea272974b9312b6e17e82fd3, type: 3}
+  m_Name: Dunes_BiomeTemplate
+  m_EditorClassIdentifier: 
+  m_biomePrefab: {fileID: 2787929806039072392, guid: 5d797b5b4b82ecc44850676dd4b84b48, type: 3}
+  m_info:
+    m_title: Dunes
+    m_description: Roll out a field of wind swept sand dunes with soft, rounded crests
+      and rippled flanks.
+    m_usageGuide: 'Creates a desert dune biome with soft, rounded crests and a sand
+      surface.
+
+      Works well as a base biome filling a large area, or with the
+      Height Win blend mode to fill in the hollows of a surrounding biome.
+
+      Move
+      the biome and edit its anchors to shape where the dunes sit, and use the falloff
+      to fade them into neighboring biomes.'
+    m_screenshot: {fileID: 2800000, guid: cbc2fb37e7670474ebba6f7a7786c76b, type: 3}
+  m_sortingNumber: 1

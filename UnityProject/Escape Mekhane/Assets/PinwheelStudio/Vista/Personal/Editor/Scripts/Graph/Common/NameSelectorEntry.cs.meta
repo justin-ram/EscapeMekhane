@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8dc6a71a463cf404aa9479df0eac57b8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Editor/Scripts/Graph/Common/NameSelectorEntry.cs
+  uploadId: 997366

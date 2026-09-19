@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1503076522642222540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6545922074181348850}
+  - component: {fileID: 2476551114734345300}
+  m_Layer: 0
+  m_Name: Crater Biome
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6545922074181348850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503076522642222540}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 512, y: 116.8, z: 497}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2476551114734345300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503076522642222540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c05938ebcb84ab4ebf1959f34e51c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_order: 0
+  m_terrainGraph: {fileID: 11400000, guid: dd9d0b9b5735d1e4fab87a8058608131, type: 2}
+  m_space: 1
+  m_dataMask: -1
+  m_baseResolution: 512
+  m_seed: 0
+  m_biomeMaskResolution: 512
+  m_biomeMaskGraph: {fileID: 11400000, guid: 5ac052c931983c748954902e04a82ae0, type: 2}
+  m_anchors:
+  - {x: 500, y: 0, z: 0}
+  - {x: 461.93976, y: 0, z: 191.34172}
+  - {x: 353.55338, y: 0, z: 353.55338}
+  - {x: 191.34172, y: 0, z: 461.93976}
+  - {x: -0.000021855694, y: 0, z: 500}
+  - {x: -191.3417, y: 0, z: 461.9398}
+  - {x: -353.55338, y: 0, z: 353.55338}
+  - {x: -461.93976, y: 0, z: 191.34174}
+  - {x: -500, y: 0, z: -0.00004371139}
+  - {x: -461.93976, y: 0, z: -191.34172}
+  - {x: -353.5534, y: 0, z: -353.55334}
+  - {x: -191.34178, y: 0, z: -461.93976}
+  - {x: 0.0000059624404, y: 0, z: -500}
+  - {x: 191.3418, y: 0, z: -461.93973}
+  - {x: 353.5533, y: 0, z: -353.55344}
+  - {x: 461.9398, y: 0, z: -191.34172}
+  m_falloffDirection: 0
+  m_falloffDistance: 300
+  m_falloffAnchors:
+  - {x: 800, y: 0, z: 0.00002278964}
+  - {x: 739.10364, y: 0, z: 306.14676}
+  - {x: 565.6854, y: 0, z: 565.6854}
+  - {x: 306.14676, y: 0, z: 739.10364}
+  - {x: -0.000008181911, y: 0, z: 800}
+  - {x: -306.14676, y: 0, z: 739.10364}
+  - {x: -565.6854, y: 0, z: 565.6854}
+  - {x: -739.10364, y: 0, z: 306.1468}
+  - {x: -800, y: 0, z: -0.000059664137}
+  - {x: -739.10364, y: 0, z: -306.14676}
+  - {x: -565.6855, y: 0, z: -565.6853}
+  - {x: -306.14685, y: 0, z: -739.10364}
+  - {x: 0.000026473115, y: 0, z: -800}
+  - {x: 306.14685, y: 0, z: -739.1036}
+  - {x: 565.6853, y: 0, z: -565.6855}
+  - {x: 739.10364, y: 0, z: -306.14676}
+  m_cleanUpMode: 0
+  m_biomeMaskAdjustments: []
+  m_blendOptions:
+    m_heightMapBlendMode: 1
+    m_textureBlendMode: 0
+    m_meshDensityBlendMode: 0
+    m_holeMapBlendMode: 0
+    m_populationBlendMode: 0
+    m_useTransformForHeightBlend: 0
+  m_textureInputs: []
+  m_positionInputs: []
+  m_guid: PL33VFU1
+  m_propertyOverrides: []

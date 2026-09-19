@@ -1,0 +1,44 @@
+#pragma exclude_renderers gles3
+#pragma kernel Main
+
+#include "../Includes/CommonDataTypes.hlsl"
+
+StructuredBuffer<PositionSample> _SrcBuffer;
+RWStructuredBuffer<PositionSample> _DestBuffer;
+int _BaseIndex;
+int _SampleCount;
+int _RangeStart;
+int _RangeEnd;
+int _TotalWeight;
+int _Seed;
+
+// lowbias32 by Chris Wellons: https://github.com/skeeto/hash-prospector
+// Every output pass mixes the same index and seed, so the sample makes one choice.
+uint MixSampleIndex(uint index, uint seed)
+{
+    uint value = index ^ seed;
+    value ^= value >> 16;
+    value *= 0x7feb352du;
+    value ^= value >> 15;
+    value *= 0x846ca68bu;
+    value ^= value >> 16;
+    return value;
+}
+
+[numthreads(8, 1, 1)]
+void Main(uint3 id : SV_DISPATCHTHREADID)
+{
+    int index = int(id.x) + _BaseIndex;
+    if (index >= _SampleCount)
+        return;
+
+    PositionSample sample = _SrcBuffer[index];
+    if (sample.isValid > 0)
+    {
+        // Choose one ticket in [1, total weight]. Output ranges partition those tickets.
+        uint choice = MixSampleIndex(uint(index), uint(_Seed)) % uint(_TotalWeight) + 1u;
+        if (choice < uint(_RangeStart) || choice > uint(_RangeEnd))
+            sample.isValid = 0;
+    }
+    _DestBuffer[index] = sample;
+}

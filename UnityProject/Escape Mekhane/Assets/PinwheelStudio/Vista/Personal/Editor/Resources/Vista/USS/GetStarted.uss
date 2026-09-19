@@ -1,0 +1,111 @@
+/* Get Started onboarding layout. Typography comes from VistaUI's shared Title, Hx, and Px classes. */
+
+.get-started-welcome {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 24px 24px 24px;
+}
+
+.get-started-welcome__logo {
+    width: 112px;
+    height: 112px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.get-started-welcome__actions {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.get-started-welcome__actions > * {
+    margin: 2px 0 2px 0;
+}
+
+.get-started-welcome__skip {
+    padding: 5px 12px 5px 12px;
+}
+
+.get-started-carousel {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 12px 20px 12px;
+}
+
+.get-started-carousel__frame {
+    width: 100%;
+    max-width: 820px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.get-started-page {
+    width: 80%;
+    max-width: 640px;
+    align-items: center;
+    margin: 0 20px 0 20px;
+}
+
+.get-started-page__image {
+    width: 100%;
+    max-width: 640px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 18px;
+    border-width: 1px;
+    border-color: var(--vista-outline-border, rgba(255, 255, 255, 0.12));
+    border-radius: var(--wizard-radius);
+    background-color: rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.get-started-page__image-content {
+    width: 100%;
+    height: 100%;
+}
+
+.get-started-page__action {
+    height: 46px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.get-started-nav {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 4px 4px 4px 4px;
+    align-items: center;
+    justify-content: center;
+}
+
+.get-started-nav__icon {
+    width: 28px;
+    height: 28px;
+}
+
+.get-started-paginator {
+    height: 18px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.get-started-paginator__dot {
+    width: 8px;
+    height: 8px;
+    margin: 0 5px 0 5px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+.get-started-paginator__dot--active {
+    background-color: rgba(255, 255, 255, 0.9);
+}

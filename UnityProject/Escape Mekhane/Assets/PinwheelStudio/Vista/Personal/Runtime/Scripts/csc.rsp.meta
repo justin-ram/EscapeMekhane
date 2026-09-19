@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ae66c064f05b6ae498c376b3add2f328
+labels:
+- VistaSplinesDefines
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Runtime/Scripts/csc.rsp
+  uploadId: 997366

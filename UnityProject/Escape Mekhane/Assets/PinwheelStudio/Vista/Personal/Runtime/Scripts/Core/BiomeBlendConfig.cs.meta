@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 2c433f078c7b4d3c9fa2a4613ba0750b
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Runtime/Scripts/Core/BiomeBlendConfig.cs
+  uploadId: 997366

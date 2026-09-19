@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4c2c404acde64049a7fe2484cd7202e2
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Editor/Resources/Vista/Shaders/Preview/UnityTerrainTilePreview.shader
+  uploadId: 997366

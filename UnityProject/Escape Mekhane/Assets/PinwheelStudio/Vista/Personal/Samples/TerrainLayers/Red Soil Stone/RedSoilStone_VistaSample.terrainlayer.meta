@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4dd61ea5081050242b2feab02ab9959d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Samples/TerrainLayers/Red Soil
+    Stone/RedSoilStone_VistaSample.terrainlayer
+  uploadId: 997366

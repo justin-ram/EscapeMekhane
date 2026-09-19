@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ae7e9d0e2b17da14689defe7d3d89e54
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Editor/Scripts/BiomeTemplate/ScreenshotCaptureUtility.cs
+  uploadId: 997366

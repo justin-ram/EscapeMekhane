@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &218633550274695145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1454445444458112013}
+  - component: {fileID: 4044880141558639012}
+  - component: {fileID: -6099510523155305091}
+  - component: {fileID: 7074278233355983169}
+  m_Layer: 0
+  m_Name: MountainBiome
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1454445444458112013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218633550274695145}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 500, y: 0, z: 500}
+  m_LocalScale: {x: 1.05, y: 1, z: 1.05}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4044880141558639012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218633550274695145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c05938ebcb84ab4ebf1959f34e51c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_order: 0
+  m_terrainGraph: {fileID: 11400000, guid: 273c7fd9f1604184893996b97511efff, type: 2}
+  m_space: 0
+  m_dataMask: -1
+  m_baseResolution: 1024
+  m_seed: 159
+  m_biomeMaskResolution: 512
+  m_biomeMaskGraph: {fileID: 0}
+  m_anchors:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 2000}
+  - {x: 2000, y: 0, z: 2000}
+  - {x: 2000, y: 0, z: 0}
+  m_falloffDirection: 0
+  m_falloffDistance: 50
+  m_falloffAnchors:
+  - {x: -35.35534, y: 0, z: -35.35534}
+  - {x: -35.35534, y: 0, z: 2035.3553}
+  - {x: 2035.3553, y: 0, z: 2035.3553}
+  - {x: 2035.3553, y: 0, z: -35.35534}
+  m_cleanUpMode: 0
+  m_biomeMaskAdjustments: []
+  m_blendOptions:
+    m_heightMapBlendMode: 0
+    m_textureBlendMode: 0
+    m_meshDensityBlendMode: 0
+    m_holeMapBlendMode: 0
+    m_populationBlendMode: 0
+    m_useTransformForHeightBlend: 1
+  m_textureInputs: []
+  m_positionInputs: []
+  m_guid: 4f1e2205-d99a-436d-84d7-1cec9e6c9085
+  m_propertyOverrides: []
+--- !u!114 &-6099510523155305091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218633550274695145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc5739ce0cc134648abea1274b6f9c4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7074278233355983169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218633550274695145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95bdfb504ff468b48a584897b922ede2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_worldHeight: 500

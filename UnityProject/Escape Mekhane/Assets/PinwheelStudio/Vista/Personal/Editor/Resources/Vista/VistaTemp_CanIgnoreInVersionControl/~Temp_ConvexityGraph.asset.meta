@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3aed4cbb8edcddf44a2fc8efc0a7cb09
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Editor/Resources/Vista/VistaTemp_CanIgnoreInVersionControl/~Temp_ConvexityGraph.asset
+  uploadId: 997366

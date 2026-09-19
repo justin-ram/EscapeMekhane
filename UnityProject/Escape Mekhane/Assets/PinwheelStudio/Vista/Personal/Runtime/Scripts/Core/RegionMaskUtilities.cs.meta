@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: d53f91f3b46e4be8bed44f16447eb285
+timeCreated: 1787288400
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Runtime/Scripts/Core/RegionMaskUtilities.cs
+  uploadId: 997366

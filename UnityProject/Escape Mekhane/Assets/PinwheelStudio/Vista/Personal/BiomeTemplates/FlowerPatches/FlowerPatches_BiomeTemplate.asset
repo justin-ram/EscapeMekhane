@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4def07ea272974b9312b6e17e82fd3, type: 3}
+  m_Name: FlowerPatches_BiomeTemplate
+  m_EditorClassIdentifier: 
+  m_biomePrefab: {fileID: 2454901207045131480, guid: 5d28da65ad55adc4899180bb885715b9, type: 3}
+  m_info:
+    m_title: Flower Patches
+    m_description: Scatters patches of wild flowers within each biome bounds.
+    m_usageGuide: Spawns two flower patch biomes that share one placement graph.
+      Move each biome and edit its anchors to shape where the flowers grow, then
+      duplicate any of them to scatter more patches around your scene. Every patch
+      reads the same graph, so shaping it updates them all at once. In the graph,
+      tweak the noise and thin out nodes to control patch size and density, or swap
+      the detail template to spawn your own plant.
+    m_screenshot: {fileID: 2800000, guid: 717e48469d325394a9d900454b84a254, type: 3}
+  m_sortingNumber: 100

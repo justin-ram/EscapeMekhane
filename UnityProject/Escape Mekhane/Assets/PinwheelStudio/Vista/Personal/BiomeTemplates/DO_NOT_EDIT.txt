@@ -1,0 +1,16 @@
+Vista Bundled Biome Templates
+=============================
+
+This folder holds the Biome Templates that Vista ships with, the ones shown in the
+Wizard's "Create Biome" gallery. They are shared across all editions (Personal, Indie,
+Pro).
+
+Please do not edit, move, rename, or delete anything in this folder, unless you are
+deliberately replacing the bundled set and accept that your changes will be overwritten
+the next time Vista updates. Edits here are not preserved across updates, and a broken
+or missing template can break the gallery.
+
+Want your own templates? You do not need to touch this folder. Create a Biome Template
+anywhere else in your project (Assets > Create > Vista > Biome Template) and it shows up
+in the gallery automatically. The Wizard discovers every valid Biome Template in the
+project, wherever it lives.

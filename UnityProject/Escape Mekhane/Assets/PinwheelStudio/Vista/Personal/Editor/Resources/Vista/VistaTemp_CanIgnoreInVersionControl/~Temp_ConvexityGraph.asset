@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07711547029740afa7dc1344f5d2cb56, type: 3}
+  m_Name: ~Temp_ConvexityGraph
+  m_EditorClassIdentifier: 
+  m_nodeData:
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.InputNode
+    jsonData: '{"m_groupId":"","m_id":"QHCXL5TU","m_visualState":{"m_position":{"x":200.0,"y":0.0},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_outputSlotData":{"typeInfo":{"fullName":"Pinwheel.Vista.Graph.MaskSlot"},"jsonData":"{\"m_id\":100,\"m_type\":1,\"m_name\":\"\"}","version":1},"m_inputName":"Scene
+      Height","m_slotTypeName":"Pinwheel.Vista.Graph.MaskSlot"}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.InputNode
+    jsonData: '{"m_groupId":"","m_id":"BHCJ73F0","m_visualState":{"m_position":{"x":199.99993896484376,"y":143.1999969482422},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_outputSlotData":{"typeInfo":{"fullName":"Pinwheel.Vista.Graph.MaskSlot"},"jsonData":"{\"m_id\":100,\"m_type\":1,\"m_name\":\"\"}","version":1},"m_inputName":"Stroke
+      Mask Input","m_slotTypeName":"Pinwheel.Vista.Graph.MaskSlot"}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Strokes.Graph.BrushTipNode
+    jsonData: '{"m_groupId":"","m_id":"6YHI3RLI","m_visualState":{"m_position":{"x":207.99993896484376,"y":243.1999969482422},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_resolutionOverride":0,"m_resolutionMultiplier":1.0,"m_resolutionAbsolute":1024,"m_fallbackIntensity":1.0,"m_fallbackSoftness":0.5}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.CombineNode
+    jsonData: '{"m_groupId":"","m_id":"8PI1FJNH","m_visualState":{"m_position":{"x":423.20001220703127,"y":142.80003356933595},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_resolutionOverride":1,"m_resolutionMultiplier":1.0,"m_resolutionAbsolute":1024,"m_mode":2,"m_backgroundMultiplier":1.0,"m_foregroundMultiplier":1.0,"m_maskMultiplier":1.0}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.CurvatureNode
+    jsonData: '{"m_groupId":"","m_id":"T605O5X0","m_visualState":{"m_position":{"x":435.199951171875,"y":-0.4000244140625},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_resolutionOverride":1,"m_resolutionMultiplier":1.0,"m_resolutionAbsolute":1024,"m_radius":3.0,"m_maxDeviation":0.25}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.CombineNode
+    jsonData: '{"m_groupId":"","m_id":"G88XJV53","m_visualState":{"m_position":{"x":709.8141479492188,"y":0.0289154052734375},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_resolutionOverride":1,"m_resolutionMultiplier":1.0,"m_resolutionAbsolute":1024,"m_mode":2,"m_backgroundMultiplier":1.0,"m_foregroundMultiplier":1.0,"m_maskMultiplier":1.0}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.MathNode
+    jsonData: '{"m_groupId":"","m_id":"542BYKWW","m_visualState":{"m_position":{"x":746.048095703125,"y":443.8310546875},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_resolutionOverride":1,"m_resolutionMultiplier":1.0,"m_resolutionAbsolute":1024,"m_maths":[{"m_enabled":true,"m_number":1.0,"m_ops":0}]}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.TextureSlotOutputNode
+    jsonData: '{"m_groupId":"","m_id":"3K6GGDMQ","m_visualState":{"m_position":{"x":963.8099975585938,"y":443.60107421875},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_resolutionOverride":1,"m_resolutionMultiplier":1.0,"m_resolutionAbsolute":1024,"m_order":0,"m_slotName":"Convexity
+      Texture"}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.LevelsNode
+    jsonData: '{"m_groupId":"","m_id":"LKSRITJ5","m_visualState":{"m_position":{"x":1000.8002319335938,"y":-0.399993896484375},"m_collapsed":false},"m_shouldSplitExecution":false,"m_isBypassed":false,"m_resolutionOverride":1,"m_resolutionMultiplier":1.0,"m_resolutionAbsolute":1024,"m_inLow":0.20000000298023225,"m_inMid":0.5,"m_inHigh":0.30000001192092898,"m_outLow":0.0,"m_outHigh":1.0}'
+    version: 1
+  m_edgeData:
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.Edge
+    jsonData: '{"m_id":"EZNE0YWN","m_outputSlot":{"m_nodeId":"BHCJ73F0","m_slotId":100},"m_inputSlot":{"m_nodeId":"8PI1FJNH","m_slotId":0}}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.Edge
+    jsonData: '{"m_id":"2Z1M2LN7","m_outputSlot":{"m_nodeId":"6YHI3RLI","m_slotId":100},"m_inputSlot":{"m_nodeId":"8PI1FJNH","m_slotId":1}}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.Edge
+    jsonData: '{"m_id":"V0RQI1Z9","m_outputSlot":{"m_nodeId":"QHCXL5TU","m_slotId":100},"m_inputSlot":{"m_nodeId":"T605O5X0","m_slotId":0}}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.Edge
+    jsonData: '{"m_id":"66XHNL1R","m_outputSlot":{"m_nodeId":"8PI1FJNH","m_slotId":100},"m_inputSlot":{"m_nodeId":"G88XJV53","m_slotId":1}}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.Edge
+    jsonData: '{"m_id":"3WY8MPE6","m_outputSlot":{"m_nodeId":"T605O5X0","m_slotId":100},"m_inputSlot":{"m_nodeId":"G88XJV53","m_slotId":0}}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.Edge
+    jsonData: '{"m_id":"EY78CJAS","m_outputSlot":{"m_nodeId":"G88XJV53","m_slotId":100},"m_inputSlot":{"m_nodeId":"LKSRITJ5","m_slotId":0}}'
+    version: 1
+  - typeInfo:
+      fullName: Pinwheel.Vista.Graph.Edge
+    jsonData: '{"m_id":"SNA2SQRG","m_outputSlot":{"m_nodeId":"LKSRITJ5","m_slotId":100},"m_inputSlot":{"m_nodeId":"3K6GGDMQ","m_slotId":0}}'
+    version: 1
+  m_groupData: []
+  m_stickyNoteData: []
+  m_stickyImageData: []
+  m_objectReferences:
+  - m_key: 3K6GGDMQ.m_terrainLayer
+    m_target: {fileID: 8574412962073106934, guid: ba427773956c3364f8cd25ed51a85a77, type: 2}
+  m_exposedProperties:
+  - m_id:
+      m_nodeId: T605O5X0
+      m_propertyName: radius
+    m_label: Radius
+    m_description: 
+    m_groupName: 
+    m_enumTypeName: 
+    m_objectTypeName: 
+    m_propertyType: 20
+    m_intValueRange:
+      min: -2147483648
+      max: 2147483647
+    m_floatValueRange:
+      min: 0
+      max: 10
+  - m_id:
+      m_nodeId: T605O5X0
+      m_propertyName: maxDeviation
+    m_label: Max Deviation
+    m_description: 
+    m_groupName: 
+    m_enumTypeName: 
+    m_objectTypeName: 
+    m_propertyType: 20
+    m_intValueRange:
+      min: -2147483648
+      max: 2147483647
+    m_floatValueRange:
+      min: 0
+      max: 10
+  m_debugConfigs:
+    m_resolution: 1256
+    m_worldBounds:
+      serializedVersion: 2
+      x: -127.87198
+      y: -128.22446
+      width: 1255.6615
+      height: 1255.6615
+    m_terrainHeight: 500
+    m_seed: 1234
+    m_shouldOutputTempHeight: 0
+  m_allowSplitExecution: 1

@@ -1,0 +1,24 @@
+#pragma exclude_renderers gles3
+#pragma kernel Main
+
+#include "../Includes/CommonDataTypes.hlsl"
+
+StructuredBuffer<PositionSample> _PositionInput;
+RWStructuredBuffer<PositionSample> _PositionOutput;
+
+float4x4 _TransformMatrix;
+int _BaseIndex;
+int _InstanceCount;
+
+[numthreads(8,1,1)]
+void Main (uint3 id : SV_DispatchThreadID)
+{
+	int index = id.x + _BaseIndex;
+	if (index >= _InstanceCount)
+		return;
+
+	PositionSample pos = _PositionInput[index];
+	float4 newPos = mul(_TransformMatrix, float4(pos.position, 1));
+	pos.position = newPos.xyz;	
+	_PositionOutput[index] = pos;
+}

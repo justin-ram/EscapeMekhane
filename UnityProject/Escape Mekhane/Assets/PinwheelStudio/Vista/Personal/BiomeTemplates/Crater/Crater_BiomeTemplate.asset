@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4def07ea272974b9312b6e17e82fd3, type: 3}
+  m_Name: Crater_BiomeTemplate
+  m_EditorClassIdentifier: 
+  m_biomePrefab: {fileID: 1503076522642222540, guid: 3dfb1892d27334e4eafb786e3cc90d06, type: 3}
+  m_info:
+    m_title: Crater
+    m_description: Carve a broad impact crater with a raised rim, eroded walls, and
+      a defined central floor.
+    m_usageGuide: "Shape the biome anchors into a circle to preserve the crater\u2019s
+      natural form.\nSet Height blending to Raise and disable Transform Contribution.
+      Place this biome on top of a base biome so it adds the crater without replacing
+      the underlying terrain.\nA strong starting point for meteor impact sites, ancient
+      craters, or barren alien landscapes."
+    m_screenshot: {fileID: 2800000, guid: f9e5c9cc3d9d5e146badfed47e2ae1f6, type: 3}
+    m_documentationUrl: 
+  m_sortingNumber: 3

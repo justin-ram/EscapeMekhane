@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4def07ea272974b9312b6e17e82fd3, type: 3}
+  m_Name: Mountain_BiomeTemplate
+  m_EditorClassIdentifier: 
+  m_biomePrefab: {fileID: 218633550274695145, guid: 380a36b6f15c6be44b20f36b184cb6dd, type: 3}
+  m_info:
+    m_title: Mountain
+    m_description: Build from a rugged mountain landscape with rocky peaks and forested
+      foothills.
+    m_usageGuide: "Creates a mountainous biome with steep ridges, exposed rock faces,
+      and broad lower slopes ready for foliage. Intended to work best as a base biome
+      that fills a large portion of the scene. \nMountain placement is driven by
+      internal noise rather than the detailed shape of the biome mask, so the mask
+      mostly contributes to fading and blending this biome into neighboring ones.
+      \nA good starting point for alpine, highland, or temperate mountain scenes
+      where you want strong elevation and natural valley structure from the start."
+    m_screenshot: {fileID: 2800000, guid: bd2bae7d699160345ab62312a4e7dd77, type: 3}
+  m_sortingNumber: 0

@@ -1,0 +1,24 @@
+{
+    "name": "Pinwheel.Vista.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:478a2357cc57436488a56e564b08d223",
+        "GUID:9c184a1e5cc20654384071dfebc106ed",
+        "GUID:4bdfb2239705740718731d0b4d54061d",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:21d1eb854b91ade49bc69a263d12bee2",
+        "GUID:624c061ee4dfdaf4787b9c0bb51b4c1f",
+        "GUID:2fdef4a859838e3449b625605ab13c25",
+        "GUID:37a5b28b0679c474b8ff4eb4779c0304",
+        "GUID:fb6249b03580a8f46be5625e12c09fc2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

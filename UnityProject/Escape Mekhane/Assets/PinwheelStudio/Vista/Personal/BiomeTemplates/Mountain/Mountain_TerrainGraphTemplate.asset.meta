@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 273c7fd9f1604184893996b97511efff
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/BiomeTemplates/Mountain/Mountain_TerrainGraphTemplate.asset
+  uploadId: 997366

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8cb565031f23454d96e8594d7112cfc8
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Mask: {instanceID: 0}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/Editor/Resources/Vista/Shaders/Preview/PolarisTilePreview.shader
+  uploadId: 997366

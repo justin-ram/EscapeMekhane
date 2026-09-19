@@ -1,0 +1,508 @@
+#pragma exclude_renderers gles3
+
+// The simulation runs on a downsampled canvas (_WorldDataResolution). Erosion changes are then upsampled and added
+// to the full-resolution source height so the source's micro detail is preserved: final = source + upsample(delta).
+#pragma kernel InitWorldData
+#pragma kernel Rain
+#pragma kernel WaterFlowPhase1
+#pragma kernel WaterFlowPhase2
+#pragma kernel Evaporate
+#pragma kernel ErosionAndDeposition
+#pragma kernel SedimentTransportPhase1
+#pragma kernel SedimentTransportPhase2
+#pragma kernel OutputHeight01
+#pragma kernel OutputSoil01
+
+#include "../Includes/ShaderIncludes.hlsl"
+#include COMPUTE_COMMON_HLSL
+#include SAMPLING_HLSL
+
+Texture2D<float> _InputHeight01;
+Texture2D<float> _InputHardness01;
+RWTexture2D<float4> _WorldDataCM; //height (bedrock cm), sediment, temp (flow/transport decrement), water
+RWTexture2D<float4> _SimData0; //outflowVH
+RWTexture2D<float4> _SimData1; //outflowDiag
+RWTexture2D<float4> _SimData2; //(flowVelocity.xy, deposit, exposure odometer)
+RWTexture2D<float> _InitialHeightData; //source height at sim resolution, captured in Init; used to form the erosion delta at output
+
+RWTexture2D<float> _OutputRT01;
+
+float2 _WorldDataResolution; //simulation canvas resolution (downsampled)
+float2 _OutputResolution;    //final output resolution (full res); output kernels upsample sim -> output
+float3 _WorldSizeCM;
+float _FlowConstant;
+float _SedimentTransportConstant;
+
+float _RainRateCM;
+float _SedimentCapacityCM;
+float _ErosionRate;      //[0,1] fraction of the capacity deficit dissolved per iteration
+float _DepositionRate;   //[0,1] fraction of the excess sediment deposited per iteration
+float _EvaporationRateCM; //cm of water removed per iteration
+float _UseBorderFade; //1 fades erosion out toward the biome edges so it blends into surrounding terrain, 0 erodes uniformly
+
+//Bare soil mask ramps, uploaded per execution from the node so they are artist controllable. The two disturbance
+//signals have opposite spatial statistics, so each is normalized by its own ramp and combined (see OutputSoil01).
+//  Deposit odometer (net sediment settled, cm): concentrated in valleys and hollows, near zero everywhere else,
+//  so a LOW ramp makes the settled areas read clearly without bleeding onto clean terrain.
+//  Exposure odometer (net rock scoured, cm): a faint nonzero over almost the whole terrain, because flowing water
+//  grazes nearly every pixel, so it needs a HIGH ramp, otherwise everything lights up instead of just the drainage.
+float _DepositRampCM;
+float _DrainageRampCM; //applies to the exposure odometer, which is what shows as drainage
+
+//Bilinear blend of the 4 corner values with fractional weights f (v00=floor,floor; v10=ceil,floor; v01=floor,ceil; v11=ceil,ceil).
+#define BILERP(v00, v10, v01, v11, f) ((v00)*(1-(f).x)*(1-(f).y) + (v10)*(f).x*(1-(f).y) + (v01)*(1-(f).x)*(f).y + (v11)*(f).x*(f).y)
+
+#define MARGIN float2(4,4)
+#define PX_POS id.xz + MARGIN
+
+#define PX_LEFT float2(id.x-1, id.z)+ MARGIN
+#define PX_TOP float2(id.x, id.z+1)+ MARGIN
+#define PX_RIGHT float2(id.x+1, id.z)+ MARGIN
+#define PX_BOTTOM float2(id.x, id.z-1)+ MARGIN
+
+#define PX_LEFT_TOP float2(id.x-1, id.z+1)+ MARGIN
+#define PX_TOP_RIGHT float2(id.x+1, id.z+1)+ MARGIN
+#define PX_RIGHT_BOTTOM float2(id.x+1, id.z-1)+ MARGIN
+#define PX_BOTTOM_LEFT float2(id.x-1, id.z-1)+ MARGIN
+
+#define PX_MIN_NO_MARGIN float2(0, 0)
+#define PX_MAX_NO_MARGIN float2(_WorldDataResolution.x - 1, _WorldDataResolution.y - 1)
+
+#define PX_LEFT_CLAMP clamp(float2(id.x-1, id.z), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_TOP_CLAMP clamp(float2(id.x, id.z+1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_RIGHT_CLAMP clamp(float2(id.x+1, id.z), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_BOTTOM_CLAMP clamp(float2(id.x, id.z-1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+
+#define PX_LEFT_TOP_CLAMP clamp(float2(id.x-1, id.z+1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_TOP_RIGHT_CLAMP clamp(float2(id.x+1, id.z+1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_RIGHT_BOTTOM_CLAMP clamp(float2(id.x+1, id.z-1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_BOTTOM_LEFT_CLAMP clamp(float2(id.x-1, id.z-1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+
+#define WATER_OUTFLOW_VH_CM _SimData0
+#define WATER_OUTFLOW_DIAG_CM _SimData1
+#define FLOW_VELOCITY_CM _SimData2
+
+#define SEDIMENT_OUTFLOW_VH_CM _SimData0
+#define SEDIMENT_OUTFLOW_DIAG_CM _SimData1
+
+#define WORLD_POSITION _SimData2
+
+//Groupshared (LDS) tiling for the 8-neighbor stencils (WaterFlow / SedimentTransport phases). Each 8x8 group
+//cooperatively loads its 10x10 neighborhood (tile + 1 texel halo) into on-chip memory once, then reads neighbors
+//from LDS instead of re-fetching overlapping texels from the UAVs (these kernels are memory bound). Halo loads need
+//no clamping: the world data / outflow textures have a 4px margin, so a 1 texel halo always lands in valid memory
+//and stages exactly the same texels the UAV path read -> output is bit-identical. Group stays 8x8 so it tiles
+//multiple-of-8 resolutions exactly with no bounds checks.
+#define GROUP_SIZE 8
+#define TILE_SIZE (GROUP_SIZE + 2)
+
+//Surface-height tile (one scalar sum per cell). WaterFlow uses bedrock+water (r+a), SedimentTransport uses
+//bedrock+sediment (r+g); two loaders fill the same tile with the sum that kernel needs.
+groupshared float gs_HeightCM[TILE_SIZE * TILE_SIZE];
+#define TILE_H(x, z) gs_HeightCM[(z) * TILE_SIZE + (x)]
+
+//The 100 tile slots are spread over the 64 threads by flat local index (thread t fills slot t; threads 0-35 also
+//fill slot t+64), row-major so consecutive threads read consecutive texels (coalesced).
+void LoadWaterHeightTile(uint2 groupId, uint2 localId)
+{
+	uint2 tileOriginPx = groupId * GROUP_SIZE + (uint2)MARGIN - 1;
+	uint flatLocalIndex = localId.y * GROUP_SIZE + localId.x;
+	for (uint slot = flatLocalIndex; slot < TILE_SIZE * TILE_SIZE; slot += GROUP_SIZE * GROUP_SIZE)
+	{
+		uint2 texel = tileOriginPx + uint2(slot % TILE_SIZE, slot / TILE_SIZE);
+		float4 data = _WorldDataCM[texel];
+		gs_HeightCM[slot] = data.r + data.a;
+	}
+}
+
+void LoadSedimentHeightTile(uint2 groupId, uint2 localId)
+{
+	uint2 tileOriginPx = groupId * GROUP_SIZE + (uint2)MARGIN - 1;
+	uint flatLocalIndex = localId.y * GROUP_SIZE + localId.x;
+	for (uint slot = flatLocalIndex; slot < TILE_SIZE * TILE_SIZE; slot += GROUP_SIZE * GROUP_SIZE)
+	{
+		uint2 texel = tileOriginPx + uint2(slot % TILE_SIZE, slot / TILE_SIZE);
+		float4 data = _WorldDataCM[texel];
+		gs_HeightCM[slot] = data.r + data.g;
+	}
+}
+
+//Phase2 outflow tiles: full float4 kept because up to four neighbors each read a different channel. Water and
+//sediment Phase2 both use the same _SimData0/_SimData1 outflow textures, so one loader serves both. 2 x 100 x 16B = 3.2KB.
+groupshared float4 gs_OutflowVH[TILE_SIZE * TILE_SIZE];
+groupshared float4 gs_OutflowDiag[TILE_SIZE * TILE_SIZE];
+#define TILE_OF_VH(x, z) gs_OutflowVH[(z) * TILE_SIZE + (x)]
+#define TILE_OF_DIAG(x, z) gs_OutflowDiag[(z) * TILE_SIZE + (x)]
+
+void LoadOutflowTiles(uint2 groupId, uint2 localId)
+{
+	uint2 tileOriginPx = groupId * GROUP_SIZE + (uint2)MARGIN - 1;
+	uint flatLocalIndex = localId.y * GROUP_SIZE + localId.x;
+	for (uint slot = flatLocalIndex; slot < TILE_SIZE * TILE_SIZE; slot += GROUP_SIZE * GROUP_SIZE)
+	{
+		uint2 texel = tileOriginPx + uint2(slot % TILE_SIZE, slot / TILE_SIZE);
+		gs_OutflowVH[slot] = _SimData0[texel];
+		gs_OutflowDiag[slot] = _SimData1[texel];
+	}
+}
+
+[numthreads(8, 1, 8)]
+void InitWorldData(uint3 id : SV_DispatchThreadID)
+{
+	//sample the full-res source down to the sim canvas; this is the starting bedrock height for the sim, and also
+	//the baseline we diff against at output to get the erosion delta (see OutputHeight01).
+	float2 uv = float2(
+		id.x / (_WorldDataResolution.x - 1),
+		id.z / (_WorldDataResolution.y - 1));
+	float hCM = _InputHeight01.SampleLevel(_SamplerLinearClamp, uv, 0) * _WorldSizeCM.y;
+
+	_WorldDataCM[PX_POS] = float4(hCM, 0, 0, 0); //other sim textures start cleared (ClearWithZeros at creation)
+	_InitialHeightData[PX_POS] = hCM;
+}
+
+[numthreads(8, 1, 8)]
+void Rain(uint3 id : SV_DispatchThreadID)
+{
+	float4 worldData = _WorldDataCM[PX_POS];
+	worldData.a += _RainRateCM;
+	_WorldDataCM[PX_POS] = worldData;
+
+	//only reset xy channel, zw may contains other data
+	float4 flowVelocity = FLOW_VELOCITY_CM[PX_POS];
+	flowVelocity.x = 0;
+	flowVelocity.y = 0;
+	FLOW_VELOCITY_CM[PX_POS] = flowVelocity;
+}
+
+[numthreads(8, 1, 8)]
+void WaterFlowPhase1(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	LoadWaterHeightTile(groupId.xz, groupThreadId.xz);
+	GroupMemoryBarrierWithGroupSync();
+
+	float4 dataSrc = _WorldDataCM[PX_POS];
+	float hSrc = dataSrc.r + dataSrc.a;
+
+	//drive flow by true world-space slope (dh / pipe length) instead of raw dh, so it responds to real
+	//steepness — consistent across resolution stages and biome size. _FlowConstant carries the recalibration.
+	float cellDistance = _WorldSizeCM.x / _WorldDataResolution.x;
+	float flowFactor = _FlowConstant / cellDistance;
+
+	//this thread's own texel sits at (gtid + 1) inside the haloed tile; the 8 neighbor heights come from LDS
+	uint tx = groupThreadId.x + 1;
+	uint tz = groupThreadId.z + 1;
+
+	float dhL = hSrc - TILE_H(tx - 1, tz);
+	float fL = max(0, flowFactor * dhL);
+
+	float dhT = hSrc - TILE_H(tx, tz + 1);
+	float fT = max(0, flowFactor * dhT);
+
+	float dhR = hSrc - TILE_H(tx + 1, tz);
+	float fR = max(0, flowFactor * dhR);
+
+	float dhB = hSrc - TILE_H(tx, tz - 1);
+	float fB = max(0, flowFactor * dhB);
+
+	float dhLT = hSrc - TILE_H(tx - 1, tz + 1);
+	float fLT = max(0, flowFactor * dhLT);
+
+	float dhTR = hSrc - TILE_H(tx + 1, tz + 1);
+	float fTR = max(0, flowFactor * dhTR);
+
+	float dhRB = hSrc - TILE_H(tx + 1, tz - 1);
+	float fRB = max(0, flowFactor * dhRB);
+
+	float dhBL = hSrc - TILE_H(tx - 1, tz - 1);
+	float fBL = max(0, flowFactor * dhBL);
+
+	float fSum = 0;
+	fSum = fL + fT + fR + fB + fLT + fTR + fRB + fBL;
+
+	float fScale = 0;
+	if (fSum > 0)
+	{
+		fScale = min(1, dataSrc.a / fSum);
+	}
+
+	float4 fVH = float4(fL, fT, fR, fB) * fScale; //channel order is important for inflow
+	WATER_OUTFLOW_VH_CM[PX_POS] = fVH;
+
+	float4 fDiag = float4(fLT, fTR, fRB, fBL) * fScale;
+	WATER_OUTFLOW_DIAG_CM[PX_POS] = fDiag;
+
+	//temporary write water decrement to B channel, as other threads may still reading from A
+	dataSrc.b = fSum * fScale;
+	_WorldDataCM[PX_POS] = dataSrc;
+}
+
+[numthreads(8, 1, 8)]
+void WaterFlowPhase2(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	LoadOutflowTiles(groupId.xz, groupThreadId.xz);
+	GroupMemoryBarrierWithGroupSync();
+
+	//Apply water decrement and reset temp channel
+	float4 dataSrc = _WorldDataCM[PX_POS];
+	dataSrc.a -= dataSrc.b;
+	dataSrc.a = max(0, dataSrc.a); //water level should not be negative, but just in case
+	dataSrc.b = 0;
+
+	uint tx = groupThreadId.x + 1;
+	uint tz = groupThreadId.z + 1;
+
+	float4 ofL = TILE_OF_VH(tx - 1, tz);
+	float4 ofT = TILE_OF_VH(tx, tz + 1);
+	float4 ofR = TILE_OF_VH(tx + 1, tz);
+	float4 ofB = TILE_OF_VH(tx, tz - 1);
+
+	float4 ofLT = TILE_OF_DIAG(tx - 1, tz + 1);
+	float4 ofTR = TILE_OF_DIAG(tx + 1, tz + 1);
+	float4 ofRB = TILE_OF_DIAG(tx + 1, tz - 1);
+	float4 ofBL = TILE_OF_DIAG(tx - 1, tz - 1);
+
+	float4 ofVHSrc = TILE_OF_VH(tx, tz);
+	float4 ofDiagSrc = TILE_OF_DIAG(tx, tz);
+
+	float ifL = ofL.b; //flow from the left pixel to the right (the current pixel)
+	float ifT = ofT.a;
+	float ifR = ofR.r;
+	float ifB = ofB.g;
+
+	float ifLT = ofLT.b; //flow from the left top pixel to right bottom (the current pixel)
+	float ifTR = ofTR.a;
+	float ifRB = ofRB.r;
+	float ifBL = ofBL.g;
+
+	float ifSum = ifL + ifT + ifR + ifB + ifLT + ifTR + ifRB + ifBL;
+	dataSrc.a += ifSum;
+
+	_WorldDataCM[PX_POS] = dataSrc;
+
+	//Update flow velocity	
+	//(fL, fT, fR, fB)
+	//(fLT, fTR, fRB, fBL)
+	float2 v0 = float2(1, 0) * (ofL.b + ofVHSrc.b);
+	float2 v1 = float2(-1, 0) * (ofR.r + ofVHSrc.r);
+	float2 v2 = float2(0, 1) * (ofB.g + ofVHSrc.g);
+	float2 v3 = float2(0, -1) * (ofT.a + ofVHSrc.a);
+
+	float2 v4 = float2(-1, -1) * (ofTR.a + ofDiagSrc.a);
+	float2 v5 = float2(1, 1) * (ofBL.g + ofDiagSrc.g);
+	float2 v6 = float2(-1, 1) * (ofRB.r + ofDiagSrc.r);
+	float2 v7 = float2(1, -1) * (ofLT.b + ofDiagSrc.b);
+
+	float2 v = (v0 + v1 + v2 + v3 + v4 + v5 + v6 + v7);
+	FLOW_VELOCITY_CM[PX_POS] += float4(v, 0, 0); //velocity reset in Rain
+}
+
+[numthreads(8, 1, 8)]
+void Evaporate(uint3 id : SV_DispatchThreadID)
+{
+	float4 worldData = _WorldDataCM[PX_POS];
+	worldData.a -= _EvaporationRateCM;
+	worldData.a = max(0, worldData.a);
+
+	_WorldDataCM[PX_POS] = worldData;
+}
+
+//The erosion mask used to be precomputed into _SimData2.w by InitWorldData; that channel now holds the
+//exposure odometer, so the mask (hardness inverse * border fade) is recomputed at point of use instead.
+float GetErosionMask(float2 uv)
+{
+	float2 uv1 = uv * 2 - 1;
+	float fadeX = 1 - pow(abs(uv1.x), 8);
+	float fadeY = 1 - pow(abs(uv1.y), 8);
+	float fade = lerp(1, fadeX * fadeY, _UseBorderFade);
+
+	float erosionMask = 1 - _InputHardness01.SampleLevel(_SamplerLinearClamp, uv, 0);
+	return erosionMask * fade;
+}
+
+[numthreads(8, 1, 8)]
+void ErosionAndDeposition(uint3 id : SV_DispatchThreadID)
+{
+	float2 uv = float2(
+		id.x / (_WorldDataResolution.x - 1),
+		id.z / (_WorldDataResolution.y - 1));
+
+	float4 simData2 = _SimData2[PX_POS];
+	float2 flowVelocity = simData2.xy;
+	float velocityFactor = length(flowVelocity) * 0.01;
+	float capacity = _SedimentCapacityCM * velocityFactor;
+	float4 worldData = _WorldDataCM[PX_POS];
+
+	if (capacity > worldData.g)
+	{
+		float erosionMask = GetErosionMask(uv);
+		float erosionAmount = _ErosionRate * erosionMask * (capacity - worldData.g);
+		worldData.r -= erosionAmount;
+		worldData.g += erosionAmount;
+		simData2.b = max(0, simData2.b - erosionAmount); //deposit odometer: settled sediment scoured back off
+		simData2.a += erosionAmount; //exposure: rock scoured away
+	}
+	else
+	{
+		float depositionAmount = _DepositionRate * (worldData.g - capacity);
+		worldData.r += depositionAmount;
+		worldData.g -= depositionAmount;
+		simData2.b += depositionAmount; //deposit odometer: net sediment that settled and stayed
+		simData2.a = max(0, simData2.a - depositionAmount); //exposure: scour reburied by deposition
+	}
+
+	_WorldDataCM[PX_POS] = worldData;
+	_SimData2[PX_POS] = simData2;
+}
+
+[numthreads(8, 1, 8)]
+void SedimentTransportPhase1(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	LoadSedimentHeightTile(groupId.xz, groupThreadId.xz);
+	GroupMemoryBarrierWithGroupSync();
+
+	float4 dataSrc = _WorldDataCM[PX_POS];
+	float hSrc = dataSrc.r + dataSrc.g;
+
+	//same true-slope normalization as water flow (dh / pipe length); _SedimentTransportConstant carries the recalibration
+	float cellDistance = _WorldSizeCM.x / _WorldDataResolution.x;
+	float transportFactor = _SedimentTransportConstant / cellDistance;
+
+	//this thread's own texel sits at (gtid + 1) inside the haloed tile; the 8 neighbor heights come from LDS
+	uint tx = groupThreadId.x + 1;
+	uint tz = groupThreadId.z + 1;
+
+	float dhL = hSrc - TILE_H(tx - 1, tz);
+	float fL = max(0, transportFactor * dhL);
+
+	float dhT = hSrc - TILE_H(tx, tz + 1);
+	float fT = max(0, transportFactor * dhT);
+
+	float dhR = hSrc - TILE_H(tx + 1, tz);
+	float fR = max(0, transportFactor * dhR);
+
+	float dhB = hSrc - TILE_H(tx, tz - 1);
+	float fB = max(0, transportFactor * dhB);
+
+	float dhLT = hSrc - TILE_H(tx - 1, tz + 1);
+	float fLT = max(0, transportFactor * dhLT);
+
+	float dhTR = hSrc - TILE_H(tx + 1, tz + 1);
+	float fTR = max(0, transportFactor * dhTR);
+
+	float dhRB = hSrc - TILE_H(tx + 1, tz - 1);
+	float fRB = max(0, transportFactor * dhRB);
+
+	float dhBL = hSrc - TILE_H(tx - 1, tz - 1);
+	float fBL = max(0, transportFactor * dhBL);
+
+	float fSum = 0;
+	fSum = fL + fT + fR + fB + fLT + fTR + fRB + fBL;
+
+	float fScale = 0;
+	if (fSum > 0)
+	{
+		fScale = min(1, dataSrc.g / fSum);
+	}
+
+	float4 fVH = float4(fL, fT, fR, fB) * fScale; //channel order is important for inflow
+	SEDIMENT_OUTFLOW_VH_CM[PX_POS] = fVH;
+
+	float4 fDiag = float4(fLT, fTR, fRB, fBL) * fScale;
+	SEDIMENT_OUTFLOW_DIAG_CM[PX_POS] = fDiag;
+
+	//temporary write to B channel, as other threads may still reading from G
+	dataSrc.b = fSum * fScale;
+	_WorldDataCM[PX_POS] = dataSrc;
+}
+
+[numthreads(8, 1, 8)]
+void SedimentTransportPhase2(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	LoadOutflowTiles(groupId.xz, groupThreadId.xz);
+	GroupMemoryBarrierWithGroupSync();
+
+	//Apply sediment decrement and reset temp channel
+	float4 dataSrc = _WorldDataCM[PX_POS];
+	dataSrc.g -= dataSrc.b;
+	dataSrc.g = max(0, dataSrc.g); //should not be negative, but just in case
+	dataSrc.b = 0;
+
+	uint tx = groupThreadId.x + 1;
+	uint tz = groupThreadId.z + 1;
+
+	float4 ofL = TILE_OF_VH(tx - 1, tz);
+	float4 ofT = TILE_OF_VH(tx, tz + 1);
+	float4 ofR = TILE_OF_VH(tx + 1, tz);
+	float4 ofB = TILE_OF_VH(tx, tz - 1);
+
+	float4 ofLT = TILE_OF_DIAG(tx - 1, tz + 1);
+	float4 ofTR = TILE_OF_DIAG(tx + 1, tz + 1);
+	float4 ofRB = TILE_OF_DIAG(tx + 1, tz - 1);
+	float4 ofBL = TILE_OF_DIAG(tx - 1, tz - 1);
+
+	float ifL = ofL.b; //flow from the left pixel to the right (the current pixel)
+	float ifT = ofT.a;
+	float ifR = ofR.r;
+	float ifB = ofB.g;
+
+	float ifLT = ofLT.b; //flow from the left top pixel to right bottom (the current pixel)
+	float ifTR = ofTR.a;
+	float ifRB = ofRB.r;
+	float ifBL = ofBL.g;
+
+	float ifSum = ifL + ifT + ifR + ifB + ifLT + ifTR + ifRB + ifBL;
+	dataSrc.g += ifSum;
+
+	_WorldDataCM[PX_POS] = dataSrc;
+}
+
+//Output kernels run at the FULL output resolution and upsample the sim-resolution results. For each output texel
+//they bilinearly sample the sim canvas. Height also adds the erosion delta onto the full-res source (micro detail).
+
+//Fills the 4 sim-canvas texel coords (margin space) and fractional weights for an output-space uv.
+void SimResSample(float2 outUv, out uint2 c00, out uint2 c10, out uint2 c01, out uint2 c11, out float2 frac)
+{
+	float2 samplePos = outUv * (_WorldDataResolution - 1);
+	samplePos = clamp(samplePos, 0, _WorldDataResolution - 1) + MARGIN;
+	int2 fl = int2(floor(samplePos));
+	int2 cl = int2(ceil(samplePos));
+	frac = samplePos - fl;
+	c00 = uint2(fl.x, fl.y);
+	c10 = uint2(cl.x, fl.y);
+	c01 = uint2(fl.x, cl.y);
+	c11 = uint2(cl.x, cl.y);
+}
+
+[numthreads(8, 1, 8)]
+void OutputHeight01(uint3 id : SV_DispatchThreadID)
+{
+	float2 outUv = float2(id.x / (_OutputResolution.x - 1), id.z / (_OutputResolution.y - 1));
+	uint2 c00, c10, c01, c11; float2 frac;
+	SimResSample(outUv, c00, c10, c01, c11, frac);
+
+	//erosion delta (eroded - initial source) at sim res, upsampled bilinearly...
+	float erodedUp = BILERP(_WorldDataCM[c00].r, _WorldDataCM[c10].r, _WorldDataCM[c01].r, _WorldDataCM[c11].r, frac);
+	float srcSimUp = BILERP(_InitialHeightData[c00], _InitialHeightData[c10], _InitialHeightData[c01], _InitialHeightData[c11], frac);
+	float deltaCM = erodedUp - srcSimUp;
+
+	//...added onto the full-res source so its micro detail survives
+	float sourceFullCM = _InputHeight01.SampleLevel(_SamplerLinearClamp, outUv, 0) * _WorldSizeCM.y;
+	_OutputRT01[id.xz] = (sourceFullCM + deltaCM) / _WorldSizeCM.y;
+}
+
+//Bare soil mask: the original green surface is disturbed wherever the terrain was scoured (exposure odometer .a,
+//lights up drainage) OR buried under settled sediment (deposit odometer .b, lights up valleys). Both reveal the
+//same soil color. Each is normalized by its own ramp (deposit low, exposure high, see the defines) then combined
+//with max so the stronger disturbance wins.
+[numthreads(8, 1, 8)]
+void OutputSoil01(uint3 id : SV_DispatchThreadID)
+{
+	float2 outUv = float2(id.x / (_OutputResolution.x - 1), id.z / (_OutputResolution.y - 1));
+	uint2 c00, c10, c01, c11; float2 frac;
+	SimResSample(outUv, c00, c10, c01, c11, frac);
+	float exposureCM = BILERP(_SimData2[c00].a, _SimData2[c10].a, _SimData2[c01].a, _SimData2[c11].a, frac);
+	float depositCM = BILERP(_SimData2[c00].b, _SimData2[c10].b, _SimData2[c01].b, _SimData2[c11].b, frac);
+	float depositMask = saturate(depositCM / _DepositRampCM);
+	float exposureMask = saturate(exposureCM / _DrainageRampCM);
+	_OutputRT01[id.xz] = max(depositMask, exposureMask);
+}

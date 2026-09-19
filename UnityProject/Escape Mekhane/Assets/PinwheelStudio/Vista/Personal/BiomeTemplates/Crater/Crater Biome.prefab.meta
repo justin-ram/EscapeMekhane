@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3dfb1892d27334e4eafb786e3cc90d06
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 297327
+  packageName: Vista Personal - Procedural Terrain Generator with Biomes
+  packageVersion: 3000.3.0
+  assetPath: Assets/PinwheelStudio/Vista/Personal/BiomeTemplates/Crater/Crater Biome.prefab
+  uploadId: 997366

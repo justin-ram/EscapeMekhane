@@ -1,0 +1,474 @@
+/* Shared wizard design tokens. Defined on the root wrapper class so they inherit to every
+   descendant. Override here to retheme the whole wizard. */
+.vista-wizard {
+    flex-grow: 1;
+
+    --wizard-border-color: rgba(0, 0, 0, 0.25);      /* dividers: toolbar, nav edge */
+    --wizard-panel-bg: rgba(0, 0, 0, 0.10);          /* left nav column background */
+
+    --wizard-item-hover-bg: rgba(255, 255, 255, 0.06);  /* back button hover */
+    --wizard-item-active-bg: rgba(255, 255, 255, 0.13); /* nav item current section, back button press */
+
+    --wizard-radius: 4px;
+}
+
+/* Window toolbar (window level controls, today just back) */
+
+.wizard-toolbar {
+    flex-direction: row;
+    align-items: center;
+    height: 25px;
+    padding: 4px 4px 4px 4px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--wizard-border-color);
+}
+
+.wizard-back-button {
+    height: 22px;
+    margin: 0;
+    padding: 0 10px 0 8px;
+    font-size: 12px;
+    border-width: 0;
+    border-radius: var(--wizard-radius);
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+}
+
+.wizard-back-button:hover {
+    background-color: var(--wizard-item-hover-bg);
+}
+
+.wizard-back-button:active {
+    background-color: var(--wizard-item-active-bg);
+}
+
+.wizard-pages-container {
+    flex-grow: 1;
+}
+
+/* Full screen page body (onboarding and the like) */
+
+.wizard-body {
+    flex-grow: 1;
+    padding: 8px 12px 12px 12px;
+}
+
+/* Hub two pane layout: left nav + right content */
+
+.hub-page {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.hub-nav {
+    width: 180px;
+    flex-shrink: 0;
+    padding: 8px 8px 8px 8px;
+    border-right-width: 1px;
+    border-right-color: var(--wizard-border-color);
+    background-color: var(--wizard-panel-bg);
+}
+
+.hub-nav-item {
+    height: 32px;
+    -unity-text-align: middle-left;
+    margin: 0 0 2px 0;
+    padding: 7px 10px 7px 10px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* Double class so the highlight outranks .clickable (which sets a transparent background at rest on
+   the element's own Controls.uss, and would otherwise win at equal specificity). */
+.hub-nav-item.hub-nav-item--active {
+    background-color: var(--wizard-item-active-bg);
+    -unity-font-style: bold;
+}
+
+/* Selected section wins over the shared hover and press states from Controls.uss, it stays highlighted.
+   The double class raises specificity above .clickable:hover / .clickable:active. */
+.hub-nav-item.hub-nav-item--active:hover,
+.hub-nav-item.hub-nav-item--active:active {
+    background-color: var(--wizard-item-active-bg);
+}
+
+.hub-content {
+    flex-grow: 1;
+}
+
+.hub-breadcrumb {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 32px;
+}
+
+.hub-breadcrumb__item {
+    height: 18px;
+    margin: 0;
+    padding: 0 0px 0 0px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.hub-breadcrumb__item:hover {
+    opacity: 1;
+}
+
+.hub-breadcrumb__sep {
+    margin: 0 2px 0 2px;
+}
+
+.hub-breadcrumb__current {
+    padding: 0 4px 0 4px;
+    -unity-font-style: bold;
+}
+
+.hub-title-strip {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 8px 0;
+}
+
+.hub-title-strip__actions {
+    flex-direction: row;
+    align-items: center;
+}
+
+.hub-content-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    margin: 0;
+    padding: 0;
+    height: 32px;
+    -unity-text-align: middle-left;
+}
+
+/* The scroll view itself fills the content pane's vertical space, so its content container can grow and
+   short pages still occupy the full height rather than hugging the top. */
+.hub-content-scroll {
+    flex-grow: 1;
+}
+
+.hub-content-body {
+    flex-grow: 1;
+    padding: 8px 8px 8px 8px;
+}
+
+/* Home title strip content: optional upgrade CTA */
+
+.home-upgrade-cta {
+
+}
+
+/* Create in Scene: compact infrastructure status above the two primary navigation cards. */
+
+.create-scene-manager__field {
+    flex-grow: 1;
+}
+
+/* Quick actions: a wrapping grid of tiles, about four per row at the default window width. */
+
+.quick-action-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.quick-action-grid > .action-tile {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 23%;
+    min-width: 150px;
+    margin: 0 4px 4px 0;
+}
+
+/* Tools: registered launchers share the compact ActionTile control used by the dashboard. */
+
+.wizard-tool-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.wizard-tool-grid > .action-tile {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 31%;
+    min-width: 180px;
+    margin: 0 4px 4px 0;
+}
+
+.wizard-tool-availability {
+    align-items: center;
+}
+
+.wizard-tool-availability > * {
+    margin-right: 4px;
+}
+
+/* Create Terrain form: a fixed label column so every field input lines up. The type selector's spacer
+   reuses the field label class, so its tiles reserve the exact same indent and align with the inputs. */
+.terrain-form .unity-base-field__label {
+    min-width: 140px;
+    width: 140px;
+    flex-shrink: 0;
+}
+
+/* Terrain type selector: two selectable tiles in a row, behind the shared label-column spacer. */
+.terrain-type-row {
+    flex-direction: row;
+    align-items: center;
+    margin: 6px 2px 6px 2px;
+}
+
+/* Config quick-fill chips, set off from the field above. The spacer reserves the label column; the chips
+   live in the wrap row beside it (flex-start so the spacer aligns to the first chip line). */
+.terrain-config-chips {
+    margin-top: 4px;
+    align-items: flex-start;
+}
+
+/* The chips wrap within this column next to the spacer, so every wrapped line keeps the same indent. */
+.terrain-config-chips__wrap {
+    flex-grow: 1;
+    flex-wrap: wrap;
+}
+
+/* Gap between chips (also the row gap when wrapped). Descendant selector outranks the .chip base. */
+.terrain-config-chips .chip {
+}
+
+/* Terrain type tile: icon + label in a row, equal width. The card look (rounded box, border, background,
+   hover/press and the selected highlight) comes from SelectionCard in Controls.uss; this only lays out the
+   inner row so the tiles fill the selector evenly. */
+.selection-card.terrain-type-tile {
+    flex-grow: 1;
+    flex-basis: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: 2px 2px 2px 2px;
+}
+
+.terrain-type-tile__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+/* Create Biome: two columns, the starting-point list on the left and the preview on the right. */
+
+.biome-columns {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.biome-template-list {
+    width: 33%;
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+
+/* Space the selection cards down the list. Three classes so this outranks the .clickable.selection-card
+   base rule in Controls.uss (which sets margin: 0). */
+.biome-template-list .selection-card.biome-template-item {
+    margin-bottom: 8px;
+}
+
+/* A selectable starting-point item (Blank or a template): bold name over a faded summary. The card look and
+   the selected highlight come from SelectionCard in Controls.uss; this only stacks the name and summary and
+   spaces the items in the list. */
+.selection-card.biome-template-item {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.biome-template-item__name {
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+}
+
+.biome-template-item__summary {
+    margin-top: 2px;
+    -unity-text-align: middle-left;
+}
+
+.biome-detail {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+/* Screenshot slot: a bordered box that holds real template art, or centers a placeholder when none. */
+.biome-detail__screenshot {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-width: 1px;
+    border-color: var(--vista-outline-border, rgba(255, 255, 255, 0.12));
+    border-radius: var(--wizard-radius);
+    background-color: rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+/* The template screenshot fills the slot; ScaleToFit (set in code) letterboxes the texture inside it. */
+.biome-detail__screenshot-image {
+    width: 100%;
+    height: 100%;
+}
+
+.biome-detail__info {
+    margin-top: 10px;
+}
+
+.biome-detail__doc-link {
+    align-self: flex-start;
+}
+
+/* Recent biomes: a vertical list of rows, info on the left, actions on the right. */
+
+.recent-row {
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 2px 0;
+    padding: 4px 2px 4px 2px;
+}
+
+.recent-row__info {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.recent-row__title {
+    flex-direction: row;
+    align-items: center;
+}
+
+.recent-row__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    flex-shrink: 0;
+}
+
+.recent-row__name {
+    -unity-font-style: bold;
+}
+
+.recent-row__sep {
+    margin: 0 4px 0 4px;
+}
+
+.recent-row__meta {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recent-row__actions {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Status: a "works best with Vista" report. Three side by side columns, each a title then rows of
+   "Label: Info" with the status dot pushed to the right. The fuller detail is on each row's tooltip. */
+
+/* No align-items override, so it defaults to stretch: every column grows to the tallest column's
+   content height, giving equal height cards without a hardcoded value. */
+.status-columns {
+    flex-direction: row;
+}
+
+.status-column {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin-right: 8px;
+    padding: 8px 8px 8px 8px;
+    border-width: 1px;
+    border-color: var(--vista-outline-border, rgba(255, 255, 255, 0.12));
+    border-radius: var(--vista-clickable-radius, 4px);
+    overflow: hidden;
+}
+
+.status-row {
+    flex-direction: row;
+    align-items: center;
+    margin: 0 0 1px 0;
+    padding: 2px 2px 2px 2px;
+}
+
+.status-row__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.status-row__dot--ok {
+    background-color: rgb(115, 200, 120);
+}
+
+.status-row__dot--warn {
+    background-color: rgb(230, 180, 80);
+}
+
+.status-row__dot--error {
+    background-color: rgb(225, 110, 100);
+}
+
+.status-row__dot--info {
+    background-color: rgba(255, 255, 255, 0.35);
+}
+
+.status-row__label {
+    flex-shrink: 0;
+}
+
+.status-row__info {
+    margin-left: 4px;
+    flex-shrink: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-row--link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+/* News: a short list of remote items, each a clickable card with title + optional tag chip + summary.
+   The card is a ClickableElement, so the hover/press background comes from .clickable in Controls.uss. */
+
+.news-item {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 0 4px 0;
+    padding: 6px 8px 6px 8px;
+}
+
+.news-item__header {
+    align-items: center;
+}
+
+.news-item__title {
+    -unity-font-style: bold;
+    flex-shrink: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.news-item__tag {
+    margin-left: 6px;
+    flex-shrink: 0;
+}
+
+.news-item__summary {
+    white-space: normal;
+    margin-top: 2px;
+}

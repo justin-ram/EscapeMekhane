@@ -1,0 +1,360 @@
+#pragma exclude_renderers gles3
+
+#pragma kernel InitWorldData
+#pragma kernel OutputHeight01
+#pragma kernel Weathering
+#pragma kernel ThermalErosionPhase1
+#pragma kernel ThermalErosionPhase2
+#pragma kernel Upsampling
+#pragma kernel OutputDeposit01
+#pragma kernel OutputExposure01
+
+#include "../Includes/ShaderIncludes.hlsl"
+#include COMPUTE_COMMON_HLSL
+#include SAMPLING_HLSL
+
+Texture2D<float> _InputHeight01;
+Texture2D<float> _InputHardness01;
+RWTexture2D<float4> _WorldDataCM; //bedrock height, loose sediment, transport temp, cumulative rock detached (exposure)
+RWTexture2D<float4> _SimData0; //outflowVH || (deltaHeight, sediment, temp, temp) for upsampling
+RWTexture2D<float4> _SimData1; //outflowDiag
+
+RWTexture2D<float> _OutputRT01;
+
+float2 _WorldDataResolution;
+float2 _UpsampleResolution;
+float3 _WorldSizeCM;
+float _SedimentTransportConstant;
+float _ThermalErosionDeltaHeightThreshold;
+
+float _ErosionRate;
+float _UseBorderFade; //1 fades weathering out toward the biome edges so it blends into surrounding terrain, 0 weathers uniformly
+
+#define MARGIN float2(4,4)
+#define PX_POS id.xz + MARGIN
+
+#define PX_LEFT float2(id.x-1, id.z)+ MARGIN
+#define PX_TOP float2(id.x, id.z+1)+ MARGIN
+#define PX_RIGHT float2(id.x+1, id.z)+ MARGIN
+#define PX_BOTTOM float2(id.x, id.z-1)+ MARGIN
+
+#define PX_LEFT_TOP float2(id.x-1, id.z+1)+ MARGIN
+#define PX_TOP_RIGHT float2(id.x+1, id.z+1)+ MARGIN
+#define PX_RIGHT_BOTTOM float2(id.x+1, id.z-1)+ MARGIN
+#define PX_BOTTOM_LEFT float2(id.x-1, id.z-1)+ MARGIN
+
+#define PX_MIN_NO_MARGIN float2(0, 0)
+#define PX_MAX_NO_MARGIN float2(_WorldDataResolution.x - 1, _WorldDataResolution.y - 1)
+
+#define PX_LEFT_CLAMP clamp(float2(id.x-1, id.z), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_TOP_CLAMP clamp(float2(id.x, id.z+1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_RIGHT_CLAMP clamp(float2(id.x+1, id.z), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_BOTTOM_CLAMP clamp(float2(id.x, id.z-1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+
+#define PX_LEFT_TOP_CLAMP clamp(float2(id.x-1, id.z+1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_TOP_RIGHT_CLAMP clamp(float2(id.x+1, id.z+1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_RIGHT_BOTTOM_CLAMP clamp(float2(id.x+1, id.z-1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+#define PX_BOTTOM_LEFT_CLAMP clamp(float2(id.x-1, id.z-1), PX_MIN_NO_MARGIN, PX_MAX_NO_MARGIN) + MARGIN
+
+#define THERMAL_EROSION_OUTFLOW_VH_CM _SimData0
+#define THERMAL_EROSION_OUTFLOW_DIAG_CM _SimData1
+
+//Soil is opaque, a thin layer already obscures the surface underneath completely.
+//These ramps make the masks saturate to 1 almost immediately, they only exist to keep mask edges anti aliased.
+#define FULL_COVER_DEPTH_CM 1.0
+#define EXPOSURE_RAMP_CM 1.0
+
+//Groupshared (LDS) tiling for the 8-neighbor stencils in Weathering and Phase1. Each 8x8 group cooperatively
+//loads the surface height (bedrock + loose soil) of its 10x10 neighborhood (tile + 1 texel halo) into LDS once,
+//then reads neighbors from on-chip memory instead of re-fetching overlapping texels from the world data UAV
+//(~5.7x redundant global loads otherwise). The kernels are memory bound, so this trades DRAM/L2 traffic for LDS.
+//Halo loads need no clamping: the world data texture has a 4px margin, so a 1 texel halo always lands in valid
+//memory; margin texels are zeros and their contribution is nulled by the existing boundary multipliers.
+//Group stays 8x8 (not 16x16) so groups keep tiling multiple-of-8 resolutions exactly and no bounds checks are needed.
+#define GROUP_SIZE 8
+#define TILE_SIZE (GROUP_SIZE + 2)
+groupshared float gs_HeightCM[TILE_SIZE * TILE_SIZE];
+#define TILE_H(x, z) gs_HeightCM[(z) * TILE_SIZE + (x)]
+
+//Cooperative load of the group's height tile. Call GroupMemoryBarrierWithGroupSync() after this before reading TILE_H.
+//  groupId: 2D index of this thread group within the dispatch grid (SV_GroupID.xz).
+//  localId: this thread's 2D position inside its 8x8 group (SV_GroupThreadID.xz), NOT the global SV_DispatchThreadID.
+//The 100 tile slots are spread over the 64 threads by flat local index: thread t fills slot t, and threads 0-35
+//also fill slot t+64. Slots are row-major so consecutive threads read consecutive texels (coalesced). Which texels
+//a thread loads is unrelated to which pixel it simulates - the load phase is decoupled from the compute phase.
+void LoadHeightTile(uint2 groupId, uint2 localId)
+{
+	//texture position of tile slot (0,0): one texel up-left of the group's first pixel (margin space, see PX_POS)
+	uint2 tileOriginPx = groupId * GROUP_SIZE + (uint2)MARGIN - 1;
+	//flat 0..63 index of this thread inside its group; equals SV_GroupIndex, computed here to avoid a third parameter
+	uint flatLocalIndex = localId.y * GROUP_SIZE + localId.x;
+	for (uint slot = flatLocalIndex; slot < TILE_SIZE * TILE_SIZE; slot += GROUP_SIZE * GROUP_SIZE)
+	{
+		uint2 texel = tileOriginPx + uint2(slot % TILE_SIZE, slot / TILE_SIZE);
+		float4 data = _WorldDataCM[texel];
+		gs_HeightCM[slot] = data.r + data.g;
+	}
+}
+
+//Phase2's tiles: the two outflow textures staged the same way. Unlike the height tile these must keep the full
+//float4 per texel, because up to four different neighbors each read a different channel of it (per-direction
+//channel picks). 2 x 10x10 x 16 B = 3.2 KB LDS per group - still far below any occupancy concern.
+groupshared float4 gs_OutflowVH[TILE_SIZE * TILE_SIZE];
+groupshared float4 gs_OutflowDiag[TILE_SIZE * TILE_SIZE];
+#define TILE_OF_VH(x, z) gs_OutflowVH[(z) * TILE_SIZE + (x)]
+#define TILE_OF_DIAG(x, z) gs_OutflowDiag[(z) * TILE_SIZE + (x)]
+
+//Cooperative load of both outflow tiles; same strided-loop slot assignment as LoadHeightTile.
+//Margin texels of the outflow textures are zeros (cleared at creation, Phase1/Upsampling only write the
+//interior), so halo slots stage zero inflow - identical to what the untiled reads returned.
+void LoadOutflowTiles(uint2 groupId, uint2 localId)
+{
+	uint2 tileOriginPx = groupId * GROUP_SIZE + (uint2)MARGIN - 1;
+	uint flatLocalIndex = localId.y * GROUP_SIZE + localId.x;
+	for (uint slot = flatLocalIndex; slot < TILE_SIZE * TILE_SIZE; slot += GROUP_SIZE * GROUP_SIZE)
+	{
+		uint2 texel = tileOriginPx + uint2(slot % TILE_SIZE, slot / TILE_SIZE);
+		gs_OutflowVH[slot] = THERMAL_EROSION_OUTFLOW_VH_CM[texel];
+		gs_OutflowDiag[slot] = THERMAL_EROSION_OUTFLOW_DIAG_CM[texel];
+	}
+}
+
+[numthreads(8, 1, 8)]
+void InitWorldData(uint3 id : SV_DispatchThreadID)
+{
+	float2 uv = float2(
+		id.x / (_WorldDataResolution.x - 1),
+		id.z / (_WorldDataResolution.y - 1));
+
+
+	float hCM = _InputHeight01.SampleLevel(_SamplerLinearClamp, uv, 0) * _WorldSizeCM.y;
+	float4 upsampledWorldData = _SimData0[PX_POS];
+
+	float4 worldData = float4(0, 0, 0, 0);
+	worldData.r = hCM + upsampledWorldData.r;
+	worldData.g = upsampledWorldData.g;
+	worldData.b = 0;
+	worldData.a = upsampledWorldData.a; //carry the cumulative detach tally across resolution stages (zero on the first stage, _SimData0 is cleared)
+	_WorldDataCM[PX_POS] = worldData;
+}
+
+[numthreads(8, 1, 8)]
+void OutputHeight01(uint3 id : SV_DispatchThreadID)
+{
+	float4 data = _WorldDataCM[PX_POS];
+	float hCM = data.r + data.g;
+	float h01 = hCM / _WorldSizeCM.y;
+	_OutputRT01[PX_POS - MARGIN] = h01;
+}
+
+//Runs once per iteration, before the transport substeps.
+//Converts a small amount of bedrock (R) into loose sediment (G) where the local slope exceeds the talus threshold.
+//Production is self limiting, the loose layer is capped at a thin mobile depth, so bedrock only weathers where transport keeps carrying debris away.
+[numthreads(8, 1, 8)]
+void Weathering(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	LoadHeightTile(groupId.xz, groupThreadId.xz);
+	GroupMemoryBarrierWithGroupSync();
+
+	float2 uv = float2(
+		id.x / (_WorldDataResolution.x - 1),
+		id.z / (_WorldDataResolution.y - 1));
+
+	float2 uv1 = uv * 2 - 1;
+	float fadeX = 1 - pow(abs(uv1.x), 8);
+	float fadeY = 1 - pow(abs(uv1.y), 8);
+	float fade = lerp(1, fadeX * fadeY, _UseBorderFade);
+	float softness = 1 - _InputHardness01.SampleLevel(_SamplerLinearClamp, uv, 0);
+
+	float4 dataSrc = _WorldDataCM[PX_POS];
+	float hSrc = dataSrc.r + dataSrc.g;
+
+	uint3 minId = uint3(0, 0, 0);
+	uint3 maxId = uint3(_WorldDataResolution.x - 1, 0, _WorldDataResolution.y - 1);
+
+	//this thread's own texel sits at (gtid + 1) inside the haloed tile
+	uint tx = groupThreadId.x + 1;
+	uint tz = groupThreadId.z + 1;
+
+	float dhL = (hSrc - TILE_H(tx - 1, tz)) * (id.x > minId.x);
+	float dhT = (hSrc - TILE_H(tx, tz + 1)) * (id.z < maxId.z);
+	float dhR = (hSrc - TILE_H(tx + 1, tz)) * (id.x < maxId.x);
+	float dhB = (hSrc - TILE_H(tx, tz - 1)) * (id.z > minId.z);
+	float dhLT = (hSrc - TILE_H(tx - 1, tz + 1)) * (id.x > minId.x) * (id.z < maxId.z);
+	float dhTR = (hSrc - TILE_H(tx + 1, tz + 1)) * (id.x < maxId.x) * (id.z < maxId.z);
+	float dhRB = (hSrc - TILE_H(tx + 1, tz - 1)) * (id.x < maxId.x) * (id.z > minId.z);
+	float dhBL = (hSrc - TILE_H(tx - 1, tz - 1)) * (id.x > minId.x) * (id.z > minId.z);
+
+	float steepestDrop = max(max(max(dhL, dhT), max(dhR, dhB)), max(max(dhLT, dhTR), max(dhRB, dhBL)));
+
+	float threshold = _ThermalErosionDeltaHeightThreshold;
+	//production ramps up smoothly above the talus threshold, cells at or below the threshold produce nothing
+	float slopeFactor = saturate((steepestDrop - threshold) / max(threshold, 1));
+
+	//the mobile layer never grows thicker than a fraction of one talus step, extreme erosion rates degrade gracefully instead of avalanching
+	float maxLooseDepth = max(0.5 * threshold, 1);
+
+	float detachAmount = _ErosionRate * softness * slopeFactor * fade;
+	detachAmount = min(detachAmount, max(0, maxLooseDepth - dataSrc.g));
+	detachAmount = min(detachAmount, max(0, dataSrc.r));
+
+	dataSrc.r -= detachAmount;
+	dataSrc.g += detachAmount;
+	dataSrc.a += detachAmount; //monotonic odometer of rock ever detached here, drives the Exposure mask (transport never touches A)
+	_WorldDataCM[PX_POS] = dataSrc;
+}
+
+[numthreads(8, 1, 8)]
+void ThermalErosionPhase1(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	LoadHeightTile(groupId.xz, groupThreadId.xz);
+	GroupMemoryBarrierWithGroupSync();
+
+	float4 dataSrc = _WorldDataCM[PX_POS];
+	float hSrc = dataSrc.r + dataSrc.g;
+	float threshold = _ThermalErosionDeltaHeightThreshold;
+	float f = _SedimentTransportConstant * DT;
+
+	uint3 minId = uint3(0, 0, 0);
+	uint3 maxId = uint3(_WorldDataResolution.x - 1, 0, _WorldDataResolution.y - 1);
+
+	//this thread's own texel sits at (gtid + 1) inside the haloed tile
+	uint tx = groupThreadId.x + 1;
+	uint tz = groupThreadId.z + 1;
+
+	float dhL = hSrc - TILE_H(tx - 1, tz) - threshold;
+	float fL = max(0, dhL * f) * (id.x > minId.x);
+
+	float dhT = hSrc - TILE_H(tx, tz + 1) - threshold;
+	float fT = max(0, dhT * f) * (id.z < maxId.z);
+
+	float dhR = hSrc - TILE_H(tx + 1, tz) - threshold;
+	float fR = max(0, dhR * f) * (id.x < maxId.x);
+
+	float dhB = hSrc - TILE_H(tx, tz - 1) - threshold;
+	float fB = max(0, dhB * f) * (id.z > minId.z);
+
+	float dhLT = hSrc - TILE_H(tx - 1, tz + 1) - threshold;
+	float fLT = max(0, dhLT * f) * (id.x > minId.x) * (id.z < maxId.z);
+
+	float dhTR = hSrc - TILE_H(tx + 1, tz + 1) - threshold;
+	float fTR = max(0, dhTR * f) * (id.x < maxId.x) * (id.z < maxId.z);
+
+	float dhRB = hSrc - TILE_H(tx + 1, tz - 1) - threshold;
+	float fRB = max(0, dhRB * f) * (id.x < maxId.x) * (id.z > minId.z);
+
+	float dhBL = hSrc - TILE_H(tx - 1, tz - 1) - threshold;
+	float fBL = max(0, dhBL * f) * (id.x > minId.x) * (id.z > minId.z);
+
+	float fSum = 0;
+	fSum = fL + fT + fR + fB + fLT + fTR + fRB + fBL;
+
+	float fScale = 0;
+	if (fSum > 0)
+	{
+		fScale = min(1, dataSrc.g / fSum);
+	}
+
+	float4 fVH = float4(fL, fT, fR, fB) * fScale; //channel order is important for inflow
+	THERMAL_EROSION_OUTFLOW_VH_CM[PX_POS] = fVH;
+
+	float4 fDiag = float4(fLT, fTR, fRB, fBL) * fScale;
+	THERMAL_EROSION_OUTFLOW_DIAG_CM[PX_POS] = fDiag;
+
+	//temporary write to B channel, as other threads may still reading from G
+	dataSrc.b = fSum * fScale;
+	_WorldDataCM[PX_POS] = dataSrc;
+}
+
+[numthreads(8, 1, 8)]
+void ThermalErosionPhase2(uint3 id : SV_DispatchThreadID, uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID)
+{
+	LoadOutflowTiles(groupId.xz, groupThreadId.xz);
+	GroupMemoryBarrierWithGroupSync();
+
+	//Apply height decrement and reset temp channel
+	float4 dataSrc = _WorldDataCM[PX_POS];
+	dataSrc.g -= dataSrc.b;
+	dataSrc.g = max(0, dataSrc.g); //should not be negative, but just in case
+	dataSrc.b = 0;
+
+	//this thread's own texel sits at (gtid + 1) inside the haloed tile
+	uint tx = groupThreadId.x + 1;
+	uint tz = groupThreadId.z + 1;
+
+	float ifL = TILE_OF_VH(tx - 1, tz).b; //flow from the left pixel to the right (the current pixel)
+	float ifT = TILE_OF_VH(tx, tz + 1).a;
+	float ifR = TILE_OF_VH(tx + 1, tz).r;
+	float ifB = TILE_OF_VH(tx, tz - 1).g;
+
+	float ifLT = TILE_OF_DIAG(tx - 1, tz + 1).b; //flow from the left top pixel to right bottom (the current pixel)
+	float ifTR = TILE_OF_DIAG(tx + 1, tz + 1).a;
+	float ifRB = TILE_OF_DIAG(tx + 1, tz - 1).r;
+	float ifBL = TILE_OF_DIAG(tx - 1, tz - 1).g;
+
+	float ifSum = ifL + ifT + ifR + ifB + ifLT + ifTR + ifRB + ifBL;
+	dataSrc.g += ifSum;
+
+	_WorldDataCM[PX_POS] = dataSrc;
+}
+
+//Dispatch based on upsampled resolution
+//_UpsampleResolution is the current canvas size
+//_WorldDataResolution is the last canvas size
+[numthreads(8, 1, 8)]
+void Upsampling(uint3 id : SV_DispatchThreadID)
+{
+	float2 uv = float2(
+		id.x / (_UpsampleResolution.x - 1),
+		id.z / (_UpsampleResolution.y - 1));
+
+	float2 samplePos = float2(
+		lerp(0, _WorldDataResolution.x - 1, uv.x),
+		lerp(0, _WorldDataResolution.y - 1, uv.y));
+
+	samplePos.x = clamp(samplePos.x, 0, _WorldDataResolution.x - 1) + MARGIN.x;
+	samplePos.y = clamp(samplePos.y, 0, _WorldDataResolution.y - 1) + MARGIN.y;
+
+	int xFloor = floor(samplePos.x);
+	int xCeil = ceil(samplePos.x);
+	int yFloor = floor(samplePos.y);
+	int yCeil = ceil(samplePos.y);
+	float2 unitCoord = float2(samplePos.x - xFloor, samplePos.y - yFloor);
+
+	//interpolate world data
+	float4 w00 = _WorldDataCM[uint2(xFloor, yFloor)];
+	float4 w01 = _WorldDataCM[uint2(xFloor, yCeil)];
+	float4 w10 = _WorldDataCM[uint2(xCeil, yFloor)];
+	float4 w11 = _WorldDataCM[uint2(xCeil, yCeil)];
+	float4 w = w00 * (1 - unitCoord.x) * (1 - unitCoord.y) + w01 * (1 - unitCoord.x) * unitCoord.y + w10 * unitCoord.x * (1 - unitCoord.y) + w11 * unitCoord.x * unitCoord.y;
+
+	//store delta height in R
+	float inputHeightCM = _InputHeight01.SampleLevel(_SamplerLinearClamp, uv, 0) * _WorldSizeCM.y;
+	w.r = inputHeightCM - w.r;
+
+	_SimData0[PX_POS] = w;
+}
+
+//Near boolean coverage mask, 1 where the surface is covered by deposited soil
+[numthreads(8, 1, 8)]
+void OutputDeposit01(uint3 id : SV_DispatchThreadID)
+{
+	float depositCM = _WorldDataCM[PX_POS].g;
+	float coverage = saturate(depositCM / FULL_COVER_DEPTH_CM);
+	_OutputRT01[PX_POS - MARGIN] = coverage;
+}
+
+//Near boolean mask, 1 where bedrock was eroded and the fresh surface is not reburied by soil.
+//Reads the cumulative detach tally (A) directly instead of differencing input height against R, so the
+//multi resolution upsample residual (which corrupts inputHeight - R on curvy terrain) never shows up here.
+[numthreads(8, 1, 8)]
+void OutputExposure01(uint3 id : SV_DispatchThreadID)
+{
+	float4 data = _WorldDataCM[PX_POS];
+	float depositCM = data.g;
+	float detachedCM = data.a;
+
+	float exposed = saturate(detachedCM / EXPOSURE_RAMP_CM);
+	float covered = saturate(depositCM / FULL_COVER_DEPTH_CM);
+	_OutputRT01[PX_POS - MARGIN] = exposed * (1 - covered);
+}
