@@ -233,6 +233,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e35892e4c5444340a0e2189311808e5, type: 3}
+--- !u!114 &80404742 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6485293254279150594, guid: 825cb54eb1442504ebbd404e656f1f6e, type: 3}
+  m_PrefabInstance: {fileID: 1521966197}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee9bbf96fc134844a91c7f1b5deedbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &94124963
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -300,7 +311,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -746079447478585731, guid: bbf8903a5b0c76043ad470cf0b28b96c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 992691058}
+    - targetCorrespondingSourceObject: {fileID: -746079447478585731, guid: bbf8903a5b0c76043ad470cf0b28b96c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 992691059}
   m_SourcePrefab: {fileID: -4161369568681901532, guid: bbf8903a5b0c76043ad470cf0b28b96c, type: 3}
 --- !u!1001 &248712698
 PrefabInstance:
@@ -1052,7 +1069,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -746079447478585731, guid: 40f79c5f171c0fc44b501e3c35c36695, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 886903913}
+    - targetCorrespondingSourceObject: {fileID: -746079447478585731, guid: 40f79c5f171c0fc44b501e3c35c36695, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 886903914}
   m_SourcePrefab: {fileID: -4161369568681901532, guid: 40f79c5f171c0fc44b501e3c35c36695, type: 3}
 --- !u!1001 &812673519
 PrefabInstance:
@@ -1111,6 +1134,48 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: -4161369568681901532, guid: f1818aacaa4d84b429db0307f7c8b192, type: 3}
+--- !u!1 &886903909 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -746079447478585731, guid: 40f79c5f171c0fc44b501e3c35c36695, type: 3}
+  m_PrefabInstance: {fileID: 802201484}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &886903913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886903909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d07d010bcaaffd4a80c75de3209f2cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanID: cargo_pod
+  objectName: Cargo Pod
+  scanDialogue: this is a cargo pod. it may have the items that we need.
+  canOnlyScanOnce: 0
+--- !u!65 &886903914
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886903909}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.404217, y: 1.899239, z: 1.4166691}
+  m_Center: {x: 0.06192249, y: 0.9496195, z: -0.0038095117}
 --- !u!1001 &974269192
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1225,6 +1290,48 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: -4161369568681901532, guid: f1818aacaa4d84b429db0307f7c8b192, type: 3}
+--- !u!1 &992691054 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -746079447478585731, guid: bbf8903a5b0c76043ad470cf0b28b96c, type: 3}
+  m_PrefabInstance: {fileID: 94124963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &992691058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992691054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d07d010bcaaffd4a80c75de3209f2cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanID: escape_pod
+  objectName: Escape Pod
+  scanDialogue: 'The escape pod is badly damaged. '
+  canOnlyScanOnce: 0
+--- !u!65 &992691059
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992691054}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.646451, y: 1.1034251, z: 1.8985313}
+  m_Center: {x: -0.0011284958, y: 0.5517125, z: 0.0023024352}
 --- !u!1 &1095742699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,7 +1962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3045668937515327166, guid: a5fe10936a07be94396711bd4506465b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 356.9384
+      value: 356.851
       objectReference: {fileID: 0}
     - target: {fileID: 3045668937515327166, guid: a5fe10936a07be94396711bd4506465b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1885,10 +1992,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6526922289627313583, guid: a5fe10936a07be94396711bd4506465b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.764
+      objectReference: {fileID: 0}
+    - target: {fileID: 6526922289627313583, guid: a5fe10936a07be94396711bd4506465b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.277
+      objectReference: {fileID: 0}
     - target: {fileID: 6687765142510852671, guid: a5fe10936a07be94396711bd4506465b, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6842218431076651405, guid: a5fe10936a07be94396711bd4506465b, type: 3}
+      propertyPath: dialogUI
+      value: 
+      objectReference: {fileID: 80404742}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
