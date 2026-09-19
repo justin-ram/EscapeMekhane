@@ -276,6 +276,7 @@ MonoBehaviour:
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 8
+  animator: {fileID: 8858851212495716699}
   HP: 100
   speed: 6
   jumpSpeed: 6
@@ -946,5 +947,10 @@ PrefabInstance:
 --- !u!4 &3175278432961780513 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 70f64e32a439de74d83242751227608f, type: 3}
+  m_PrefabInstance: {fileID: 3141933178107215050}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8858851212495716699 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 70f64e32a439de74d83242751227608f, type: 3}
   m_PrefabInstance: {fileID: 3141933178107215050}
   m_PrefabAsset: {fileID: 0}
