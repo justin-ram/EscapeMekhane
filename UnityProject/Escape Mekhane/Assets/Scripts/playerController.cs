@@ -8,6 +8,9 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreLayer;
 
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+
     [Header("Stats")]
     [Range(1, 100)][SerializeField] int HP;
     [Range(5, 10)][SerializeField] int speed;
@@ -109,6 +112,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         {
             movement();
             sprint();
+            updateAnimation();
             dash();
             grapple();
             HealHp();
@@ -116,6 +120,16 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             interactUpdateUi();
             damagePushBack();
         }
+    }
+    void updateAnimation()
+    {
+        bool walking =
+            controller.isGrounded &&
+            !isGrappling &&
+            !isWallRunning &&
+            moveDirection.sqrMagnitude > 0.01f;
+
+        animator.SetBool("IsWalking", walking);
     }
 
     void movement()
