@@ -14,6 +14,8 @@ public class InventoryUI : MonoBehaviour
 
     void Start()
     {
+        inventoryPanel.SetActive(false);
+
         if (inventoryManager == null)
         {
             inventoryManager = InventoryManager.instance;
@@ -22,11 +24,9 @@ public class InventoryUI : MonoBehaviour
         if (inventoryManager == null)
         {
             Debug.LogError("InventoryUI could not find InventoryManager.");
-            return;
         }
-
-        inventoryPanel.SetActive(false);
     }
+
     void Update()
     {
         if (Input.GetKeyDown(toggleKey))
@@ -34,15 +34,48 @@ public class InventoryUI : MonoBehaviour
             ToggleInventory();
         }
     }
+
     public void ToggleInventory()
     {
-        bool showInventory = !inventoryPanel.activeSelf;
-
-        inventoryPanel.SetActive(showInventory);
-
-        if (showInventory)
+        if (inventoryPanel.activeSelf)
         {
-            RefreshInventory();
+            CloseInventory();
+        }
+        else
+        {
+            OpenInventory();
+        }
+    }
+
+    private void OpenInventory()
+    {
+        // Do not open over another paused menu.
+        if (gameManager.instance != null &&
+            gameManager.instance.isPaused)
+        {
+            return;
+        }
+
+        RefreshInventory();
+        inventoryPanel.SetActive(true);
+
+        Time.timeScale = 0f;
+
+        if (gameManager.instance != null)
+        {
+            gameManager.instance.isPaused = true;
+        }
+    }
+
+    private void CloseInventory()
+    {
+        inventoryPanel.SetActive(false);
+
+        Time.timeScale = 1f;
+
+        if (gameManager.instance != null)
+        {
+            gameManager.instance.isPaused = false;
         }
     }
 
@@ -55,26 +88,38 @@ public class InventoryUI : MonoBehaviour
 
         if (inventoryManager == null)
         {
-            inventoryText.text = "Inventory Manager is not assigned.";
+            inventoryText.text =
+                "Inventory Manager is not assigned.";
             return;
         }
 
         StringBuilder inventoryDisplay = new StringBuilder();
-        inventoryDisplay.AppendLine("<b>INVENTORY</b>");
+
+        inventoryDisplay.AppendLine(
+            "<color=#55E7FF><b>INVENTORY</b></color>"
+        );
+
         inventoryDisplay.AppendLine();
 
         if (inventoryManager.Items.Count == 0)
         {
-            inventoryDisplay.Append("No items collected.");
+            inventoryDisplay.AppendLine("No items collected.");
         }
         else
         {
             foreach (InventoryItem item in inventoryManager.Items)
             {
-                inventoryDisplay.AppendLine(item.DisplayName
-                    + " x" + item.amount);
+                inventoryDisplay.AppendLine(
+                    item.DisplayName + "  x" + item.amount
+                );
             }
         }
+
+        inventoryDisplay.AppendLine();
+        inventoryDisplay.AppendLine(
+            "<size=20><color=#55E7FF>[I] CLOSE</color></size>"
+        );
+
         inventoryText.text = inventoryDisplay.ToString();
     }
 }
