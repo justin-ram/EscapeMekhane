@@ -433,6 +433,23 @@ MonoBehaviour:
   _model: {fileID: 4364291397505983178}
   _tetherOrigin: {fileID: 1863243390785353655}
   _tetherMaterial: {fileID: 2100000, guid: d712c9ce1ac9a6e42bfdedd344ef60ef, type: 2}
+  _hoverAudioSource: {fileID: 0}
+  _tetherAudioSource: {fileID: 0}
+  _oneShotAudioSource: {fileID: 0}
+  _hoverClip: {fileID: 8300000, guid: ff44f71b33be5894e90233e28c943cfd, type: 3}
+  _targetDetectedClip: {fileID: 0}
+  _tetherConnectClip: {fileID: 8300000, guid: f029b60624ccfc4429668ecbf25aac62, type: 3}
+  _tetherLoopClip: {fileID: 8300000, guid: 9944b3ca83c9a7c459d0bf41c4139a4e, type: 3}
+  _tetherDisconnectClip: {fileID: 8300000, guid: e16500c243b35d14eb36c81d6208fe47, type: 3}
+  _damageClip: {fileID: 8300000, guid: ecdca5be07beb9348b1b81bf3b1042ae, type: 3}
+  _destroyClip: {fileID: 8300000, guid: 4cda59c9746a0bc4488a5cf8882ae138, type: 3}
+  _hoverVolume: 0.3
+  _tetherVolume: 0.6
+  _oneShotVolume: 0.8
+  _destroyVolume: 0.65
+  _hoverPitch: 1.15
+  _audioMinDistance: 2
+  _audioMaxDistance: 18
   _maxHealth: 35
   _damageFlashTime: 0.08
   _healingRange: 12
