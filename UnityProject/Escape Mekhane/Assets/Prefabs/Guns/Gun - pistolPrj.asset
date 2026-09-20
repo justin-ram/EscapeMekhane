@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Gun - pistolPrj
   m_EditorClassIdentifier: 
   gunModel: {fileID: 4698201593948852689, guid: 185ce04d44da342739f0bef843698e6c, type: 3}
-  ammoType: 0
+  ammoType: 2
   shootDamage: 1
   shootDistance: 1
   shootFireRate: 1
   damageDir: {x: 0, y: 0, z: 0}
   pushBackSpeed: 0
   pushBackDuration: 0
-  ammoCur: 2
+  ammoCur: 30
   ammoMax: 30
   hitEffect: {fileID: 0}
   shootSound:

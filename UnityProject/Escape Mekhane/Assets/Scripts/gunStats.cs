@@ -5,9 +5,9 @@ public class gunStats : ScriptableObject
 {
     public GameObject gunModel;
 
-    enum AmmoType { Rocket, Rifle, Pistol, Shotgun, Grenade}
+    public enum AmmoType { Rocket, Rifle, Pistol, Shotgun, Grenade}
 
-    [SerializeField] AmmoType ammoType;
+    [SerializeField] public AmmoType ammoType;
 
     [Range(1, 100)][SerializeField] public int shootDamage;
     [Range(1, 100)][SerializeField] public int shootDistance;

@@ -1,0 +1,114 @@
+fileFormatVersion: 2
+guid: 955a6bf371342c3449c69c0995609378
+timeCreated: 1488129214
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: All
+    100002: All 1
+    100004: Fold
+    100006: Fold 1
+    100008: Hammer
+    100010: Hammer 1
+    100012: Lift
+    100014: Lift 1
+    100016: Oylinder
+    100018: Oylinder 1
+    100020: Pointer
+    100022: Pointer 1
+    100024: Trigger
+    100026: Trigger 1
+    100028: //RootNode
+    100030: Xenon_Hand_Revolver_Mesh
+    100032: Xenon_Hand_Revolver_Rig
+    400000: All
+    400002: All 1
+    400004: Fold
+    400006: Fold 1
+    400008: Hammer
+    400010: Hammer 1
+    400012: Lift
+    400014: Lift 1
+    400016: Oylinder
+    400018: Oylinder 1
+    400020: Pointer
+    400022: Pointer 1
+    400024: Trigger
+    400026: Trigger 1
+    400028: //RootNode
+    400030: Xenon_Hand_Revolver_Mesh
+    400032: Xenon_Hand_Revolver_Rig
+    4300000: Lift
+    7400000: 04_Reload_Start
+    9500000: //RootNode
+    13700000: Lift
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: a390a2ba460aaa143a88a4a890e3c66a,
+    type: 3}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

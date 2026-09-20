@@ -207,6 +207,39 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
         animator.SetFloat("VelocityX", velocityX);
         animator.SetFloat("VelocityZ", velocityZ);
+
+        if(gunInv.Count > 0)
+        {
+            if (gunInv[gunInvPos].ammoType == gunStats.AmmoType.Pistol)
+            {
+                animator.SetBool("isPistolMovement", true);
+            }
+            else
+            {
+                animator.SetBool("isPistolMovement", false);
+            }
+           
+
+            if (gunInv[gunInvPos].ammoType == gunStats.AmmoType.Rifle)
+            {
+                animator.SetBool("isRifleMovement", true);
+            }
+            else
+            {
+                animator.SetBool("isRifleMovement", false);
+            }
+
+            if (gunInv[gunInvPos].ammoType == gunStats.AmmoType.Rocket)
+            {
+                animator.SetBool("isRocketMovement", true);
+            }
+            else
+            {
+                animator.SetBool("isRocketMovement", false);
+            }
+            //if (gunInv[gunInvPos].ammoType == gunStats.AmmoType.S)
+            //    animator.SetBool("isPistolMovement", true);
+        }
     }
 
     void movement()

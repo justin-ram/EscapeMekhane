@@ -13,12 +13,21 @@ MonoBehaviour:
   m_Name: Gun - Pistol
   m_EditorClassIdentifier: 
   gunModel: {fileID: 4698201593948852689, guid: 185ce04d44da342739f0bef843698e6c, type: 3}
+  ammoType: 2
   shootDamage: 5
   shootDistance: 20
   shootFireRate: 0.8
+  damageDir: {x: 0, y: 0, z: 0}
+  pushBackSpeed: 0
+  pushBackDuration: 0
   ammoCur: 10
   ammoMax: 10
   hitEffect: {fileID: 5584602140419805224, guid: 25246989ef8fb1e49a5425378d295c10, type: 3}
   shootSound:
   - {fileID: 8300000, guid: 46e1c7ce22809c74490a8b97e755cec3, type: 3}
   shootSoundVol: 0.5
+  isProjectile: 0
+  projectile: {fileID: 0}
+  weaponPushSpeed: 0
+  weaponPushLastsTimer: 0
+  weaponPushLasts: 0

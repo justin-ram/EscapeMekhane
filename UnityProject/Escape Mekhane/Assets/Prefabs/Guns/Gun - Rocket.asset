@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Gun - Rocket
   m_EditorClassIdentifier: 
   gunModel: {fileID: 4698201593948852689, guid: 185ce04d44da342739f0bef843698e6c, type: 3}
+  ammoType: 1
   shootDamage: 1
   shootDistance: 1
   shootFireRate: 2
