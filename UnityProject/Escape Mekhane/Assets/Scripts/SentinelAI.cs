@@ -15,6 +15,10 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
     [Min(1)][SerializeField] int _maxHealth = 50;
     [SerializeField] float _damageFlashTime = 0.08f;
 
+    [Header("Death VFX")]
+    [SerializeField] GameObject _deathVFXPrefab;										// Explosion prefab created when the Sentinel is defeated.
+    [Min(0.1f)][SerializeField] float _deathVFXLifetime = 4f;							// Allows the particles to finish before removing their temporary object.
+
     [Header("Detection")]
     [SerializeField] float _sightRange = 18f;
     [SerializeField] float _attackRange = 14f;
@@ -294,6 +298,26 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
     }
 
 
+    void SpawnDeathVFX()
+    {
+        if (_deathVFXPrefab == null)
+        {
+            return;
+        }
+
+        Vector3 spawnPosition =
+            _model != null
+            ? _model.bounds.center
+            : transform.position;
+
+        GameObject deathVFX = Instantiate(
+            _deathVFXPrefab,
+            spawnPosition,
+            Quaternion.identity);														// Keep the explosion separate so destroying the Sentinel cannot remove it.
+
+        Destroy(deathVFX, _deathVFXLifetime);											// Clean up the completed effect instead of leaving an empty object behind.
+    }
+
     public void takeDamage(int amount)
     {
         takeDamage(amount, Vector3.zero, 0, 0f);
@@ -318,6 +342,7 @@ public class SentinelAI : MonoBehaviour, IDamage, IHealable					// Lets the play
             }
 
             PlayDetachedClip(_destroyClip);					// Allow the complete destruction sound to survive after this object is destroyed.
+            SpawnDeathVFX();
             Destroy(gameObject);					// Removing the root also removes every visual and weapon child.
         }
         else

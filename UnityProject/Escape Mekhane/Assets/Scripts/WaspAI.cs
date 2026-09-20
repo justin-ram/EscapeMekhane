@@ -15,6 +15,10 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
     [Min(1)][SerializeField] int _maxHealth = 25;
     [SerializeField] float _damageFlashTime = 0.08f;
 
+    [Header("Death VFX")]
+    [SerializeField] GameObject _deathVFXPrefab;										// Explosion prefab created when the Wasp is defeated.
+    [Min(0.1f)][SerializeField] float _deathVFXLifetime = 4f;							// Allows the particles to finish before removing their temporary object.
+
     [Header("Detection")]
     [SerializeField] float _sightRange = 22f;
     [SerializeField] float _attackRange = 16f;
@@ -607,6 +611,27 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
         }
     }
 
+
+    void SpawnDeathVFX()
+    {
+        if (_deathVFXPrefab == null)
+        {
+            return;
+        }
+
+        Vector3 spawnPosition =
+            _model != null
+            ? _model.bounds.center
+            : transform.position;
+
+        GameObject deathVFX = Instantiate(
+            _deathVFXPrefab,
+            spawnPosition,
+            Quaternion.identity);														// Keep the explosion separate so destroying the Wasp cannot remove it.
+
+        Destroy(deathVFX, _deathVFXLifetime);											// Clean up the completed effect instead of leaving an empty object behind.
+    }
+
     public void takeDamage(
         int amount,
         Vector3 damageDirection,
@@ -631,6 +656,7 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
             }
 
             PlayDetachedClip(_destroyClip);                 // Allow the destruction sound to finish after this object is removed.
+            SpawnDeathVFX();
             Destroy(gameObject);                    // Remove the defeated Wasp and all of its child objects.
         }
         else

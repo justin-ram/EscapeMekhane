@@ -99,6 +99,8 @@ MonoBehaviour:
   _projectilePrefab: {fileID: 2298444432907026333, guid: c248435dae28b714abfe9417a28c115b, type: 3}
   _maxHealth: 50
   _damageFlashTime: 0.08
+  _deathVFXPrefab: {fileID: 2674485277236681455, guid: 53302a8bb83943b4db91f97198c79d4f, type: 3}
+  _deathVFXLifetime: 4
   _sightRange: 18
   _attackRange: 14
   _fieldOfView: 90
