@@ -48,6 +48,10 @@ public class FabricatorAI : MonoBehaviour, IDamage
     [SerializeField] Color _tetherColor = new Color(0.1f, 1f, 0.75f, 1f);
     [Min(0.01f)][SerializeField] float _tetherWidth = 0.08f;
 
+    [Header("Healing VFX")]
+    [SerializeField] ParticleSystem _healingParticles;					
+    [Min(0.01f)][SerializeField] float _healingParticleWidth = 0.25f;
+
     [Header("Flight")]
     [Min(0.1f)][SerializeField] float _hoverHeight = 4f;
     [Min(0.1f)][SerializeField] float _flightSpeed = 3f;
@@ -103,6 +107,7 @@ public class FabricatorAI : MonoBehaviour, IDamage
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
 
         PrepareTether();                    // Configure the required LineRenderer before a healing target can be selected.
+        PrepareHealingVFX();
         PrepareAudio();
     }
 
@@ -192,6 +197,69 @@ public class FabricatorAI : MonoBehaviour, IDamage
         _lineRenderer.enabled = false;					// Hide the tether until a valid injured enemy has been selected.
     }
 
+    void StopHealingVFX()
+    {
+        if (_healingParticles != null)
+        {
+            _healingParticles.Stop(
+                true,
+                ParticleSystemStopBehavior.StopEmittingAndClear);							// Clear every particle when the healing connection ends.
+        }
+    }
+
+    void PrepareHealingVFX()
+    {
+        if (_healingParticles == null)
+        {
+            return;
+        }
+
+        ParticleSystem.MainModule main = _healingParticles.main;
+        main.loop = true;
+        main.playOnAwake = false;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;							// Keep emitted particles stable while the Fabricator and target move.
+
+        ParticleSystem.ShapeModule shape = _healingParticles.shape;
+        shape.enabled = true;
+        shape.shapeType = ParticleSystemShapeType.Box;
+
+        StopHealingVFX();
+    }
+
+    void BeginHealingVFX()
+    {
+        if (_healingParticles != null && !_healingParticles.isPlaying)
+        {
+            _healingParticles.Play(true);
+        }
+    }
+
+    void UpdateHealingVFX(Vector3 originPosition, Vector3 targetPosition)
+    {
+        if (_healingParticles == null)
+        {
+            return;
+        }
+
+        Vector3 tetherDirection = targetPosition - originPosition;
+        float tetherLength = tetherDirection.magnitude;
+
+        if (tetherLength <= 0.01f)
+        {
+            return;
+        }
+
+        Transform particleTransform = _healingParticles.transform;
+        particleTransform.SetPositionAndRotation(
+            Vector3.Lerp(originPosition, targetPosition, 0.5f),
+            Quaternion.LookRotation(tetherDirection / tetherLength));
+
+        ParticleSystem.ShapeModule shape = _healingParticles.shape;
+        shape.scale = new Vector3(
+            _healingParticleWidth,
+            _healingParticleWidth,
+            tetherLength);																// Stretch the particle area across the entire healing tether.
+    }
     void PrepareAudio()
     {
         ConfigureAudioSource(_hoverAudioSource);
@@ -620,6 +688,7 @@ public class FabricatorAI : MonoBehaviour, IDamage
         _healTimer = 0f;
         _lineRenderer.enabled = true;					// Show the tether as soon as an injured target has been acquired.
         UpdateTetherPositions();
+        BeginHealingVFX();
         BeginHealingAudio();
     }
 
@@ -700,12 +769,15 @@ public class FabricatorAI : MonoBehaviour, IDamage
             return;
         }
 
-        _lineRenderer.SetPosition(0, GetTetherOriginPosition());
-        _lineRenderer.SetPosition(
-            1,
-            GetTargetPosition(
-                _healingTargetBehaviour.transform,
-                _healingTargetRenderer));
+        Vector3 originPosition = GetTetherOriginPosition();
+        Vector3 targetPosition = GetTargetPosition(
+            _healingTargetBehaviour.transform,
+            _healingTargetRenderer);
+
+        _lineRenderer.SetPosition(0, originPosition);
+        _lineRenderer.SetPosition(1, targetPosition);
+
+        UpdateHealingVFX(originPosition, targetPosition);							// Keep the particle stream attached to both moving enemies.
     }
 
     Vector3 GetTetherOriginPosition()
@@ -742,6 +814,8 @@ public class FabricatorAI : MonoBehaviour, IDamage
         {
             _lineRenderer.enabled = false;					// Removing the visible tether communicates that healing has stopped.
         }
+
+        StopHealingVFX();
 
         if (hadHealingTarget && playDisconnectSound)
         {

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class spawner : MonoBehaviour
 {
@@ -7,6 +8,13 @@ public class spawner : MonoBehaviour
     [SerializeField] int amountToSpawn;
     [SerializeField] int spawnRate;
     [SerializeField] int spawnDist;
+
+    [Header("Spawn VFX")]
+    [SerializeField] GameObject _spawnEffectPrefab;
+    [SerializeField] float _spawnEffectDelay = 2.0f;
+    [SerializeField] float _spawnEffectCleanupDelay = 2.0f;
+    [SerializeField] float _spawnEffectHeight = 1.0f;
+
     int spawnCount;
     float spawnTimer;
 
@@ -49,7 +57,23 @@ public class spawner : MonoBehaviour
         ranPos += transform.position;
         NavMeshHit hit;
         NavMesh.SamplePosition(ranPos, out hit, spawnDist, 1);
-        Instantiate(objectToSpawn, hit.position, Quaternion.Euler(0, Random.Range(0, 360), 0));
+        StartCoroutine(SpawnWithEffect(hit.position));
+    }
+
+    IEnumerator SpawnWithEffect(Vector3 spawnPosition)
+    {
+        Vector3 effectPosition = spawnPosition + Vector3.up * _spawnEffectHeight;
+        Quaternion enemyRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
+        GameObject spawnEffect = Instantiate(_spawnEffectPrefab, effectPosition, Quaternion.identity);
+        GameObject enemy = Instantiate(objectToSpawn, spawnPosition, enemyRotation);
+
+        enemy.SetActive(false);                              // Keeps the enemy inactive while the spawn effect conceals it.
+
+        yield return new WaitForSeconds(_spawnEffectDelay);
+
+        enemy.SetActive(true);                               // Activates the enemy after the central smoke clears.
+        Destroy(spawnEffect, _spawnEffectCleanupDelay);     // Allows the remaining particles to fade before cleanup.
     }
 }
 
