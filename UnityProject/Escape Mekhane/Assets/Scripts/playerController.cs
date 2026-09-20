@@ -93,9 +93,14 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
     [SerializeField] float wallJumpDurationTime;
     float wallJumpDuration;
-
     public bool canBeDamagedByRadiation;
+    public float velocityX = 0.00f;
+    public float velocityZ = 0.00f;
+    public float maximumWalkVelocity = 0.5f;
+    public float maximumRunVelocity = 2.0f;
 
+    [SerializeField] float acceleration;
+    [SerializeField] float deceleration;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -123,13 +128,85 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     }
     void updateAnimation()
     {
-        bool walking =
-            controller.isGrounded &&
-            !isGrappling &&
-            !isWallRunning &&
-            moveDirection.sqrMagnitude > 0.01f;
+        //bool walking =
+        //    controller.isGrounded &&
+        //    !isGrappling &&
+        //    !isWallRunning &&
+        //    moveDirection.sqrMagnitude > 0.01f;
 
-        animator.SetBool("IsWalking", walking);
+        //animator.SetBool("IsWalking", walking);
+
+        bool forwardPressed = Input.GetKey("w") &&  !isGrappling && !isWallRunning;
+        bool leftPressed = Input.GetKey("a") &&  !isGrappling && !isWallRunning;
+        bool rightPressed = Input.GetKey("d") &&  !isGrappling && !isWallRunning;
+        bool runPressed = Input.GetKey("left shift") &&  !isGrappling && !isWallRunning;
+        bool backPressed = Input.GetKey("s") && !isGrappling && !isWallRunning;
+
+        //Debug.Log("W:" + Input.GetKey("w") +
+        //    "| Grounded:" + controller.isGrounded +
+        //    " |Grapple:" + isGrappling +
+        //    " | wallrun: " + isWallRunning+
+        //    " | forward:" + forwardPressed+
+        //    " | Z:" + velocityZ);
+
+        float currentMaxVelocity = runPressed ? maximumRunVelocity : maximumWalkVelocity;
+
+        if (forwardPressed && velocityZ < currentMaxVelocity)
+        {
+            velocityZ += Time.deltaTime * acceleration;
+           // Debug.Log("forward istrue");
+        }
+        if (backPressed && velocityZ > -currentMaxVelocity)
+        {
+            velocityZ -= Time.deltaTime * acceleration;
+           // Debug.Log("backPressed istrue");
+        }
+        if (leftPressed && velocityX > -currentMaxVelocity)
+        {
+            velocityX -= Time.deltaTime * acceleration;
+         //   Debug.Log("leftPressed istrue");
+        }
+        if (rightPressed && velocityX < currentMaxVelocity)
+        {
+            velocityX += Time.deltaTime * acceleration;
+            //Debug.Log("rightPressed istrue");
+        }
+
+        //decrease
+        if(!leftPressed && velocityX <0.0f)
+        {
+            velocityX += Time.deltaTime * deceleration;
+        }
+
+        //decrease
+        if(!rightPressed && velocityX > 0.0f)
+        {
+            velocityX -= Time.deltaTime * deceleration;
+        }
+
+        //decrease
+         if(!backPressed && velocityZ < 0.0f)
+        {
+            velocityZ += Time.deltaTime * deceleration;
+        }
+
+         //decrease
+        if (!forwardPressed && velocityZ > 0.0f)
+        {
+            velocityZ -= Time.deltaTime * deceleration;
+        }
+
+        if (!leftPressed && !rightPressed && velocityX != 0.0f && (velocityX > -0.05f && velocityX < 0.05f))
+        {
+            velocityX = 0.0f;
+        }
+
+        if (!forwardPressed && !backPressed && velocityZ != 0.0f && (velocityZ > -0.05f && velocityZ < 0.05f))
+        {
+            velocityZ = 0.0f;
+        }
+        animator.SetFloat("VelocityX", velocityX);
+        animator.SetFloat("VelocityZ", velocityZ);
     }
 
     void movement()
@@ -178,7 +255,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             shoot();
         }
 
-        
+
 
         if (Input.GetButtonDown("Fire2"))
         {
@@ -188,15 +265,6 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         selectGun();
     }
 
-    /*
-        void wallRun()
-        {
-            
-            either set gravity to 0 or close to zero.
-            after that calculate direction of wall and player so that it aligns across the wall
-            use vector3.projectonplane
-        }
-    */
     void wallRun()
     {
         // create a raycast to see if you can wall run. if true then set isWallrun to true;
@@ -349,7 +417,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         if (Input.GetButtonDown("Dash") && dashTimer <= 0 && isGrappling == false)
         {
             dashDirection = Input.GetAxis("Horizontal") * transform.right + Input.GetAxis("Vertical") * transform.forward;
-            if(dashDirection == Vector3.zero)
+            if (dashDirection == Vector3.zero)
             {
                 dashDirection = transform.forward;
             }
@@ -527,7 +595,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, grappleDistance, ~ignoreLayer))
             {
-              //  Debug.Log(hit.collider.name);
+                //  Debug.Log(hit.collider.name);
                 IGrapple grapple = hit.collider.GetComponent<IGrapple>();
                 if (grapple != null)
                 {
@@ -545,7 +613,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             grappleLine.SetPosition(1, transform.position);
             grappleLine.enabled = true;
             CollisionFlags flagged = controller.Move(grappleDirection.normalized * grappleSpeed * Time.deltaTime);
-           // Debug.Log(Vector3.Distance(hitPosition, transform.position));
+            // Debug.Log(Vector3.Distance(hitPosition, transform.position));
             if (Vector3.Distance(hitPosition, transform.position) < 0.9f || flagged != CollisionFlags.None)
             {
                 isGrappling = false;
