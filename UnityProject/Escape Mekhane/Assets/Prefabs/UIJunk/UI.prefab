@@ -169,12 +169,54 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Brayden Heyde - UI & Level Design
+  m_text: '<size=42><b>ESCAPE MEKHANE</b></size>
 
-    Justin Lewis - Player Movement
-    & Design
+    <b>DEVELOPMENT TEAM</b>
 
-    Christopher Stefanese - Enemy AI & Design'
+
+
+    Dustin
+    Dean - Gameplay Systems, HUD, Scanner, UI, over world,
+
+    Inventory, Crafting,
+    and Level Integration
+
+    Ray Blanco - UI and Level Design
+
+    Justin Lewis
+    - Player Movement and Design
+
+    Christopher Stefanese - Enemy AI and Design
+
+
+
+    <b>AI
+    AND DEVELOPMENT TOOLS</b>
+
+    ChatGPT by OpenAI - Programming, debugging, writing,
+    and design assistance
+
+    DALL-E by OpenAI - Concept art and visual asset generation
+
+    Rodin
+    - AI-assisted 3D model generation
+
+
+
+    <b>SOUND EFFECTS</b>
+
+    "Projectile
+    Shoot" by Tobiasz "unfa" Karon - Freesound.org, CC0
+
+    "Robot walk, looped"
+    by Magnesus - Freesound.org, CC0
+
+
+
+    <b>SPECIAL THANKS</b>
+
+    Rob Moye -
+    Instructor'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -204,9 +246,9 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 16
+  m_fontSizeMax: 30
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -371,6 +413,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: buttonFunctions, Assembly-CSharp
         m_MethodName: credits
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4154,7 +4208,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Rob Moye - Teacher
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
