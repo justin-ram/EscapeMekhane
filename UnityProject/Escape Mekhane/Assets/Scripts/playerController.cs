@@ -136,10 +136,10 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
         //animator.SetBool("IsWalking", walking);
 
-        bool forwardPressed = Input.GetKey("w") &&  !isGrappling && !isWallRunning;
-        bool leftPressed = Input.GetKey("a") &&  !isGrappling && !isWallRunning;
-        bool rightPressed = Input.GetKey("d") &&  !isGrappling && !isWallRunning;
-        bool runPressed = Input.GetKey("left shift") &&  !isGrappling && !isWallRunning;
+        bool forwardPressed = Input.GetKey("w") && !isGrappling && !isWallRunning;
+        bool leftPressed = Input.GetKey("a") && !isGrappling && !isWallRunning;
+        bool rightPressed = Input.GetKey("d") && !isGrappling && !isWallRunning;
+        bool runPressed = Input.GetKey("left shift") && !isGrappling && !isWallRunning;
         bool backPressed = Input.GetKey("s") && !isGrappling && !isWallRunning;
 
         //Debug.Log("W:" + Input.GetKey("w") +
@@ -154,17 +154,17 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         if (forwardPressed && velocityZ < currentMaxVelocity)
         {
             velocityZ += Time.deltaTime * acceleration;
-           // Debug.Log("forward istrue");
+            // Debug.Log("forward istrue");
         }
         if (backPressed && velocityZ > -currentMaxVelocity)
         {
             velocityZ -= Time.deltaTime * acceleration;
-           // Debug.Log("backPressed istrue");
+            // Debug.Log("backPressed istrue");
         }
         if (leftPressed && velocityX > -currentMaxVelocity)
         {
             velocityX -= Time.deltaTime * acceleration;
-         //   Debug.Log("leftPressed istrue");
+            //   Debug.Log("leftPressed istrue");
         }
         if (rightPressed && velocityX < currentMaxVelocity)
         {
@@ -173,24 +173,24 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         }
 
         //decrease
-        if(!leftPressed && velocityX <0.0f)
+        if (!leftPressed && velocityX < 0.0f)
         {
             velocityX += Time.deltaTime * deceleration;
         }
 
         //decrease
-        if(!rightPressed && velocityX > 0.0f)
+        if (!rightPressed && velocityX > 0.0f)
         {
             velocityX -= Time.deltaTime * deceleration;
         }
 
         //decrease
-         if(!backPressed && velocityZ < 0.0f)
+        if (!backPressed && velocityZ < 0.0f)
         {
             velocityZ += Time.deltaTime * deceleration;
         }
 
-         //decrease
+        //decrease
         if (!forwardPressed && velocityZ > 0.0f)
         {
             velocityZ -= Time.deltaTime * deceleration;
@@ -208,7 +208,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         animator.SetFloat("VelocityX", velocityX);
         animator.SetFloat("VelocityZ", velocityZ);
 
-        if(gunInv.Count > 0)
+        if (gunInv.Count > 0)
         {
             if (gunInv[gunInvPos].ammoType == gunStats.AmmoType.Pistol)
             {
@@ -218,7 +218,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             {
                 animator.SetBool("isPistolMovement", false);
             }
-           
+
 
             if (gunInv[gunInvPos].ammoType == gunStats.AmmoType.Rifle)
             {
@@ -240,6 +240,7 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             //if (gunInv[gunInvPos].ammoType == gunStats.AmmoType.S)
             //    animator.SetBool("isPistolMovement", true);
         }
+
     }
 
     void movement()
