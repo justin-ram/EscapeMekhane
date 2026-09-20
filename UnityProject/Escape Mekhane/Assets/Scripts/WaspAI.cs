@@ -68,6 +68,7 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
     readonly RaycastHit[] _lineOfSightHits = new RaycastHit[12];
 
     Rigidbody _rigidbody;
+    FlyingEnemyVisuals _flyingVisuals;
     Transform _player;
     Material _material;
     Color _originalColor;
@@ -86,6 +87,7 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _flyingVisuals = GetComponent<FlyingEnemyVisuals>();						// The Wasp still works safely when the optional visuals component is absent.
         _rigidbody.useGravity = false;					// Flight code controls the Wasp's height instead of gravity.
         _rigidbody.isKinematic = true;
         _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
@@ -600,7 +602,12 @@ public class WaspAI : MonoBehaviour, IDamage, IHealable
             _projectilePrefab,
             _shootOrigin.position,
             projectileRotation);
-        PlayActionClip(_fireClip);					// Play the shot at the moment the projectile is created.
+        PlayActionClip(_fireClip);                  // Play the shot at the moment the projectile is created.
+
+        if (_flyingVisuals != null)
+        {
+            _flyingVisuals.PlayRecoil();												// Visually kicks the model backward without affecting flight physics.
+        }
 
         WaspProjectile projectile =
             projectileObject.GetComponent<WaspProjectile>();

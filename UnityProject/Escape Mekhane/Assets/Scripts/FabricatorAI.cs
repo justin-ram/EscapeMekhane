@@ -56,6 +56,9 @@ public class FabricatorAI : MonoBehaviour, IDamage
     [SerializeField] ParticleSystem _healingParticles;					
     [Min(0.01f)][SerializeField] float _healingParticleWidth = 0.25f;
 
+    [Header("Visual Animation")]
+    [SerializeField] FlyingEnemyVisuals _flyingVisuals;						// Reuses the model-only hover, flight tilt, and action recoil animation.
+
     [Header("Flight")]
     [Min(0.1f)][SerializeField] float _hoverHeight = 4f;
     [Min(0.1f)][SerializeField] float _flightSpeed = 3f;
@@ -104,6 +107,11 @@ public class FabricatorAI : MonoBehaviour, IDamage
     {
         _rigidbody = GetComponent<Rigidbody>();
         _lineRenderer = GetComponent<LineRenderer>();
+
+        if (_flyingVisuals == null)
+        {
+            _flyingVisuals = GetComponent<FlyingEnemyVisuals>();				// Finds the reusable visual component on the Fabricator root automatically.
+        }
 
         _rigidbody.useGravity = false;					// Flight code maintains altitude without allowing gravity to pull the Fabricator down.
         _rigidbody.isKinematic = true;
@@ -619,7 +627,12 @@ public class FabricatorAI : MonoBehaviour, IDamage
         }
 
         _healTimer -= _healInterval;
-        _healingTarget.Heal(_healAmount);					// Healing occurs in configurable pulses rather than being tied to frame rate.
+        _healingTarget.Heal(_healAmount);                   // Healing occurs in configurable pulses rather than being tied to frame rate.
+
+        if (_flyingVisuals != null)
+        {
+            _flyingVisuals.PlayRecoil();										// Gives every healing pulse a small visible movement without affecting physics.
+        }
 
         if (!IsHealingTargetValid())
         {
