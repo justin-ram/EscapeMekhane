@@ -49,6 +49,10 @@ MonoBehaviour:
   amountToSpawn: 3
   spawnRate: 4
   spawnDist: 5
+  _spawnEffectPrefab: {fileID: 6993986680022171059, guid: b4727d2720299404d8008a0b02a2265b, type: 3}
+  _spawnEffectDelay: 2
+  _spawnEffectCleanupDelay: 2
+  _spawnEffectHeight: 1
 --- !u!135 &1816993041154168716
 SphereCollider:
   m_ObjectHideFlags: 0

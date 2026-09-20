@@ -72,8 +72,10 @@ public class spawner : MonoBehaviour
 
         yield return new WaitForSeconds(_spawnEffectDelay);
 
-        enemy.SetActive(true);                               // Activates the enemy after the central smoke clears.
-        Destroy(spawnEffect, _spawnEffectCleanupDelay);     // Allows the remaining particles to fade before cleanup.
+        yield return new WaitForSeconds(_spawnEffectCleanupDelay);				// Allows the remaining particles to dissipate.
+
+        Destroy(spawnEffect);
+        enemy.SetActive(true);													// Activates the enemy after the effect has cleared.
     }
 }
 

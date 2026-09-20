@@ -245,6 +245,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointB: {fileID: 2573445536177211903}
+  _teleportVFXPrefab: {fileID: 6993986680022171059, guid: 1326c04a8edf7224c8e902da04e25588, type: 3}
+  _teleportDelay: 0.75
+  _teleportVFXLifetime: 3
 --- !u!33 &8677007129597117540
 MeshFilter:
   m_ObjectHideFlags: 0
