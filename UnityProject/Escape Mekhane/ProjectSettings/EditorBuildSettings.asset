@@ -11,15 +11,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main Menu.unity
     guid: 061c61e2b3269aa4aa150b7085704e5a
+  - enabled: 1
+    path: Assets/Scenes/CrashZone.unity
+    guid: b3bf4af3527d66e45bb2d2513f1e9e77
+  - enabled: 1
+    path: Assets/Scenes/Level1_Blockout.unity
+    guid: 19288354b4d392144b2a204579139fc4
   - enabled: 0
     path: Assets/Scenes/Level1.unity
     guid: 93711d353ce5d6f4e845909f8217ace4
   - enabled: 0
     path: Assets/Scenes/Level2.unity
     guid: 22ea3e718f4ff414a91b65fb8f0236ea
-  - enabled: 1
-    path: Assets/Scenes/Level1_Blockout.unity
-    guid: 19288354b4d392144b2a204579139fc4
+  - enabled: 0
+    path: Assets/Settings/Build Profiles/Big_Scene/Level1_Blockout 1.unity
+    guid: 78887cd3ceef2ed4494fdafee5e14aeb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
