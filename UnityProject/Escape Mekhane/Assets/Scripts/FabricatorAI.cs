@@ -11,6 +11,27 @@ public class FabricatorAI : MonoBehaviour, IDamage
     [SerializeField] Transform _tetherOrigin;
     [SerializeField] Material _tetherMaterial;
 
+    [Header("Audio")]
+    [SerializeField] AudioSource _hoverAudioSource;
+    [SerializeField] AudioSource _tetherAudioSource;
+    [SerializeField] AudioSource _oneShotAudioSource;
+
+    [SerializeField] AudioClip _hoverClip;
+    [SerializeField] AudioClip _targetDetectedClip;
+    [SerializeField] AudioClip _tetherConnectClip;
+    [SerializeField] AudioClip _tetherLoopClip;
+    [SerializeField] AudioClip _tetherDisconnectClip;
+    [SerializeField] AudioClip _damageClip;
+    [SerializeField] AudioClip _destroyClip;
+
+    [Range(0f, 1f)][SerializeField] float _hoverVolume = 0.3f;
+    [Range(0f, 1f)][SerializeField] float _tetherVolume = 0.6f;
+    [Range(0f, 1f)][SerializeField] float _oneShotVolume = 0.8f;
+    [Range(0f, 1f)][SerializeField] float _destroyVolume = 0.65f;
+    [Range(0.1f, 3f)][SerializeField] float _hoverPitch = 1.15f;
+    [Min(0.01f)][SerializeField] float _audioMinDistance = 2f;
+    [Min(0.01f)][SerializeField] float _audioMaxDistance = 18f;
+
     [Header("Health")]
     [Min(1)][SerializeField] int _maxHealth = 35;
     [Min(0f)][SerializeField] float _damageFlashTime = 0.08f;
@@ -81,7 +102,8 @@ public class FabricatorAI : MonoBehaviour, IDamage
         _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         _rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
 
-        PrepareTether();					// Configure the required LineRenderer before a healing target can be selected.
+        PrepareTether();                    // Configure the required LineRenderer before a healing target can be selected.
+        PrepareAudio();
     }
 
     void Start()
@@ -93,7 +115,16 @@ public class FabricatorAI : MonoBehaviour, IDamage
 
         _spawnPosition = _rigidbody.position;					// The spawn point becomes the center of the Fabricator's assigned patrol area.
         SelectPatrolDestination();
-        _targetSearchTimer = 0f;					// Search immediately so an injured nearby enemy can be supported after spawning.
+        _targetSearchTimer = 0f;                    // Search immediately so an injured nearby enemy can be supported after spawning.
+        PlayHoverAudio();
+    }
+
+    void OnEnable()
+    {
+        if (_currentHealth > 0 && !_isDead)
+        {
+            PlayHoverAudio();
+        }
     }
 
     void Update()
@@ -159,6 +190,136 @@ public class FabricatorAI : MonoBehaviour, IDamage
         }
 
         _lineRenderer.enabled = false;					// Hide the tether until a valid injured enemy has been selected.
+    }
+
+    void PrepareAudio()
+    {
+        ConfigureAudioSource(_hoverAudioSource);
+        ConfigureAudioSource(_tetherAudioSource);
+        ConfigureAudioSource(_oneShotAudioSource);
+
+        if (_hoverAudioSource != null)
+        {
+            _hoverAudioSource.loop = true;
+            _hoverAudioSource.clip = _hoverClip;
+            _hoverAudioSource.volume = _hoverVolume;
+            _hoverAudioSource.pitch = _hoverPitch;
+        }
+
+        if (_tetherAudioSource != null)
+        {
+            _tetherAudioSource.loop = true;
+            _tetherAudioSource.clip = _tetherLoopClip;
+            _tetherAudioSource.volume = _tetherVolume;
+        }
+
+        if (_oneShotAudioSource != null)
+        {
+            _oneShotAudioSource.loop = false;
+            _oneShotAudioSource.volume = _oneShotVolume;
+        }
+    }
+
+    void ConfigureAudioSource(AudioSource source)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        source.playOnAwake = false;
+        source.spatialBlend = 1f;
+        source.dopplerLevel = 0f;
+        source.rolloffMode = AudioRolloffMode.Logarithmic;
+        source.minDistance = _audioMinDistance;
+        source.maxDistance = Mathf.Max(
+            _audioMinDistance,
+            _audioMaxDistance);
+    }
+
+    void PlayHoverAudio()
+    {
+        if (_hoverAudioSource == null || _hoverClip == null)
+        {
+            return;
+        }
+
+        if (!_hoverAudioSource.isPlaying)
+        {
+            _hoverAudioSource.Play();
+        }
+    }
+
+    void BeginHealingAudio()
+    {
+        PlayOneShot(_targetDetectedClip);
+        PlayOneShot(_tetherConnectClip);
+
+        if (_tetherAudioSource == null || _tetherLoopClip == null)
+        {
+            return;
+        }
+
+        _tetherAudioSource.Stop();
+        _tetherAudioSource.clip = _tetherLoopClip;
+
+        float loopDelay = _tetherConnectClip != null
+            ? _tetherConnectClip.length
+            : 0f;
+
+        _tetherAudioSource.PlayDelayed(loopDelay);					// Let the connection cue finish before starting the healing loop.
+    }
+
+    void PlayOneShot(AudioClip clip)
+    {
+        if (_oneShotAudioSource != null && clip != null)
+        {
+            _oneShotAudioSource.PlayOneShot(clip);
+        }
+    }
+
+    void PlayDetachedClip(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        GameObject audioObject =
+            new GameObject("Fabricator Detached Audio");
+
+        audioObject.transform.position = transform.position;
+
+        AudioSource detachedSource =
+            audioObject.AddComponent<AudioSource>();
+
+        ConfigureAudioSource(detachedSource);
+
+        detachedSource.clip = clip;
+        detachedSource.loop = false;
+        detachedSource.volume = _destroyVolume;
+
+        if (_oneShotAudioSource != null)
+        {
+            detachedSource.outputAudioMixerGroup =
+                _oneShotAudioSource.outputAudioMixerGroup;
+        }
+
+        detachedSource.Play();
+        Destroy(audioObject, clip.length + 0.1f);					// Keep the destruction sound alive after removing the Fabricator.
+    }
+
+    void StopLoopingAudio()
+    {
+        if (_hoverAudioSource != null)
+        {
+            _hoverAudioSource.Stop();
+        }
+
+        if (_tetherAudioSource != null)
+        {
+            _tetherAudioSource.Stop();
+        }
     }
 
     void PlaceAtHoverHeight()
@@ -459,6 +620,7 @@ public class FabricatorAI : MonoBehaviour, IDamage
         _healTimer = 0f;
         _lineRenderer.enabled = true;					// Show the tether as soon as an injured target has been acquired.
         UpdateTetherPositions();
+        BeginHealingAudio();
     }
 
     bool IsHealingTargetValid()
@@ -560,16 +722,30 @@ public class FabricatorAI : MonoBehaviour, IDamage
             : targetTransform.position;
     }
 
-    void DisconnectHealingTarget()
+    void DisconnectHealingTarget(bool playDisconnectSound = true)
     {
+        bool hadHealingTarget =
+            _healingTarget != null ||
+            (_lineRenderer != null && _lineRenderer.enabled);
+
         _healingTarget = null;
         _healingTargetBehaviour = null;
         _healingTargetRenderer = null;
         _healTimer = 0f;
 
+        if (_tetherAudioSource != null)
+        {
+            _tetherAudioSource.Stop();
+        }
+
         if (_lineRenderer != null)
         {
-            _lineRenderer.enabled = false;					// Removing the visible tether also clearly communicates that healing has stopped.
+            _lineRenderer.enabled = false;					// Removing the visible tether communicates that healing has stopped.
+        }
+
+        if (hadHealingTarget && playDisconnectSound)
+        {
+            PlayOneShot(_tetherDisconnectClip);
         }
     }
 
@@ -592,6 +768,7 @@ public class FabricatorAI : MonoBehaviour, IDamage
         }
         else
         {
+            PlayOneShot(_damageClip);
             StartCoroutine(FlashDamage());
         }
     }
@@ -601,6 +778,9 @@ public class FabricatorAI : MonoBehaviour, IDamage
         _isDead = true;
         DisconnectHealingTarget();
         StopAllCoroutines();
+
+        PlayDetachedClip(_destroyClip);
+
         Destroy(gameObject);					// Destroying the root immediately removes the Fabricator and its healing effect.
     }
 
@@ -623,6 +803,7 @@ public class FabricatorAI : MonoBehaviour, IDamage
     void OnDisable()
     {
         DisconnectHealingTarget();					// Defensive cleanup also removes the tether when the object is disabled without dying.
+        StopLoopingAudio();
     }
 
     void OnDrawGizmosSelected()
