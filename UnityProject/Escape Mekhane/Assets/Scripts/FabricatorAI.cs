@@ -36,6 +36,10 @@ public class FabricatorAI : MonoBehaviour, IDamage
     [Min(1)][SerializeField] int _maxHealth = 35;
     [Min(0f)][SerializeField] float _damageFlashTime = 0.08f;
 
+    [Header("Death VFX")]
+    [SerializeField] GameObject _deathVFXPrefab;										// Explosion prefab created when the Fabricator is defeated.
+    [Min(0.1f)][SerializeField] float _deathVFXLifetime = 4f;							// Allows the particles to finish before removing their temporary object.
+
     [Header("Healing")]
     [Min(0.1f)][SerializeField] float _healingRange = 12f;
     [Min(1)][SerializeField] int _healAmount = 2;
@@ -823,6 +827,25 @@ public class FabricatorAI : MonoBehaviour, IDamage
         }
     }
 
+    void SpawnDeathVFX()
+    {
+        if (_deathVFXPrefab == null)
+        {
+            return;
+        }
+
+        Vector3 spawnPosition =
+            _model != null
+            ? _model.bounds.center
+            : transform.position;
+
+        GameObject deathVFX = Instantiate(
+            _deathVFXPrefab,
+            spawnPosition,
+            Quaternion.identity);														// Keep the explosion separate so destroying the Fabricator cannot remove it.
+
+        Destroy(deathVFX, _deathVFXLifetime);											// Clean up the completed effect instead of leaving an empty object behind.
+    }
     public void takeDamage(
         int amount,
         Vector3 damageDirection,
@@ -854,6 +877,7 @@ public class FabricatorAI : MonoBehaviour, IDamage
         StopAllCoroutines();
 
         PlayDetachedClip(_destroyClip);
+        SpawnDeathVFX();
 
         Destroy(gameObject);					// Destroying the root immediately removes the Fabricator and its healing effect.
     }
