@@ -832,6 +832,7 @@ PlayerSettings:
   webWasm2023: 0
   scriptingDefineSymbols:
     Standalone: VISTA
+    WebGL: VISTA
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
