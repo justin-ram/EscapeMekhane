@@ -101,6 +101,8 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
     [SerializeField] float acceleration;
     [SerializeField] float deceleration;
+
+    bool isReloading;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -289,7 +291,10 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             shoot();
         }
 
-
+        if (Input.GetButton("Reload") && gunInv.Count > 0 && !isReloading && gunInv[gunInvPos].canReload)
+        {
+            StartCoroutine(reload());
+        }
 
         if (Input.GetButtonDown("Fire2"))
         {
@@ -699,5 +704,15 @@ public class playerController : MonoBehaviour, IDamage, IPickup
             pushBackDuration -= Time.deltaTime;
             controller.Move(damageDir * pushBackSpeed * Time.deltaTime);
         }
+    }
+
+    IEnumerator reload()
+    {
+        isReloading = true;
+        Debug.Log("Reloading");
+        yield return new WaitForSeconds(gunInv[gunInvPos].weaponReloadTime);
+        gunInv[gunInvPos].ammoCur = gunInv[gunInvPos].ammoMax;
+        isReloading = false;
+        Debug.Log("isReloaded");
     }
 }

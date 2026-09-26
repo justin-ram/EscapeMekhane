@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c9dee7c0646884392a8526efbff6cf, type: 3}
   m_Name: Gun - Rifle
   m_EditorClassIdentifier: 
-  gunModel: {fileID: 5571641588984482722, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
+  gunModel: {fileID: 919132149155446097, guid: 3de7b573dfadd1e4d86035c5b177253a, type: 3}
   ammoType: 1
   shootDamage: 2
   shootDistance: 100
@@ -20,8 +20,10 @@ MonoBehaviour:
   damageDir: {x: 0, y: 0, z: 0}
   pushBackSpeed: 0
   pushBackDuration: 0
-  ammoCur: 30
+  ammoCur: 24
   ammoMax: 30
+  weaponReloadTime: 5
+  canReload: 1
   hitEffect: {fileID: 5584602140419805224, guid: 4d5386e8a70034148885447cd6a0a582, type: 3}
   shootSound:
   - {fileID: 8300000, guid: 46e1c7ce22809c74490a8b97e755cec3, type: 3}

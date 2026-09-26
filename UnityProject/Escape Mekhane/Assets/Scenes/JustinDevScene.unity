@@ -1847,6 +1847,18 @@ PrefabInstance:
       value: Pickup - Rifle
       objectReference: {fileID: 0}
     - target: {fileID: 3171662348027518867, guid: e9c4e962f5397a74f9ca764d77dfd57e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.7206
+      objectReference: {fileID: 0}
+    - target: {fileID: 3171662348027518867, guid: e9c4e962f5397a74f9ca764d77dfd57e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.7206
+      objectReference: {fileID: 0}
+    - target: {fileID: 3171662348027518867, guid: e9c4e962f5397a74f9ca764d77dfd57e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.7206
+      objectReference: {fileID: 0}
+    - target: {fileID: 3171662348027518867, guid: e9c4e962f5397a74f9ca764d77dfd57e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.18
       objectReference: {fileID: 0}
@@ -1856,7 +1868,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3171662348027518867, guid: e9c4e962f5397a74f9ca764d77dfd57e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.566517
+      value: -34.88
       objectReference: {fileID: 0}
     - target: {fileID: 3171662348027518867, guid: e9c4e962f5397a74f9ca764d77dfd57e, type: 3}
       propertyPath: m_LocalRotation.w

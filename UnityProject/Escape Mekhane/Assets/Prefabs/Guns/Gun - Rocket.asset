@@ -22,6 +22,8 @@ MonoBehaviour:
   pushBackDuration: 0
   ammoCur: 0
   ammoMax: 5
+  weaponReloadTime: 7
+  canReload: 1
   hitEffect: {fileID: 0}
   shootSound:
   - {fileID: 8300000, guid: 73eef571f435ab64889071a9099c6300, type: 3}

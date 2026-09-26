@@ -5,7 +5,7 @@ public class gunStats : ScriptableObject
 {
     public GameObject gunModel;
 
-    public enum AmmoType { Rocket, Rifle, Pistol, Shotgun, Grenade}
+    public enum AmmoType { Rocket, Rifle, Pistol, Shotgun, Grenade }
 
     [SerializeField] public AmmoType ammoType;
 
@@ -17,8 +17,11 @@ public class gunStats : ScriptableObject
     [SerializeField] public int pushBackSpeed;
     [SerializeField] public float pushBackDuration;
     public int ammoCur;
-    
+
     [Range(5, 50)] public int ammoMax;
+
+    public float weaponReloadTime;
+    public bool canReload;
 
     public ParticleSystem hitEffect;
     public AudioClip[] shootSound;
@@ -30,7 +33,7 @@ public class gunStats : ScriptableObject
 
     [SerializeField] public int weaponPushSpeed;
     [SerializeField] public float weaponPushLastsTimer;
-     public float weaponPushLasts;
+    public float weaponPushLasts;
 
-    
+
 }
