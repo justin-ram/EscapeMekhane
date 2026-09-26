@@ -489,30 +489,65 @@ public class playerController : MonoBehaviour, IDamage, IPickup
     void shoot()
     {
         shootTimer = 0;
-        audioManager.instance.audPlayer.PlayOneShot(gunInv[gunInvPos].shootSound[Random.Range(0, gunInv[gunInvPos].shootSound.Length)], gunInv[gunInvPos].shootSoundVol);
+
+        audioManager.instance.audPlayer.PlayOneShot(
+            gunInv[gunInvPos].shootSound[Random.Range(0, gunInv[gunInvPos].shootSound.Length)],
+            gunInv[gunInvPos].shootSoundVol
+        );
+
         isGrappling = false;
         grappleLine.enabled = false;
+
         RaycastHit hit;
 
         if (gunInv[gunInvPos].isProjectile == false)
         {
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, gunInv[gunInvPos].shootDistance, ~ignoreLayer))
+            // A fired shot uses ammunition even when the raycast misses.
+
+            gunInv[gunInvPos].ammoCur--;
+
+            if (Physics.Raycast(
+                Camera.main.transform.position,
+                Camera.main.transform.forward,
+                out hit,
+                gunInv[gunInvPos].shootDistance,
+                ~ignoreLayer))
             {
-                // Debug.Log(hit.collider.name);
-                gunInv[gunInvPos].ammoCur--;
-                Instantiate(gunInv[gunInvPos].hitEffect, hit.point, Quaternion.identity);
+                // Only create an impact and apply damage when something was hit.
+
+                Instantiate(
+                    gunInv[gunInvPos].hitEffect,
+                    hit.point,
+                    Quaternion.identity
+                );
+
                 IDamage dmg = hit.collider.GetComponent<IDamage>();
+
                 if (dmg != null)
                 {
-                    dmg.takeDamage(gunInv[gunInvPos].shootDamage, gunInv[gunInvPos].damageDir, gunInv[gunInvPos].pushBackSpeed, gunInv[gunInvPos].pushBackDuration);
+                    dmg.takeDamage(
+                        gunInv[gunInvPos].shootDamage,
+                        gunInv[gunInvPos].damageDir,
+                        gunInv[gunInvPos].pushBackSpeed,
+                        gunInv[gunInvPos].pushBackDuration
+                    );
                 }
             }
         }
         else if (gunInv[gunInvPos].ammoCur > 0)
         {
+            // Projectile weapons continue using their original firing behavior.
+
             gunInv[gunInvPos].ammoCur--;
-            Instantiate(gunInv[gunInvPos].projectile, gunEndpoint.position, Camera.main.transform.rotation);
-            gunInv[gunInvPos].weaponPushLasts = gunInv[gunInvPos].weaponPushLastsTimer;
+
+            Instantiate(
+                gunInv[gunInvPos].projectile,
+                gunEndpoint.position,
+                Camera.main.transform.rotation
+            );
+
+            gunInv[gunInvPos].weaponPushLasts =
+                gunInv[gunInvPos].weaponPushLastsTimer;
         }
     }
 
@@ -663,6 +698,8 @@ public class playerController : MonoBehaviour, IDamage, IPickup
 
     }
 
+
+
     public void spawnPlayer()
     {
         if (controller == null)
@@ -681,6 +718,22 @@ public class playerController : MonoBehaviour, IDamage, IPickup
         {
             Debug.LogError("Spawn failed: Player Spawn Position is not assigned.");
             return;
+        }
+
+        // Stop existing movement from carrying over after the player respawns.
+
+        playerVelocity = Vector3.zero;
+        timeDashLasts = 0f;
+        wallJumpDuration = 0f;
+        pushBackDuration = 0f;
+
+        isGrappling = false;
+        isWallRunning = false;
+        gravity = gravityOrig;
+
+        if (grappleLine != null)
+        {
+            grappleLine.enabled = false;
         }
 
         controller.transform.position =
