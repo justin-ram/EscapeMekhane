@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
+
 
 public class SHR0UD : MonoBehaviour, IDamage
 {
@@ -35,6 +35,8 @@ public class SHR0UD : MonoBehaviour, IDamage
     [SerializeField] float y4;
     [SerializeField] float z4;
     [SerializeField] GameObject shipItem;
+    [SerializeField] float angle;
+    
 
     [SerializeField] float gravity;
     [SerializeField] float loadRate;
@@ -401,7 +403,28 @@ public class SHR0UD : MonoBehaviour, IDamage
        
 
     }
-   
+    void spawnClone2(int num)
+    {
+        Vector3 newLocation = new Vector3(transform.position.x, transform.position.y - 20, transform.position.z);
+        transform.position = newLocation;
+        int offset;
+        Vector3 spawnPos = gameManager.instance.player.transform.position + (gameManager.instance.player.transform.forward * 15);
+        
+
+
+        for (int i = 0; i < num; i++)
+        {
+          
+            offset = i * cloneDist;
+            Instantiate(clone, spawnPos + (gameManager.instance.player.transform.right * offset), transform.rotation);
+            Instantiate(clone, spawnPos - (gameManager.instance.player.transform.right * offset), transform.rotation);
+
+        }
+        attackRate = 5;
+        
+    }
+
+
 }
 
 

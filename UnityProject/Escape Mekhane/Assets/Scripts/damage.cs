@@ -63,10 +63,7 @@ public class damage : MonoBehaviour
             }
             Destroy(gameObject);
         }
-        if(type == damageType.proximity)
-        {
-            Destroy(transform.parent.gameObject);
-        }
+        
         if(type == damageType.rocket)
         {
             Instantiate(explosion, transform.position, Quaternion.identity);

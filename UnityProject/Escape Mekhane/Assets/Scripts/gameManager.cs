@@ -185,10 +185,10 @@ public class gameManager : MonoBehaviour
 
     public void quitGame()
     {
-        #if UNITY_WEBGL && !UNTIY_EDITOR
+#if UNITY_WEBGL && !UNTIY_EDITOR
         returnToMainMenu();
-        #else
-        Application.Quit()
+#else
+        Application.Quit();
         #endif
     }
     public void returnToMainMenu()

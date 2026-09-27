@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
-using JetBrains.Annotations;
+
 
 
 public class GL00M : MonoBehaviour, IDamage
@@ -17,7 +17,7 @@ public class GL00M : MonoBehaviour, IDamage
     [Header("Weapons")]
     [SerializeField] GameObject bullet;
     [SerializeField] GameObject shipItem;
-
+    
     [SerializeField] Transform gunPivot;
     [SerializeField] Transform shootPos;
     [SerializeField] float shootRate;
@@ -27,9 +27,12 @@ public class GL00M : MonoBehaviour, IDamage
     [SerializeField] float ballDistance;
     [SerializeField] float fireRate;
     [SerializeField] int shockWaveDist;
+    [SerializeField] groundPound pound;
+     Animator animate;
     float fireTimer;
     int count;
-    int patern; 
+    int patern;
+    bool finalPhase;
 
     Color colorOrig;
 
@@ -41,12 +44,13 @@ public class GL00M : MonoBehaviour, IDamage
     float jumpTime;
     bool isJumping;
     int rand;
+    bool isWaithing;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        animate = GetComponent<Animator>();
         colorOrig = model.material.color;
         count = 0;
         isJumping = false;
@@ -62,6 +66,8 @@ public class GL00M : MonoBehaviour, IDamage
     {
         if (playerInTrigger)
         {
+            animate.SetBool("GloomWalk", true);
+
             shootTimer += Time.deltaTime;
             agent.SetDestination(gameManager.instance.player.transform.position);
 
@@ -71,39 +77,55 @@ public class GL00M : MonoBehaviour, IDamage
             faceTarget();
             rotateGun();
 
-
-
-
-
-            if (shootTimer >= shootRate && isJumping == false)
+            if (pound.dealDamage == true)
             {
-               
-                if(patern == 1)
-                {
-                    StartCoroutine(jump());
-                    
-                }
-                else if(patern ==2)
-                {
+                pound.dealDamage = false;
+            }
 
 
-                    fireTimer += Time.deltaTime;
-                    if (fireTimer >= fireRate)
+
+            if (shootTimer >= shootRate && isJumping == false && isWaithing == false)
+            {
+                if (finalPhase == false)
+                {
+                    if (patern == 1)
                     {
-                        shoot3();
-                        if (count == 3)
-                        {
-                            shootTimer = 0;
-                            count = 0;
-                            patern = 1;
-                        }
+                        StartCoroutine(jump());
+
                     }
+                    else if (patern == 2)
+                    {
 
 
+                        fireTimer += Time.deltaTime;
+                        if (fireTimer >= fireRate)
+                        {
+                            shoot3();
+                            if (count == 3)
+                            {
+                                shootTimer = 0;
+                                count = 0;
+                                patern = 1;
+                            }
+                        }
+
+
+                    }
+                }
+                else
+                {
+                    shoot3();
+                    if (count == 3)
+                    {
+                        shootTimer = 0;
+                        count = 0;
+                        patern = 1;
+                    }
                 }
                 
                 
             }
+           
             
 
         }
@@ -135,12 +157,19 @@ public class GL00M : MonoBehaviour, IDamage
     }
     public void takeDamage(int amount, Vector3 gameDirection, int damageSpeed, float pushDurationTimer)
     {
-        HP -= amount;
+        if(finalPhase == false)
+        {
+            HP -= amount;
+        }
+       
         if (HP <= 0)
         {
 
             Instantiate(shipItem, transform.position, transform.rotation);
-            Destroy(gameObject);
+            shootRate = 0.5f;
+            finalPhase = true;
+            StartCoroutine(explosion());
+            
         }
         else
         {
@@ -206,7 +235,7 @@ public class GL00M : MonoBehaviour, IDamage
 
    IEnumerator jump()
     {
-        
+        animate.SetBool("GloomWalk", false);
         isJumping = true;
         Vector3 startPos = transform.position;
         Vector3 target = gameManager.instance.player.transform.position;
@@ -224,20 +253,28 @@ public class GL00M : MonoBehaviour, IDamage
             
         }
         transform.position = target;
-        shoot();
-        isJumping = false;
-        RaycastHit hit;
-        if(Physics.Raycast(shootPos.position, shootPos.forward, out hit, shockWaveDist))
-        {
-            if (hit.collider.CompareTag("Player"))
-            {
-                
-            }
-        }
         
+        isJumping = false;
+        pound.dealDamage = true;
        
         shootTimer = 0;
         patern++;
+        StartCoroutine(groundPoundFire());
+
         
+    }
+    IEnumerator explosion()
+    {
+        yield return new WaitForSeconds(10.0f);
+        Destroy(gameObject);
+    }
+    IEnumerator groundPoundFire()
+    {
+        isWaithing = true;
+        yield return new WaitForSeconds(1.0f);
+        isWaithing = false;
+        shoot();
+        shootTimer = 0;
+        animate.SetBool("GloomWalk", true);
     }
 }
