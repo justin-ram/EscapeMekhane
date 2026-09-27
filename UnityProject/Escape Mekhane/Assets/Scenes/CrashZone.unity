@@ -2295,7 +2295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5023428561058792852, guid: a9cf9dfcc311db54a80152e67f37069c, type: 3}
       propertyPath: m_Name
-      value: Trenchcable_base_basic_pbr (1)
+      value: damagedPowerRelay
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
