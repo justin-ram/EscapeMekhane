@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8020682499409995668}
   - component: {fileID: 2333225575300364411}
   - component: {fileID: 7672560379873073439}
+  - component: {fileID: 3617487580784373665}
   m_Layer: 0
   m_Name: Radiation Suit
   m_TagString: Untagged
@@ -124,3 +125,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   increaseAmount: 1
+--- !u!114 &3617487580784373665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6302523260713342642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c869615b27d17a045b01c2e2f0b084d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: Radiation Suit
+  displayName: Radiation Suit
+  amount: 1
