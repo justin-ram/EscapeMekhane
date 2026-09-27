@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Gun - Grenade
   m_EditorClassIdentifier: 
   gunModel: {fileID: 4944541385776478556, guid: 1e31b90e7cd05e14ca694331e3acfb73, type: 3}
+  ammoType: 0
   shootDamage: 1
   shootDistance: 1
   shootFireRate: 0.1
@@ -20,7 +21,9 @@ MonoBehaviour:
   pushBackSpeed: 0
   pushBackDuration: 0
   ammoCur: 5
-  ammoMax: 5
+  ammoMax: 1
+  weaponReloadTime: 0
+  canReload: 0
   hitEffect: {fileID: 0}
   shootSound:
   - {fileID: 8300000, guid: 0cd2c85ed3f0ff84b887c8037e904735, type: 3}

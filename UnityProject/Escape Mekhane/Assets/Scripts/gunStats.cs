@@ -18,7 +18,7 @@ public class gunStats : ScriptableObject
     [SerializeField] public float pushBackDuration;
     public int ammoCur;
 
-    [Range(5, 50)] public int ammoMax;
+    [Range(1, 50)] public int ammoMax;
 
     public float weaponReloadTime;
     public bool canReload;

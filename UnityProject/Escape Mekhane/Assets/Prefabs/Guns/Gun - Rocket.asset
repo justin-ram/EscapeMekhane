@@ -21,7 +21,7 @@ MonoBehaviour:
   pushBackSpeed: 0
   pushBackDuration: 0
   ammoCur: 0
-  ammoMax: 5
+  ammoMax: 1
   weaponReloadTime: 7
   canReload: 1
   hitEffect: {fileID: 0}

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 904344187311383546}
   - component: {fileID: 5330082393501627821}
   - component: {fileID: 242329672619471791}
+  - component: {fileID: 4744657480455779995}
   m_Layer: 0
   m_Name: Pickup - PistolPrj
   m_TagString: Untagged
@@ -122,3 +123,18 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.3
   m_Center: {x: -0.0012764186, y: -0.19935292, z: -0.18658185}
+--- !u!114 &4744657480455779995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2684910214525019346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c869615b27d17a045b01c2e2f0b084d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: Pistol-Kinetic
+  displayName: Pistol-Kinetic
+  amount: 1
