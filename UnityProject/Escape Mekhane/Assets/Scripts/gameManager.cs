@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class gameManager : MonoBehaviour
@@ -18,6 +19,9 @@ public class gameManager : MonoBehaviour
     [SerializeField] GameObject cursor;
     [SerializeField] GameObject interactUI;
     [SerializeField] GameObject interactWarning;
+
+    [Header("WebGL Controls")]
+    [SerializeField] string mainMenuSceneName = "MainMenu";
 
     public bool isPaused;
     public GameObject player;
@@ -76,16 +80,9 @@ public class gameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Cancel") && isPlayer)
+        if (Input.GetButtonDown("Cancel") || Input.GetKeyDown(KeyCode.P) && isPlayer)
         {
-            if (menuActive == null)
-            {
-                statePause(menuPause);
-            }
-            else if (menuActive == menuPause)
-            {
-                stateUnpause();
-            }
+            togglePause();
         }
         if (player != null)
         {
@@ -96,7 +93,17 @@ public class gameManager : MonoBehaviour
             }
         }
     }
-
+    public void togglePause() 
+    {
+        if (menuActive == null)
+        {
+            statePause(menuPause);
+        }
+        else if (menuActive == menuPause)
+        {
+            stateUnpause();
+        }
+    }
 
     public void statePause(GameObject menu)
     {
@@ -174,5 +181,24 @@ public class gameManager : MonoBehaviour
         popUp.SetActive(true);
         yield return new WaitForSeconds(warningTimer);
         popUp.SetActive(false);
+    }
+
+    public void quitGame()
+    {
+        #if UNITY_WEBGL && !UNTIY_EDITOR
+        returnToMainMenu();
+        #else
+        Application.Quit()
+        #endif
+    }
+    public void returnToMainMenu()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 }
